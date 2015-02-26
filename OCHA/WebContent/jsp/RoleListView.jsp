@@ -1,7 +1,6 @@
 
 <%@page import="in.co.sunrays.proj4.controller.RoleListCtl"%>
 <%@page import="in.co.sunrays.proj4.controller.BaseCtl"%>
-<%@page import="in.co.sunrays.proj4.bean.RoleBean"%>
 <%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
@@ -42,16 +41,16 @@
 					int index = ((pageNo - 1) * pageSize) + 1;
 
 					List list = ServletUtility.getList(request);
-					Iterator<RoleBean> it = list.iterator();
+					Iterator<RoleModel> it = list.iterator();
 					while (it.hasNext()) {
-						RoleBean bean = it.next();
+						RoleModel model = it.next();
 				%>
 				<tr>
 					<td><%=index++%></td>
-					<td><%=bean.getId()%></td>
-					<td><%=bean.getName()%></td>
-					<td><%=bean.getDescription()%></td>
-					<td><a href="RoleCtl?id=<%=bean.getId()%>">Edit</a></td>
+					<td><%=model.getId()%></td>
+					<td><%=model.getName()%></td>
+					<td><%=model.getDescription()%></td>
+					<td><a href="RoleCtl?id=<%=model.getId()%>">Edit</a></td>
 				</tr>
 				<%
 					}

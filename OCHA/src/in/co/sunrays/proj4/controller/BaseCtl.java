@@ -2,6 +2,7 @@ package in.co.sunrays.proj4.controller;
 
 import in.co.sunrays.proj4.bean.BaseBean;
 import in.co.sunrays.proj4.bean.UserBean;
+import in.co.sunrays.proj4.model.BaseModel;
 import in.co.sunrays.proj4.util.DataUtility;
 import in.co.sunrays.proj4.util.DataValidator;
 import in.co.sunrays.proj4.util.ServletUtility;
@@ -76,6 +77,16 @@ public abstract class BaseCtl extends HttpServlet {
 	}
     
 	/**
+	 * Populates bean object from request parameters
+	 * 
+	 * @param request
+	 * @return
+	 */
+	protected BaseModel populateModel(HttpServletRequest request) {
+		return null;
+	}
+	
+	/**
 	 * Populates Generic attributes in DTO
 	 * 
 	 * @param dto
@@ -83,6 +94,51 @@ public abstract class BaseCtl extends HttpServlet {
 	 * @return
 	 */
 	protected BaseBean populateDTO(BaseBean dto, HttpServletRequest request) {
+
+		String createdBy = request.getParameter("createdBy");
+		String modifiedBy = null;
+
+		UserBean userbean = (UserBean) request.getSession().getAttribute("user");
+
+		if (userbean == null) {
+			// If record is created without login
+			createdBy = "root";
+			modifiedBy = "root";
+		} else {
+
+			modifiedBy = userbean.getLogin();
+			
+			// If record is created first time
+			if ("null".equalsIgnoreCase(createdBy) || DataValidator.isNull(createdBy)) {
+				createdBy = modifiedBy;
+			}
+
+		}
+
+		dto.setCreatedBy(createdBy);
+		dto.setModifiedBy(modifiedBy);
+
+		long cdt = DataUtility.getLong(request.getParameter("createdDatetime"));
+
+		if (cdt > 0) {
+			dto.setCreatedDatetime(DataUtility.getTimestamp(cdt));
+		} else {
+			dto.setCreatedDatetime(DataUtility.getCurrentTimestamp());
+		}
+
+		dto.setModifiedDatetime(DataUtility.getCurrentTimestamp());
+
+		return dto;
+	}
+	
+	/**
+	 * Populates Generic attributes in DTO
+	 * 
+	 * @param dto
+	 * @param request
+	 * @return
+	 */
+	protected BaseModel populateDTO(BaseModel dto, HttpServletRequest request) {
 
 		String createdBy = request.getParameter("createdBy");
 		String modifiedBy = null;

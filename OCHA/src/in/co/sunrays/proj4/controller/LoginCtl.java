@@ -1,7 +1,6 @@
 package in.co.sunrays.proj4.controller;
 
 import in.co.sunrays.proj4.bean.BaseBean;
-import in.co.sunrays.proj4.bean.RoleBean;
 import in.co.sunrays.proj4.bean.UserBean;
 import in.co.sunrays.proj4.exception.ApplicationException;
 import in.co.sunrays.proj4.model.NoticeModel;
@@ -131,10 +130,10 @@ public class LoginCtl extends BaseCtl {
 					session.setAttribute("userId", bean.getId());
 					long rollId = bean.getRoleId();
 
-					RoleBean rolebean = role.findByPK(rollId);
+					RoleModel rolemodel = role.findByPK(rollId);
 
-					if (rolebean != null) {
-						session.setAttribute("role", rolebean.getName());
+					if (rolemodel != null) {
+						session.setAttribute("role", rolemodel.getName());
 					}
 
 					ServletUtility.forward(ORSView.WELCOME_VIEW, request,

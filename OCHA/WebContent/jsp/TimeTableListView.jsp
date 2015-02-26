@@ -18,7 +18,7 @@
 					<th>FileName</th>
              <th>Download</th>
          <%
-			if (userBean.getRoleId() == RoleBean.ADMIN  || userBean.getRoleId() == RoleBean.STAFF) {
+			if (userBean.getRoleId() == RoleModel.ADMIN  || userBean.getRoleId() == RoleModel.STAFF) {
 		%>      <th>Delete</th>
 		<%} %>
 				</tr>
@@ -43,7 +43,7 @@ int index=1;
 		<td><%=f%></td>
 <td><a href="<%=ORSView.Download_CTL %>?fileName=<%=f%>">Download</a></td>
  <%
-			if (userBean.getRoleId() == RoleBean.ADMIN) {
+			if (userBean.getRoleId() == RoleModel.ADMIN) {
 		%>
 <td><a href="<%=ORSView.Download_CTL %>?fileName=<%=f%>&operation=Delete">Delete</a></td>
 <%} %>

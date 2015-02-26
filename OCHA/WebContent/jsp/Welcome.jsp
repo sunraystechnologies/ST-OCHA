@@ -10,7 +10,7 @@
 	            	<%
 	            	UserBean beanUserBean = (UserBean) session.getAttribute("user");
 						if (beanUserBean != null) {
-							if (beanUserBean.getRoleId() == RoleBean.STUDENT) {
+							if (beanUserBean.getRoleId() == RoleModel.STUDENT) {
 					%>
 		
 					<h2 align="Center">

@@ -1,9 +1,9 @@
 package in.co.sunrays.proj4.controller;
 
 import in.co.sunrays.proj4.bean.BaseBean;
-import in.co.sunrays.proj4.bean.RoleBean;
 import in.co.sunrays.proj4.exception.ApplicationException;
 import in.co.sunrays.proj4.exception.DuplicateRecordException;
+import in.co.sunrays.proj4.model.BaseModel;
 import in.co.sunrays.proj4.model.RoleModel;
 import in.co.sunrays.proj4.util.DataUtility;
 import in.co.sunrays.proj4.util.DataValidator;
@@ -57,23 +57,23 @@ public class RoleCtl extends BaseCtl {
 	}
 
 	@Override
-	protected BaseBean populateBean(HttpServletRequest request) {
+	protected BaseModel populateModel(HttpServletRequest request) {
 
-		log.debug("RoleCtl Method populatebean Started");
+		log.debug("RoleCtl Method populateModel Started");
 
-		RoleBean bean = new RoleBean();
+		RoleModel model = new RoleModel();
 
-		bean.setId(DataUtility.getLong(request.getParameter("id")));
+		model.setId(DataUtility.getLong(request.getParameter("id")));
 
-		bean.setName(DataUtility.getString(request.getParameter("name")));
-		bean.setDescription(DataUtility.getString(request
+		model.setName(DataUtility.getString(request.getParameter("name")));
+		model.setDescription(DataUtility.getString(request
 				.getParameter("description")));
 		
-		populateDTO(bean, request);
+		populateDTO(model, request);
 
-		log.debug("RoleCtl Method populatebean Ended");
+		log.debug("RoleCtl Method populateModel Ended");
 
-		return bean;
+		return model;
 	}
 
 	/**
@@ -95,17 +95,17 @@ public class RoleCtl extends BaseCtl {
 
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 
-			RoleBean bean = (RoleBean) populateBean(request);
+			model = (RoleModel) populateModel(request);
 
 			try {
 				if (id > 0) {
-					model.update(bean);
+					model.update(model);
 				} else {
-					long pk = model.add(bean);
-					bean.setId(pk);
+					long pk = model.add(model);
+					model.setId(pk);
 				}
 
-				ServletUtility.setBean(bean, request);
+				ServletUtility.setModel(model, request);
 				ServletUtility.setSuccessMessage("Data is successfully saved",
 						request);
 
@@ -114,16 +114,16 @@ public class RoleCtl extends BaseCtl {
 				ServletUtility.handleException(e, request, response);
 				return;
 			} catch (DuplicateRecordException e) {
-				ServletUtility.setBean(bean, request);
+				ServletUtility.setModel(model, request);
 				ServletUtility.setErrorMessage("Role already exists",
 						request);
 			}
 
 		} else if (OP_DELETE.equalsIgnoreCase(op)) {
 
-			RoleBean bean = (RoleBean) populateBean(request);
+			 model = (RoleModel) populateModel(request);
 			try {
-				model.delete(bean);
+				model.delete(model);
 				ServletUtility.redirect(ORSView.ROLE_LIST_CTL, request,
 						response);
 				return;
@@ -141,10 +141,9 @@ public class RoleCtl extends BaseCtl {
 		} else { // View page
 
 			if (id > 0 || op != null) {
-				RoleBean bean;
 				try {
-					bean = model.findByPK(id);
-					ServletUtility.setBean(bean, request);
+					model = model.findByPK(id);
+					ServletUtility.setModel(model, request);
 				} catch (ApplicationException e) {
 					log.error(e);
 					ServletUtility.handleException(e, request, response);

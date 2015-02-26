@@ -1,6 +1,5 @@
 package in.co.sunrays.proj4.model;
 
-import in.co.sunrays.proj4.bean.RoleBean;
 import in.co.sunrays.proj4.exception.ApplicationException;
 import in.co.sunrays.proj4.exception.DatabaseException;
 import in.co.sunrays.proj4.exception.DuplicateRecordException;
@@ -21,9 +20,56 @@ import org.apache.log4j.Logger;
  * @version 1.0
  * @Copyright (c) SUNRAYS Technologies
  */
-public class RoleModel {
+public class RoleModel extends BaseModel {
 
 	private static Logger log = Logger.getLogger(RoleModel.class);
+
+	/**
+	 * Predefined Role constants
+	 */
+	public static final int ADMIN = 1;
+	public static final int STUDENT = 2;
+	public static final int STAFF = 3;
+	public static final int KIOSK = 4;
+
+	/**
+	 * Role Name
+	 */
+
+	private String name;
+
+	/**
+	 * Role Description
+	 */
+	private String description;
+
+	/**
+	 * accessor
+	 */
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getKey() {
+		return id + "";
+	}
+
+	public String getValue() {
+		return name;
+	}
 
 	/**
 	 * Find next PK of Role
@@ -57,21 +103,22 @@ public class RoleModel {
 	/**
 	 * Add a Role
 	 * 
-	 * @param bean
+	 * @param model
 	 * @throws DatabaseException
 	 * 
 	 */
-	public long add(RoleBean bean) throws ApplicationException, DuplicateRecordException{
+	public long add(RoleModel model) throws ApplicationException,
+			DuplicateRecordException {
 		log.debug("Model add Started");
 		Connection conn = null;
 		int pk = 0;
-        
-		RoleBean duplicataRole = findByName(bean.getName());
+
+		RoleModel duplicataRole = findByName(model.getName());
 		// Check if create Role already exist
 		if (duplicataRole != null) {
 			throw new DuplicateRecordException("Role already exists");
 		}
-		
+
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = nextPK();
@@ -81,12 +128,12 @@ public class RoleModel {
 			PreparedStatement pstmt = conn
 					.prepareStatement("INSERT INTO ST_ROLE VALUES(?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
-			pstmt.setString(2, bean.getName());
-			pstmt.setString(3, bean.getDescription());
-			pstmt.setString(4, bean.getCreatedBy());
-			pstmt.setString(5, bean.getModifiedBy());
-			pstmt.setTimestamp(6, bean.getCreatedDatetime());
-			pstmt.setTimestamp(7, bean.getModifiedDatetime());
+			pstmt.setString(2, model.getName());
+			pstmt.setString(3, model.getDescription());
+			pstmt.setString(4, model.getCreatedBy());
+			pstmt.setString(5, model.getModifiedBy());
+			pstmt.setTimestamp(6, model.getCreatedDatetime());
+			pstmt.setTimestamp(7, model.getModifiedDatetime());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -110,10 +157,10 @@ public class RoleModel {
 	/**
 	 * Delete a Role
 	 * 
-	 * @param bean
+	 * @param model
 	 * @throws DatabaseException
 	 */
-	public void delete(RoleBean bean) throws ApplicationException {
+	public void delete(RoleModel model) throws ApplicationException {
 		log.debug("Model delete Started");
 		Connection conn = null;
 		try {
@@ -121,7 +168,7 @@ public class RoleModel {
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn
 					.prepareStatement("DELETE FROM ST_ROLE WHERE ID=?");
-			pstmt.setLong(1, bean.getId());
+			pstmt.setLong(1, model.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -148,15 +195,15 @@ public class RoleModel {
 	 * 
 	 * @param name
 	 *            : get parameter
-	 * @return bean
+	 * @return model
 	 * @throws DatabaseException
 	 */
-	
-	public RoleBean findByName(String name) throws ApplicationException {
+
+	public RoleModel findByName(String name) throws ApplicationException {
 		log.debug("Model findBy EmailId Started");
 		StringBuffer sql = new StringBuffer(
 				"SELECT * FROM ST_ROLE WHERE NAME=?");
-		RoleBean bean = null;
+		RoleModel model = null;
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -164,14 +211,14 @@ public class RoleModel {
 			pstmt.setString(1, name);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				bean = new RoleBean();
-				bean.setId(rs.getLong(1));
-				bean.setName(rs.getString(2));
-				bean.setDescription(rs.getString(3));
-				bean.setCreatedBy(rs.getString(4));
-				bean.setModifiedBy(rs.getString(5));
-				bean.setCreatedDatetime(rs.getTimestamp(6));
-				bean.setModifiedDatetime(rs.getTimestamp(7));
+				model = new RoleModel();
+				model.setId(rs.getLong(1));
+				model.setName(rs.getString(2));
+				model.setDescription(rs.getString(3));
+				model.setCreatedBy(rs.getString(4));
+				model.setModifiedBy(rs.getString(5));
+				model.setCreatedDatetime(rs.getTimestamp(6));
+				model.setModifiedDatetime(rs.getTimestamp(7));
 
 			}
 			rs.close();
@@ -183,7 +230,7 @@ public class RoleModel {
 			JDBCDataSource.closeConnection(conn);
 		}
 		log.debug("Model findBy EmailId End");
-		return bean;
+		return model;
 	}
 
 	/**
@@ -191,14 +238,14 @@ public class RoleModel {
 	 * 
 	 * @param pk
 	 *            : get parameter
-	 * @return bean
+	 * @return model
 	 * @throws DatabaseException
 	 */
-	
-	public RoleBean findByPK(long pk) throws ApplicationException {
+
+	public RoleModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
 		StringBuffer sql = new StringBuffer("SELECT * FROM ST_ROLE WHERE ID=?");
-		RoleBean bean = null;
+		RoleModel model = null;
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -206,14 +253,14 @@ public class RoleModel {
 			pstmt.setLong(1, pk);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				bean = new RoleBean();
-				bean.setId(rs.getLong(1));
-				bean.setName(rs.getString(2));
-				bean.setDescription(rs.getString(3));
-				bean.setCreatedBy(rs.getString(4));
-				bean.setModifiedBy(rs.getString(5));
-				bean.setCreatedDatetime(rs.getTimestamp(6));
-				bean.setModifiedDatetime(rs.getTimestamp(7));
+				model = new RoleModel();
+				model.setId(rs.getLong(1));
+				model.setName(rs.getString(2));
+				model.setDescription(rs.getString(3));
+				model.setCreatedBy(rs.getString(4));
+				model.setModifiedBy(rs.getString(5));
+				model.setCreatedDatetime(rs.getTimestamp(6));
+				model.setModifiedDatetime(rs.getTimestamp(7));
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -224,24 +271,24 @@ public class RoleModel {
 			JDBCDataSource.closeConnection(conn);
 		}
 		log.debug("Model findByPK End");
-		return bean;
+		return model;
 	}
 
 	/**
 	 * Update a Role
 	 * 
-	 * @param bean
+	 * @param model
 	 * @throws DatabaseException
 	 */
-	
-	public void update(RoleBean bean) throws ApplicationException,
+
+	public void update(RoleModel model) throws ApplicationException,
 			DuplicateRecordException {
 		log.debug("Model update Started");
 		Connection conn = null;
-		
-		RoleBean duplicataRole = findByName(bean.getName());
+
+		RoleModel duplicataRole = findByName(model.getName());
 		// Check if updated Role already exist
-		if (duplicataRole != null && duplicataRole.getId() != bean.getId()) {
+		if (duplicataRole != null && duplicataRole.getId() != model.getId()) {
 			throw new DuplicateRecordException("Role already exists");
 		}
 		try {
@@ -250,13 +297,13 @@ public class RoleModel {
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn
 					.prepareStatement("UPDATE ST_ROLE SET NAME=?,DESCRIPTION=?,CREATED_BY=?,MODIFIED_BY=?,CREATED_DATETIME=?,MODIFIED_DATETIME=? WHERE ID=?");
-			pstmt.setString(1, bean.getName());
-			pstmt.setString(2, bean.getDescription());
-			pstmt.setString(3, bean.getCreatedBy());
-			pstmt.setString(4, bean.getModifiedBy());
-			pstmt.setTimestamp(5, bean.getCreatedDatetime());
-			pstmt.setTimestamp(6, bean.getModifiedDatetime());
-			pstmt.setLong(7, bean.getId());
+			pstmt.setString(1, model.getName());
+			pstmt.setString(2, model.getDescription());
+			pstmt.setString(3, model.getCreatedBy());
+			pstmt.setString(4, model.getModifiedBy());
+			pstmt.setTimestamp(5, model.getCreatedDatetime());
+			pstmt.setTimestamp(6, model.getModifiedDatetime());
+			pstmt.setLong(7, model.getId());
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -279,20 +326,20 @@ public class RoleModel {
 	/**
 	 * Search Role
 	 * 
-	 * @param bean
+	 * @param model
 	 *            : Search Parameters
 	 * @throws DatabaseException
 	 */
-	
-	public List search(RoleBean bean) throws ApplicationException {
-		return search(bean, 0, 0);
+
+	public List search(RoleModel model) throws ApplicationException {
+		return search(model, 0, 0);
 	}
 
 	/**
 	 * Search Role with pagination
 	 * 
 	 * @return list : List of Roles
-	 * @param bean
+	 * @param model
 	 *            : Search Parameters
 	 * @param pageNo
 	 *            : Current Page No.
@@ -301,21 +348,23 @@ public class RoleModel {
 	 * 
 	 * @throws DatabaseException
 	 */
-	
-	public List search(RoleBean bean, int pageNo, int pageSize)
+
+	public List search(RoleModel model, int pageNo, int pageSize)
 			throws ApplicationException {
 		log.debug("Model search Started");
 		StringBuffer sql = new StringBuffer("SELECT * FROM ST_ROLE WHERE 1=1");
 
-		if (bean != null) {
-			if (bean.getId() > 0) {
-				sql.append(" AND id = " + bean.getId());
+		if (model != null) {
+			if (model.getId() > 0) {
+				sql.append(" AND id = " + model.getId());
 			}
-			if (bean.getName() != null && bean.getName().length() > 0) {
-				sql.append(" AND NAME like '" + bean.getName() + "%'");
+			if (model.getName() != null && model.getName().length() > 0) {
+				sql.append(" AND NAME like '" + model.getName() + "%'");
 			}
-			if (bean.getDescription() != null && bean.getDescription().length() > 0) {
-				sql.append(" AND DESCRIPTION like '" + bean.getDescription() + "%'");
+			if (model.getDescription() != null
+					&& model.getDescription().length() > 0) {
+				sql.append(" AND DESCRIPTION like '" + model.getDescription()
+						+ "%'");
 			}
 
 		}
@@ -336,15 +385,15 @@ public class RoleModel {
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				bean = new RoleBean();
-				bean.setId(rs.getLong(1));
-				bean.setName(rs.getString(2));
-				bean.setDescription(rs.getString(3));
-				bean.setCreatedBy(rs.getString(4));
-				bean.setModifiedBy(rs.getString(5));
-				bean.setCreatedDatetime(rs.getTimestamp(6));
-				bean.setModifiedDatetime(rs.getTimestamp(7));
-				list.add(bean);
+				model = new RoleModel();
+				model.setId(rs.getLong(1));
+				model.setName(rs.getString(2));
+				model.setDescription(rs.getString(3));
+				model.setCreatedBy(rs.getString(4));
+				model.setModifiedBy(rs.getString(5));
+				model.setCreatedDatetime(rs.getTimestamp(6));
+				model.setModifiedDatetime(rs.getTimestamp(7));
+				list.add(model);
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -365,7 +414,7 @@ public class RoleModel {
 	 * @return list : List of Role
 	 * @throws DatabaseException
 	 */
-	
+
 	public List list() throws ApplicationException {
 		return list(0, 0);
 	}
@@ -380,7 +429,7 @@ public class RoleModel {
 	 *            : Size of Page
 	 * @throws DatabaseException
 	 */
-	
+
 	public List list(int pageNo, int pageSize) throws ApplicationException {
 		log.debug("Model list Started");
 		ArrayList list = new ArrayList();
@@ -399,15 +448,15 @@ public class RoleModel {
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				RoleBean bean = new RoleBean();
-				bean.setId(rs.getLong(1));
-				bean.setName(rs.getString(2));
-				bean.setDescription(rs.getString(3));
-				bean.setCreatedBy(rs.getString(4));
-				bean.setModifiedBy(rs.getString(5));
-				bean.setCreatedDatetime(rs.getTimestamp(6));
-				bean.setModifiedDatetime(rs.getTimestamp(7));
-				list.add(bean);
+				RoleModel model = new RoleModel();
+				model.setId(rs.getLong(1));
+				model.setName(rs.getString(2));
+				model.setDescription(rs.getString(3));
+				model.setCreatedBy(rs.getString(4));
+				model.setModifiedBy(rs.getString(5));
+				model.setCreatedDatetime(rs.getTimestamp(6));
+				model.setModifiedDatetime(rs.getTimestamp(7));
+				list.add(model);
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -422,4 +471,6 @@ public class RoleModel {
 		return list;
 
 	}
+
+
 }

@@ -3,6 +3,7 @@ package in.co.sunrays.proj4.util;
 import in.co.sunrays.proj4.bean.BaseBean;
 import in.co.sunrays.proj4.controller.BaseCtl;
 import in.co.sunrays.proj4.controller.ORSView;
+import in.co.sunrays.proj4.model.BaseModel;
 
 import java.io.IOException;
 import java.util.List;
@@ -160,6 +161,9 @@ public class ServletUtility {
 	 */
 	public static void setBean(BaseBean bean, HttpServletRequest request) {
 		request.setAttribute("bean", bean);
+	}
+	public static void setModel(BaseModel model, HttpServletRequest request) {
+		request.setAttribute("model", model);
 	}
 
 	/**

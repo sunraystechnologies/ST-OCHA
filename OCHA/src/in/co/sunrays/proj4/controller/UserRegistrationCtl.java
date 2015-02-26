@@ -1,7 +1,6 @@
 package in.co.sunrays.proj4.controller;
 
 import in.co.sunrays.proj4.bean.BaseBean;
-import in.co.sunrays.proj4.bean.RoleBean;
 import in.co.sunrays.proj4.bean.UserBean;
 import in.co.sunrays.proj4.exception.ApplicationException;
 import in.co.sunrays.proj4.exception.DuplicateRecordException;

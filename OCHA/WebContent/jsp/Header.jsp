@@ -1,4 +1,4 @@
-<%@page import="in.co.sunrays.proj4.bean.RoleBean"%>
+<%@page import="in.co.sunrays.proj4.model.RoleModel"%>
 <%@page import="in.co.sunrays.proj4.controller.LoginCtl"%>
 <%@page import="in.co.sunrays.proj4.bean.UserBean"%>
 <%@page import="in.co.sunrays.proj4.controller.ORSView"%>
@@ -31,7 +31,7 @@
  %></td>
 		<td rowspan="2">
 			<h1 align="Right">
-				<img src="<%=ORSView.APP_CONTEXT%>/img/SGSITS_Indore.png" width="318"
+				<img src="<%=ORSView.APP_CONTEXT%>/img/customLogo.jpg" width="318"
 					height="90">
 			</h1>
 		</td>
@@ -55,7 +55,7 @@
 	
 			
 		  <%
-			if (userBean.getRoleId() == RoleBean.ADMIN ||userBean.getRoleId() == RoleBean.STAFF ) {
+			if (userBean.getRoleId() == RoleModel.ADMIN ||userBean.getRoleId() == RoleModel.STAFF ) {
 		%>
 			<a href="<%=ORSView.USER_LIST_CTL%>">User List</b></a> |
 			<a href="<%=ORSView.NOTICE_CTL%>">Add Notice</b></a> |

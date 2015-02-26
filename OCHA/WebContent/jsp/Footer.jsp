@@ -1,4 +1,4 @@
 <HR>
 <CENTER>
-	<H3>(c) Copyrights SGSITS College Indore </H3>
+	<H3>c) Copyrights SUNRAYS Technologies </H3>
 </CENTER>

@@ -1,8 +1,7 @@
 package in.co.sunrays.proj4.controller;
 
-import in.co.sunrays.proj4.bean.BaseBean;
-import in.co.sunrays.proj4.bean.RoleBean;
 import in.co.sunrays.proj4.exception.ApplicationException;
+import in.co.sunrays.proj4.model.BaseModel;
 import in.co.sunrays.proj4.model.RoleModel;
 import in.co.sunrays.proj4.util.DataUtility;
 import in.co.sunrays.proj4.util.PropertyReader;
@@ -30,11 +29,10 @@ public class RoleListCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(RoleListCtl.class);
 
 	@Override
-	protected BaseBean populateBean(HttpServletRequest request) {
-		RoleBean bean = new RoleBean();
-		bean.setName(DataUtility.getString(request.getParameter("name")));
-
-		return bean;
+	protected BaseModel populateModel(HttpServletRequest request) {
+		RoleModel model = new RoleModel();
+		model.setName(DataUtility.getString(request.getParameter("name")));
+		return model;
 	}
 
 	@Override
@@ -53,13 +51,10 @@ public class RoleListCtl extends BaseCtl {
 		pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader
 				.getValue("page.size")) : pageSize;
 
-		RoleBean bean = (RoleBean) populateBean(request);
+		RoleModel model = (RoleModel) populateModel(request);
 
 
 		String op = DataUtility.getString(request.getParameter("operation"));
-
-		RoleModel model = new RoleModel();
-
 		try {
 
 			if (OP_SEARCH.equalsIgnoreCase(op) || "Next".equalsIgnoreCase(op)
@@ -74,7 +69,7 @@ public class RoleListCtl extends BaseCtl {
 				}
 
 			}
-			list = model.search(bean, pageNo, pageSize);
+			list = model.search(model, pageNo, pageSize);
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
