@@ -1,7 +1,7 @@
 
-<%@page import="in.co.sunrays.proj4.controller.RoleListCtl"%>
-<%@page import="in.co.sunrays.proj4.controller.BaseCtl"%>
-<%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
+<%@page import="in.co.sunrays.ocha.controller.RoleListCtl"%>
+<%@page import="in.co.sunrays.ocha.controller.BaseCtl"%>
+<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 

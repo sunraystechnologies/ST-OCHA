@@ -1,17 +1,17 @@
 
 <%@page import="java.util.List"%>
-<%@page import="in.co.sunrays.proj4.controller.UserRegistrationCtl"%>
+<%@page import="in.co.sunrays.ocha.controller.UserRegistrationCtl"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="in.co.sunrays.proj4.util.HTMLUtility"%>
-<%@page import="in.co.sunrays.proj4.util.DataUtility"%>
-<%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
+<%@page import="in.co.sunrays.ocha.util.HTMLUtility"%>
+<%@page import="in.co.sunrays.ocha.util.DataUtility"%>
+<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
 <html>
 <body>
 	<form action="<%=ORSView.USER_REGISTRATION_CTL%>">
 
 		<%@ include file="Header.jsp"%>
 		<script type="text/javascript" src="./js/calendar.js"></script>
-		<jsp:useBean id="bean" class="in.co.sunrays.proj4.bean.UserBean"
+		<jsp:useBean id="bean" class="in.co.sunrays.ocha.bean.UserBean"
 			scope="request"></jsp:useBean>
 
      <%

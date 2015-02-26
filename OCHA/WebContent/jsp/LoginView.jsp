@@ -1,16 +1,16 @@
 
-<%@page import="in.co.sunrays.proj4.model.NoticeModel"%>
+<%@page import="in.co.sunrays.ocha.model.NoticeModel"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
-<%@page import="in.co.sunrays.proj4.controller.LoginCtl"%>
-<%@page import="in.co.sunrays.proj4.util.DataUtility"%>
-<%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
+<%@page import="in.co.sunrays.ocha.controller.LoginCtl"%>
+<%@page import="in.co.sunrays.ocha.util.DataUtility"%>
+<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
 <html>
 <body>
 	<form action="<%=ORSView.LOGIN_CTL%>">
 		<%@ include file="Header.jsp"%>
 
-		<jsp:useBean id="bean" class="in.co.sunrays.proj4.bean.UserBean"
+		<jsp:useBean id="bean" class="in.co.sunrays.ocha.bean.UserBean"
 			scope="request"></jsp:useBean>
 <div style="padding-left: 170px">
 
@@ -51,9 +51,9 @@
 			</tr>
 			</table>
 			</div>
-			<div style="padding-left: 800px;margin-top: -190px">
+			<div style="padding-left: 800px;margin-top: -100px">
 			<h2 style="margin-left:150px">Notice</h2>
-			<table border="1" width="60%">
+			<table border="1" width="80%">
 			<tr>
 			<th>Subject</th>
 			<th>Details</th>

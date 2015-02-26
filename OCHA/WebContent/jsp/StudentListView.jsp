@@ -1,7 +1,7 @@
 
-<%@page import="in.co.sunrays.proj4.controller.StudentListCtl"%>
-<%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
-<%@page import="in.co.sunrays.proj4.bean.StudentBean"%>
+<%@page import="in.co.sunrays.ocha.controller.StudentListCtl"%>
+<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
+<%@page import="in.co.sunrays.ocha.bean.StudentBean"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 <html>

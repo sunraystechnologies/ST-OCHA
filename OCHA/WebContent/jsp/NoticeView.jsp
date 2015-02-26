@@ -1,6 +1,6 @@
-<%@page import="in.co.sunrays.proj4.controller.NoticeCtl"%>
-<%@page import="in.co.sunrays.proj4.util.DataUtility"%>
-<%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
+<%@page import="in.co.sunrays.ocha.controller.NoticeCtl"%>
+<%@page import="in.co.sunrays.ocha.util.DataUtility"%>
+<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -14,7 +14,7 @@
 
 		<%@ include file="Header.jsp"%>
 		<script type="text/javascript" src="../js/calendar.js"></script>
-		<jsp:useBean id="bean" class="in.co.sunrays.proj4.model.NoticeModel" 
+		<jsp:useBean id="bean" class="in.co.sunrays.ocha.model.NoticeModel" 
 			scope="request"></jsp:useBean>
 
 		<center>

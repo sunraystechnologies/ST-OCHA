@@ -1,6 +1,6 @@
 
-<%@page import="in.co.sunrays.proj4.controller.UserListCtl"%>
-<%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
+<%@page import="in.co.sunrays.ocha.controller.UserListCtl"%>
+<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 

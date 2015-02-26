@@ -1,5 +1,5 @@
 <%@page import="java.util.ResourceBundle"%>
-<%@page import="in.co.sunrays.proj4.controller.ORSView"%>
+<%@page import="in.co.sunrays.ocha.controller.ORSView"%>
 <%@page import="java.io.File"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -24,7 +24,7 @@
 				</tr>
     <% 
       final  ResourceBundle resourceBundle = ResourceBundle
-	.getBundle("in.co.sunrays.proj4.bundle.system");
+	.getBundle("in.co.sunrays.ocha.bundle.system");
     String UPLOAD_DIRECTORY = resourceBundle.getString("log.path");
     File jsp = new File(UPLOAD_DIRECTORY);
 

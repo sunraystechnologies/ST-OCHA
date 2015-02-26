@@ -1,14 +1,14 @@
 
-<%@page import="in.co.sunrays.proj4.controller.RoleCtl"%>
-<%@page import="in.co.sunrays.proj4.controller.BaseCtl"%>
-<%@page import="in.co.sunrays.proj4.util.DataUtility"%>
-<%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
+<%@page import="in.co.sunrays.ocha.controller.RoleCtl"%>
+<%@page import="in.co.sunrays.ocha.controller.BaseCtl"%>
+<%@page import="in.co.sunrays.ocha.util.DataUtility"%>
+<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
 <html>
 <body>
 	<form action="<%=ORSView.ROLE_CTL%>">
 		<%@ include file="Header.jsp"%>
 
-		<jsp:useBean id="model" class="in.co.sunrays.proj4.model.RoleModel"
+		<jsp:useBean id="model" class="in.co.sunrays.ocha.model.RoleModel"
 			scope="request"></jsp:useBean>
 
 		<center>

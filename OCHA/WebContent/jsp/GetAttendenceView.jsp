@@ -1,15 +1,15 @@
 
-<%@page import="in.co.sunrays.proj4.controller.GetAttendenceCtl"%>
-<%@page import="in.co.sunrays.proj4.controller.AttendenceListCtl"%>
-<%@page import="in.co.sunrays.proj4.model.AttendenceModel"%>
-<%@page import="in.co.sunrays.proj4.controller.CommentListCtl"%>
-<%@page import="in.co.sunrays.proj4.model.CommentModel"%>
-<%@page import="in.co.sunrays.proj4.model.EResourceModel"%>
-<%@page import="in.co.sunrays.proj4.controller.EResourceListCtl"%>
-<%@page import="in.co.sunrays.proj4.model.NoticeModel"%>
-<%@page import="in.co.sunrays.proj4.controller.NoticeListCtl"%>
-<%@page import="in.co.sunrays.proj4.controller.UserListCtl"%>
-<%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
+<%@page import="in.co.sunrays.ocha.controller.GetAttendenceCtl"%>
+<%@page import="in.co.sunrays.ocha.controller.AttendenceListCtl"%>
+<%@page import="in.co.sunrays.ocha.model.AttendenceModel"%>
+<%@page import="in.co.sunrays.ocha.controller.CommentListCtl"%>
+<%@page import="in.co.sunrays.ocha.model.CommentModel"%>
+<%@page import="in.co.sunrays.ocha.model.EResourceModel"%>
+<%@page import="in.co.sunrays.ocha.controller.EResourceListCtl"%>
+<%@page import="in.co.sunrays.ocha.model.NoticeModel"%>
+<%@page import="in.co.sunrays.ocha.controller.NoticeListCtl"%>
+<%@page import="in.co.sunrays.ocha.controller.UserListCtl"%>
+<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 

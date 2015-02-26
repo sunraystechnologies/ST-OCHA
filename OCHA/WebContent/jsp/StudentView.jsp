@@ -1,8 +1,8 @@
 
-<%@page import="in.co.sunrays.proj4.controller.StudentCtl"%>
-<%@page import="in.co.sunrays.proj4.util.DataUtility"%>
-<%@page import="in.co.sunrays.proj4.util.ServletUtility"%>
-<%@page import="in.co.sunrays.proj4.util.HTMLUtility"%>
+<%@page import="in.co.sunrays.ocha.controller.StudentCtl"%>
+<%@page import="in.co.sunrays.ocha.util.DataUtility"%>
+<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
+<%@page import="in.co.sunrays.ocha.util.HTMLUtility"%>
 <%@page import="java.util.List"%>
 
 <html>
@@ -10,7 +10,7 @@
 	<form action="StudentCtl">
 		<%@ include file="Header.jsp"%>
 		<script type="text/javascript" src="../js/calendar.js"></script>
-		<jsp:useBean id="bean" class="in.co.sunrays.proj4.bean.StudentBean"
+		<jsp:useBean id="bean" class="in.co.sunrays.ocha.bean.StudentBean"
 			scope="request"></jsp:useBean>
 
 		<%

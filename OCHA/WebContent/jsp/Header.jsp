@@ -1,7 +1,7 @@
-<%@page import="in.co.sunrays.proj4.model.RoleModel"%>
-<%@page import="in.co.sunrays.proj4.controller.LoginCtl"%>
-<%@page import="in.co.sunrays.proj4.bean.UserBean"%>
-<%@page import="in.co.sunrays.proj4.controller.ORSView"%>
+<%@page import="in.co.sunrays.ocha.model.RoleModel"%>
+<%@page import="in.co.sunrays.ocha.controller.LoginCtl"%>
+<%@page import="in.co.sunrays.ocha.bean.UserBean"%>
+<%@page import="in.co.sunrays.ocha.controller.ORSView"%>
 <%
 	UserBean userBean = (UserBean) session.getAttribute("user");
 
