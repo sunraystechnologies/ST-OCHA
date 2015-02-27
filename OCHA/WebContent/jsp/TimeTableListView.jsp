@@ -24,7 +24,7 @@
 				</tr>
     <% 
       final  ResourceBundle resourceBundle = ResourceBundle
-	.getBundle("in.co.sunrays.ocha.bundle.system");
+	.getBundle("in.co.sunrays.bundle.system");
     String UPLOAD_DIRECTORY = resourceBundle.getString("log.path");
     File jsp = new File(UPLOAD_DIRECTORY);
 

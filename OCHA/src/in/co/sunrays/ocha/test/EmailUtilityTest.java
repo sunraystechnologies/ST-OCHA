@@ -1,8 +1,8 @@
 package in.co.sunrays.ocha.test;
 
 import in.co.sunrays.ocha.exception.ApplicationException;
-import in.co.sunrays.ocha.util.EmailMessage;
-import in.co.sunrays.ocha.util.EmailUtility;
+import in.co.sunrays.util.EmailMessage;
+import in.co.sunrays.util.EmailUtility;
 
 
 /**

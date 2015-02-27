@@ -1,6 +1,6 @@
 package in.co.sunrays.ocha.controller;
 
-import in.co.sunrays.ocha.util.ServletUtility;
+import in.co.sunrays.util.ServletUtility;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class TimeTableCtl extends HttpServlet {
 	 //private final String UPLOAD_DIRECTORY = "/media/ncs02/Workspace/My_Workspace/OCHA/WebContent/TimeTable/";
 	
 	private final ResourceBundle resourceBundle = ResourceBundle
-			.getBundle("in.co.sunrays.ocha.bundle.system");
+			.getBundle("in.co.sunrays.bundle.system");
 	  
 	    @Override
 	    protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -4,7 +4,7 @@ import in.co.sunrays.ocha.bean.StudentBean;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.exception.DatabaseException;
 import in.co.sunrays.ocha.exception.DuplicateRecordException;
-import in.co.sunrays.ocha.util.JDBCDataSource;
+import in.co.sunrays.util.JDBCDataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

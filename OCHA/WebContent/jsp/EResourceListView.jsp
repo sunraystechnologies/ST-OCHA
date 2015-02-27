@@ -4,7 +4,7 @@
 <%@page import="in.co.sunrays.ocha.model.NoticeModel"%>
 <%@page import="in.co.sunrays.ocha.controller.NoticeListCtl"%>
 <%@page import="in.co.sunrays.ocha.controller.UserListCtl"%>
-<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 

@@ -1,6 +1,6 @@
 package in.co.sunrays.ocha.controller;
 
-import in.co.sunrays.ocha.util.ServletUtility;
+import in.co.sunrays.util.ServletUtility;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DownloadCtl extends HttpServlet {
 	private static final int BYTES_DOWNLOAD = 1024;
 	private final ResourceBundle resourceBundle = ResourceBundle
-			.getBundle("in.co.sunrays.ocha.bundle.system");
+			.getBundle("in.co.sunrays.bundle.system");
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String fileName = request.getParameter("fileName");

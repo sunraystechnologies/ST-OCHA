@@ -3,9 +3,9 @@ package in.co.sunrays.ocha.controller;
 import in.co.sunrays.ocha.bean.BaseBean;
 import in.co.sunrays.ocha.bean.UserBean;
 import in.co.sunrays.ocha.model.BaseModel;
-import in.co.sunrays.ocha.util.DataUtility;
-import in.co.sunrays.ocha.util.DataValidator;
-import in.co.sunrays.ocha.util.ServletUtility;
+import in.co.sunrays.util.DataUtility;
+import in.co.sunrays.util.DataValidator;
+import in.co.sunrays.util.ServletUtility;
 
 import java.io.IOException;
 

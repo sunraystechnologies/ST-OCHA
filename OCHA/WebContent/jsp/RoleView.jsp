@@ -1,8 +1,8 @@
 
 <%@page import="in.co.sunrays.ocha.controller.RoleCtl"%>
 <%@page import="in.co.sunrays.ocha.controller.BaseCtl"%>
-<%@page import="in.co.sunrays.ocha.util.DataUtility"%>
-<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
+<%@page import="in.co.sunrays.util.DataUtility"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
 <html>
 <body>
 	<form action="<%=ORSView.ROLE_CTL%>">

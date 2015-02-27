@@ -1,10 +1,10 @@
 
 <%@page import="in.co.sunrays.ocha.controller.UserCtl"%>
 <%@page import="java.util.List"%>
-<%@page import="in.co.sunrays.ocha.util.HTMLUtility"%>
+<%@page import="in.co.sunrays.util.HTMLUtility"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="in.co.sunrays.ocha.util.DataUtility"%>
-<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
+<%@page import="in.co.sunrays.util.DataUtility"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
 <html>
 <body>
 	<form action="<%=ORSView.USER_CTL%>">

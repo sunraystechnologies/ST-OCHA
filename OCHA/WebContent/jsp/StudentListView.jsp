@@ -1,6 +1,6 @@
 
 <%@page import="in.co.sunrays.ocha.controller.StudentListCtl"%>
-<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
 <%@page import="in.co.sunrays.ocha.bean.StudentBean"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>

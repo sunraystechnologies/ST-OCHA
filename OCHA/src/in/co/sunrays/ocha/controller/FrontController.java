@@ -1,7 +1,7 @@
 package in.co.sunrays.ocha.controller;
 
 import in.co.sunrays.ocha.controller.ORSView;
-import in.co.sunrays.ocha.util.ServletUtility;
+import in.co.sunrays.util.ServletUtility;
 
 import java.io.IOException;
 

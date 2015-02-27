@@ -1,7 +1,7 @@
 
 <%@page import="in.co.sunrays.ocha.controller.ChangePasswordCtl"%>
-<%@page import="in.co.sunrays.ocha.util.DataUtility"%>
-<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
+<%@page import="in.co.sunrays.util.DataUtility"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
 <html>
 <body>
 	<form action="<%=ORSView.CHANGE_PASSWORD_CTL%>">

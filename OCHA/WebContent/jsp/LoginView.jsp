@@ -3,8 +3,8 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
 <%@page import="in.co.sunrays.ocha.controller.LoginCtl"%>
-<%@page import="in.co.sunrays.ocha.util.DataUtility"%>
-<%@page import="in.co.sunrays.ocha.util.ServletUtility"%>
+<%@page import="in.co.sunrays.util.DataUtility"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
 <html>
 <body>
 	<form action="<%=ORSView.LOGIN_CTL%>">

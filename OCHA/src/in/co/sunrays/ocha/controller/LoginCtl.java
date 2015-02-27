@@ -6,10 +6,10 @@ import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.model.NoticeModel;
 import in.co.sunrays.ocha.model.RoleModel;
 import in.co.sunrays.ocha.model.UserModel;
-import in.co.sunrays.ocha.util.DataUtility;
-import in.co.sunrays.ocha.util.DataValidator;
-import in.co.sunrays.ocha.util.PropertyReader;
-import in.co.sunrays.ocha.util.ServletUtility;
+import in.co.sunrays.util.DataUtility;
+import in.co.sunrays.util.DataValidator;
+import in.co.sunrays.util.PropertyReader;
+import in.co.sunrays.util.ServletUtility;
 
 import java.io.IOException;
 import java.util.List;

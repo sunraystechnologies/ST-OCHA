@@ -2,7 +2,7 @@ package in.co.sunrays.ocha.model;
 
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.exception.DatabaseException;
-import in.co.sunrays.ocha.util.JDBCDataSource;
+import in.co.sunrays.util.JDBCDataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -5,10 +5,10 @@ import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.exception.DatabaseException;
 import in.co.sunrays.ocha.exception.DuplicateRecordException;
 import in.co.sunrays.ocha.exception.RecordNotFoundException;
-import in.co.sunrays.ocha.util.EmailBuilder;
-import in.co.sunrays.ocha.util.EmailMessage;
-import in.co.sunrays.ocha.util.EmailUtility;
-import in.co.sunrays.ocha.util.JDBCDataSource;
+import in.co.sunrays.util.EmailBuilder;
+import in.co.sunrays.util.EmailMessage;
+import in.co.sunrays.util.EmailUtility;
+import in.co.sunrays.util.JDBCDataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

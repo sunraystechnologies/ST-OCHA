@@ -1,6 +1,6 @@
 package in.co.sunrays.ocha.test;
 
-import in.co.sunrays.ocha.util.DataValidator;
+import in.co.sunrays.util.DataValidator;
 
 public class ValidationTest {
 
