@@ -1,13 +1,12 @@
 package in.co.sunrays.ocha.model;
 
-import in.co.sunrays.ocha.bean.BaseBean;
 import in.co.sunrays.ocha.bean.DropdownListBean;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 public abstract class BaseModel implements Serializable, DropdownListBean,
-Comparable<BaseModel> {
+		Comparable<BaseModel> {
 
 	/**
 	 * Non Business primary key
@@ -16,22 +15,6 @@ Comparable<BaseModel> {
 
 	protected String createdBy;
 	protected String modifiedBy;
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
 
 	/**
 	 * Contains Created Timestamp of database record
@@ -70,6 +53,25 @@ Comparable<BaseModel> {
 		this.modifiedDatetime = modifiedDatetime;
 	}
 
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+	
+	/**
+	 * If ids are equal then objects are equal.
+	 */
 	public int compareTo(BaseModel next) {
 		return getValue().compareTo(next.getValue());
 	}
