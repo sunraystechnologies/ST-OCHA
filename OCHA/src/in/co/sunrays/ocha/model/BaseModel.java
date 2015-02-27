@@ -15,11 +15,11 @@ import org.apache.log4j.Logger;
 /**
  * Base Model containing common attributes and methods.
  * 
- * It is implements Comparable interface that compares two object on the basis
- * of primary key ID.
+ * It implements Comparable interface that compares two objects on the basis of
+ * primary key ID.
  * 
- * It implements DropdownListBean that is required to make a MODEL list to
- * Dropdown List.
+ * It implements DropdownListBean that is used to show a Model list as drop down
+ * list.
  * 
  * @version 1.0
  * @since 01 Feb 2015
@@ -39,23 +39,27 @@ public abstract class BaseModel implements Serializable, DropdownListBean,
 	protected long id;
 
 	/**
-	 * User name that created this record. 
+	 * User name that creates this record.
 	 */
 	protected String createdBy;
+
+	/**
+	 * User name that modifies this record.
+	 */
 	protected String modifiedBy;
 
 	/**
-	 * Contains Created Timestamp of database record
+	 * Created timestamp of record
 	 */
 	protected Timestamp createdDatetime;
 
 	/**
-	 * Contains Modified Timestamp of database record
+	 * Modified timestamp of record
 	 */
 	protected Timestamp modifiedDatetime;
 
 	/**
-	 * accessor
+	 * accessor methods
 	 */
 	public long getId() {
 		return id;
@@ -98,14 +102,15 @@ public abstract class BaseModel implements Serializable, DropdownListBean,
 	}
 
 	/**
-	 * If ids (primary keys) are equal then objects are equal.
+	 * Compares IDs ( Primary Key). If keys are equals then objects are equals.
+	 * 
 	 */
 	public int compareTo(BaseModel next) {
 		return (int) (id - next.getId());
 	}
 
 	/**
-	 * Find next PK of comment
+	 * created next PK of record
 	 * 
 	 * @throws DatabaseException
 	 */
@@ -134,6 +139,11 @@ public abstract class BaseModel implements Serializable, DropdownListBean,
 		return pk + 1;
 	}
 
+	/**
+	 * Gets table name of Model
+	 * 
+	 * @return
+	 */
 	public abstract String getTableName();
 
 }
