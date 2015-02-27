@@ -256,59 +256,13 @@ public class EResourceModel extends BaseModel {
 		return search(model, 0, 0);
 	}
 
-	public List list() throws ApplicationException {
-		return list(0, 0);
-	}
-
-	public List list(int pageNo, int pageSize) throws ApplicationException {
-		log.debug("Model list Started");
-		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("select * from ST_EResource");
-		// if page size is greater than zero then apply pagination
-		if (pageSize > 0) {
-			// Calculate start record index
-			pageNo = (pageNo - 1) * pageSize;
-			sql.append(" limit " + pageNo + "," + pageSize);
-		}
-
-		Connection conn = null;
-
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				EResourceModel model = new EResourceModel();
-				model.setId(rs.getLong(1));
-				model.setTablesContains(rs.getString(2));
-				model.setName(rs.getString(3));
-				model.setDetail(rs.getString(4));
-				model.setCreatedOn(rs.getTimestamp(5));
-				list.add(model);
-			}
-			rs.close();
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new ApplicationException(
-					"Exception : Exception in getting list of users");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-
-		log.debug("Model list End");
-		return list;
-
-	}
-
 	@Override
 	public String getKey() {
-		// TODO Auto-generated method stub
 		return id + "";
 	}
 
 	@Override
 	public String getValue() {
-		// TODO Auto-generated method stub
 		return name;
 	}
 
