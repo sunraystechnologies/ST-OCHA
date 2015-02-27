@@ -12,32 +12,22 @@ import java.sql.Timestamp;
  * 
  */
 
-public abstract class BaseBean implements Serializable, DropdownListBean,
-		Comparable<BaseBean> {
+public abstract class BaseBean implements Serializable, Comparable<BaseBean>, DropdownListBean {
 
 	/**
 	 * Non Business primary key
 	 */
 	protected long id;
 
-protected String createdBy;
-protected String modifiedBy;
+	/**
+	 * Created by User
+	 */
+	protected String createdBy;
 
-	public String getCreatedBy() {
-	return createdBy;
-}
-
-public void setCreatedBy(String createdBy) {
-	this.createdBy = createdBy;
-}
-
-public String getModifiedBy() {
-	return modifiedBy;
-}
-
-public void setModifiedBy(String modifiedBy) {
-	this.modifiedBy = modifiedBy;
-}
+	/**
+	 * Modified by User
+	 */
+	protected String modifiedBy;
 
 	/**
 	 * Contains Created Timestamp of database record
@@ -60,6 +50,21 @@ public void setModifiedBy(String modifiedBy) {
 		this.id = id;
 	}
 
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
 
 	public Timestamp getCreatedDatetime() {
 		return createdDatetime;
@@ -76,8 +81,8 @@ public void setModifiedBy(String modifiedBy) {
 	public void setModifiedDatetime(Timestamp modifiedDatetime) {
 		this.modifiedDatetime = modifiedDatetime;
 	}
-	
+
 	public int compareTo(BaseBean next) {
-		return getValue().compareTo(next.getValue());
+		return (int) (id - next.getId());
 	}
 }

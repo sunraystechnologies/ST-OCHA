@@ -1,9 +1,6 @@
 package in.co.sunrays.ocha.model;
 
-import in.co.sunrays.ocha.bean.BaseBean;
-import in.co.sunrays.ocha.bean.StudentBean;
 import in.co.sunrays.ocha.exception.ApplicationException;
-import in.co.sunrays.ocha.exception.DatabaseException;
 import in.co.sunrays.util.JDBCDataSource;
 
 import java.sql.Connection;
@@ -16,11 +13,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class CommentModel extends BaseBean {
+public class CommentModel extends BaseModel {
 
 	private static Logger log = Logger.getLogger(CommentModel.class);
 
-	private long id = 0;
 	private long resourceId = 0;
 	private long userId = 0;
 	private String text = null;
@@ -35,13 +31,6 @@ public class CommentModel extends BaseBean {
 		this.name = name;
 	}
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 	public long getUserId() {
 		return userId;
 	}
@@ -74,50 +63,22 @@ public class CommentModel extends BaseBean {
 		this.createdOn = createdOn;
 	}
 
-	/**
-	 * Find next PK of comment
-	 * 
-	 * @throws DatabaseException
-	 */
-	public Integer nextPK() throws DatabaseException {
-		log.debug("Model nextPK Started");
-		Connection conn = null;
-		int pk = 0;
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn
-					.prepareStatement("SELECT MAX(ID) FROM ST_COMMENT");
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				pk = rs.getInt(1);
-			}
-			rs.close();
-
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new DatabaseException("Exception : Exception in getting PK");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-		log.debug("Model nextPK End");
-		return pk + 1;
-	}
-
 	public long add(CommentModel model) throws ApplicationException {
 
-	/*	log.debug("Model add Started");
-		System.out.println("eee"+model.getResourceId());
-EResourceModel emodel=new EResourceModel();
- emodel = emodel.findByPK(resourceId);
-System.out.println("bbbbb"+emodel);
-model.setName(emodel.getName());*/
+		/*
+		 * log.debug("Model add Started");
+		 * System.out.println("eee"+model.getResourceId()); EResourceModel
+		 * emodel=new EResourceModel(); emodel = emodel.findByPK(resourceId);
+		 * System.out.println("bbbbb"+emodel); model.setName(emodel.getName());
+		 */
 		Connection conn = null;
-		int pk = 0;
+		long pk = 0;
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			pk = nextPK();
+
 			// Get auto-generated next primary key
+			pk = nextPK("ST_COMMENT");
 			conn.setAutoCommit(false); // Begin transaction
 
 			PreparedStatement pstmt = conn
@@ -306,59 +267,13 @@ model.setName(emodel.getName());*/
 		return search(model, 0, 0);
 	}
 
-	public List list() throws ApplicationException {
-		return list(0, 0);
-	}
-
-	public List list(int pageNo, int pageSize) throws ApplicationException {
-		log.debug("Model list Started");
-		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("select * from ST_COMMENT");
-		// if page size is greater than zero then apply pagination
-		if (pageSize > 0) {
-			// Calculate start record index
-			pageNo = (pageNo - 1) * pageSize;
-			sql.append(" limit " + pageNo + "," + pageSize);
-		}
-
-		Connection conn = null;
-
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				CommentModel model = new CommentModel();
-				model.setId(rs.getLong(1));
-				model.setResourceId(rs.getLong(2));
-				model.setText(rs.getString(3));
-				model.setCreatedOn(rs.getTimestamp(4));
-				model.setUserId(rs.getLong(5));
-				model.setName(rs.getString(6));
-				list.add(model);
-			}
-			rs.close();
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new ApplicationException(
-					"Exception : Exception in getting list of users");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-
-		log.debug("Model list End");
-		return list;
-
-	}
-
 	@Override
 	public String getKey() {
-		// TODO Auto-generated method stub
-		return id+"";
+		return id + "";
 	}
+
 	@Override
 	public String getValue() {
-		// TODO Auto-generated method stub
 		return text;
 	}
 

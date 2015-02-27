@@ -1,12 +1,21 @@
 package in.co.sunrays.ocha.model;
 
 import in.co.sunrays.ocha.bean.DropdownListBean;
+import in.co.sunrays.ocha.exception.DatabaseException;
+import in.co.sunrays.util.JDBCDataSource;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
+
+import org.apache.log4j.Logger;
 
 public abstract class BaseModel implements Serializable, DropdownListBean,
 		Comparable<BaseModel> {
+
+	private static Logger log = Logger.getLogger(BaseModel.class);
 
 	/**
 	 * Non Business primary key
@@ -68,11 +77,42 @@ public abstract class BaseModel implements Serializable, DropdownListBean,
 	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
-	
+
 	/**
 	 * If ids are equal then objects are equal.
 	 */
 	public int compareTo(BaseModel next) {
-		return getValue().compareTo(next.getValue());
+		return (int) (id - next.getId());
 	}
+
+	/**
+	 * Find next PK of comment
+	 * 
+	 * @throws DatabaseException
+	 */
+
+	public long nextPK(String tableName) throws DatabaseException {
+		log.debug("Model nextPK Started");
+		Connection conn = null;
+		long pk = 0;
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn
+					.prepareStatement("SELECT MAX(ID) FROM " + tableName);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				pk = rs.getInt(1);
+			}
+			rs.close();
+
+		} catch (Exception e) {
+			log.error("Database Exception..", e);
+			throw new DatabaseException("Exception : Exception in getting PK");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		log.debug("Model nextPK End");
+		return pk + 1;
+	}
+
 }

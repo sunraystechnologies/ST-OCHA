@@ -1,8 +1,6 @@
 package in.co.sunrays.ocha.model;
 
-import in.co.sunrays.ocha.bean.BaseBean;
 import in.co.sunrays.ocha.exception.ApplicationException;
-import in.co.sunrays.ocha.exception.DatabaseException;
 import in.co.sunrays.util.JDBCDataSource;
 
 import java.sql.Connection;
@@ -15,84 +13,57 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class EResourceModel extends BaseBean {
+public class EResourceModel extends BaseModel {
+
 	private static Logger log = Logger.getLogger(EResourceModel.class);
 
-	private long id = 0;
 	private String name = null;
-	private String detail=null;
-	private String  tablesContains=null;
+	private String detail = null;
+	private String tablesContains = null;
 	private Timestamp createdOn = null;
-	public static Logger getLog() {
-		return log;
-	}
-	public static void setLog(Logger log) {
-		EResourceModel.log = log;
-	}
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getDetail() {
 		return detail;
 	}
+
 	public void setDetail(String detail) {
 		this.detail = detail;
 	}
+
 	public String getTablesContains() {
 		return tablesContains;
 	}
+
 	public void setTablesContains(String tablesContains) {
 		this.tablesContains = tablesContains;
 	}
+
 	public Timestamp getCreatedOn() {
 		return createdOn;
 	}
+
 	public void setCreatedOn(Timestamp createdOn) {
 		this.createdOn = createdOn;
 	}
-	public Integer nextPK() throws DatabaseException {
-		log.debug("Model nextPK Started");
-		Connection conn = null;
-		int pk = 0;
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn
-					.prepareStatement("SELECT MAX(ID) FROM ST_EResource");
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				pk = rs.getInt(1);
-			}
-			rs.close();
 
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new DatabaseException("Exception : Exception in getting PK");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-		log.debug("Model nextPK End");
-		return pk + 1;
-	}
-	
 	public long add() throws ApplicationException {
 
 		log.debug("Model add Started");
 
 		Connection conn = null;
-		int pk = 0;
+		long pk = 0;
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			pk = nextPK();
+			pk = nextPK("ST_EResource");
 			// Get auto-generated next primary key
 			conn.setAutoCommit(false); // Begin transaction
 
@@ -125,7 +96,7 @@ public class EResourceModel extends BaseBean {
 		log.debug("Model add End");
 		return pk;
 	}
-	
+
 	public void delete() throws ApplicationException {
 		log.debug("Model delete Started");
 		Connection conn = null;
@@ -155,7 +126,7 @@ public class EResourceModel extends BaseBean {
 		}
 		log.debug("Model delete Started");
 	}
-	
+
 	public EResourceModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
 		StringBuffer sql = new StringBuffer(
@@ -187,7 +158,7 @@ public class EResourceModel extends BaseBean {
 		log.debug("Model findByName End");
 		return model;
 	}
-	
+
 	public void update() throws ApplicationException {
 		log.debug("Model update Started");
 		Connection conn = null;
@@ -328,11 +299,13 @@ public class EResourceModel extends BaseBean {
 		return list;
 
 	}
+
 	@Override
 	public String getKey() {
 		// TODO Auto-generated method stub
-		return id+"";
+		return id + "";
 	}
+
 	@Override
 	public String getValue() {
 		// TODO Auto-generated method stub
