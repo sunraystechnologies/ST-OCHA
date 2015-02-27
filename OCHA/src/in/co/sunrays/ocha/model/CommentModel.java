@@ -65,12 +65,6 @@ public class CommentModel extends BaseModel {
 
 	public long add(CommentModel model) throws ApplicationException {
 
-		/*
-		 * log.debug("Model add Started");
-		 * System.out.println("eee"+model.getResourceId()); EResourceModel
-		 * emodel=new EResourceModel(); emodel = emodel.findByPK(resourceId);
-		 * System.out.println("bbbbb"+emodel); model.setName(emodel.getName());
-		 */
 		Connection conn = null;
 		long pk = 0;
 
@@ -78,11 +72,12 @@ public class CommentModel extends BaseModel {
 			conn = JDBCDataSource.getConnection();
 
 			// Get auto-generated next primary key
-			pk = nextPK("ST_COMMENT");
+			pk = nextPK();
+
 			conn.setAutoCommit(false); // Begin transaction
 
-			PreparedStatement pstmt = conn
-					.prepareStatement("INSERT INTO ST_COMMENT VALUES(?,?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO "
+					+ getTableName() + " VALUES(?,?,?,?,?,?)");
 			pstmt.setLong(1, pk);
 			pstmt.setLong(2, resourceId);
 			pstmt.setString(3, text);
@@ -118,8 +113,9 @@ public class CommentModel extends BaseModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("DELETE FROM ST_COMMENT WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM "
+					+ getTableName() + " WHERE ID=?");
+
 			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -144,8 +140,8 @@ public class CommentModel extends BaseModel {
 
 	public CommentModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByName Started");
-		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM ST_COMMENT WHERE ID=?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
+				+ " WHERE ID=?");
 		CommentModel model = null;
 		Connection conn = null;
 		try {
@@ -183,8 +179,8 @@ public class CommentModel extends BaseModel {
 			conn = JDBCDataSource.getConnection();
 
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("UPDATE ST_COMMENT SET text=? WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("UPDATE "
+					+ getTableName() + " SET text=? WHERE ID=?");
 			pstmt.setString(1, text);
 			pstmt.setLong(2, id);
 			pstmt.executeUpdate();
@@ -209,8 +205,8 @@ public class CommentModel extends BaseModel {
 	public List search(CommentModel model, int pageNo, int pageSize)
 			throws ApplicationException {
 		log.debug("Model search Started");
-		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM ST_COMMENT WHERE 1=1");
+		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
+				+ " WHERE 1=1");
 
 		if (model != null) {
 			if (id > 0) {
@@ -275,6 +271,11 @@ public class CommentModel extends BaseModel {
 	@Override
 	public String getValue() {
 		return text;
+	}
+
+	@Override
+	public String getTableName() {
+		return "ST_COMMENT";
 	}
 
 }

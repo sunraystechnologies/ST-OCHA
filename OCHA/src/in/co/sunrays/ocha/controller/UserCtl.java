@@ -40,7 +40,7 @@ public class UserCtl extends BaseCtl {
 	protected void preload(HttpServletRequest request) {
 		RoleModel model = new RoleModel();
 		try {
-			List l = model.list();
+			List l = model.search(null);
 			request.setAttribute("roleList", l);
 		} catch (ApplicationException e) {
 			log.error(e);

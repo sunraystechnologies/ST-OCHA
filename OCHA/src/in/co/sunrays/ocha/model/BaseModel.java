@@ -91,14 +91,14 @@ public abstract class BaseModel implements Serializable, DropdownListBean,
 	 * @throws DatabaseException
 	 */
 
-	public long nextPK(String tableName) throws DatabaseException {
+	public long nextPK() throws DatabaseException {
 		log.debug("Model nextPK Started");
 		Connection conn = null;
 		long pk = 0;
 		try {
 			conn = JDBCDataSource.getConnection();
 			PreparedStatement pstmt = conn
-					.prepareStatement("SELECT MAX(ID) FROM " + tableName);
+					.prepareStatement("SELECT MAX(ID) FROM " + getTableName());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				pk = rs.getInt(1);
@@ -114,5 +114,7 @@ public abstract class BaseModel implements Serializable, DropdownListBean,
 		log.debug("Model nextPK End");
 		return pk + 1;
 	}
+
+	public abstract String getTableName();
 
 }

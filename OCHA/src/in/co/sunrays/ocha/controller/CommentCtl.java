@@ -28,31 +28,33 @@ public class CommentCtl extends BaseCtl {
 	protected void preload(HttpServletRequest request) {
 		EResourceModel model = new EResourceModel();
 		try {
-			List l = model.list();
+			List l = model.search(model);
 			request.setAttribute("resourceList", l);
 		} catch (ApplicationException e) {
 			log.error(e);
 		}
 
 	}
+
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-		
+
 		log.debug("CommentCtl Method validate Started");
 
 		boolean pass = true;
 
 		if (DataValidator.isNull(request.getParameter("text"))) {
-			request.setAttribute("text", PropertyReader.getValue("error.require", "text"));
+			request.setAttribute("text",
+					PropertyReader.getValue("error.require", "text"));
 			pass = false;
 		}
 
-		
 		log.debug("EResourceCtl Method validate Ended");
 
 		return pass;
-		
+
 	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -60,13 +62,14 @@ public class CommentCtl extends BaseCtl {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
-		CommentModel model=new CommentModel();
+		CommentModel model = new CommentModel();
 		model.setId(DataUtility.getLong(request.getParameter("id")));
 		model.setText(DataUtility.getString(request.getParameter("text")));
 		model.setName(DataUtility.getString(request.getParameter("name")));
-		model.setResourceId(DataUtility.getLong(request.getParameter("resourceId")));
-		System.out.println("hkhkh"+request.getParameter("resourceId"));
-		long userId=(Long)session.getAttribute("userId");
+		model.setResourceId(DataUtility.getLong(request
+				.getParameter("resourceId")));
+		System.out.println("hkhkh" + request.getParameter("resourceId"));
+		long userId = (Long) session.getAttribute("userId");
 		model.setUserId(userId);
 		long id = DataUtility.getLong(request.getParameter("id"));
 		String op = DataUtility.getString(request.getParameter("operation"));
@@ -79,7 +82,8 @@ public class CommentCtl extends BaseCtl {
 					model.setId(pk);
 				}
 
-				ServletUtility.setBean(model, request);
+				ServletUtility.setModel(model, request);
+
 				ServletUtility.setSuccessMessage("Data is successfully saved",
 						request);
 
@@ -87,7 +91,7 @@ public class CommentCtl extends BaseCtl {
 				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
-			} 
+			}
 		} else if (OP_DELETE.equalsIgnoreCase(op)) {
 
 			try {
@@ -109,14 +113,14 @@ public class CommentCtl extends BaseCtl {
 			return;
 
 		} else { // View page
-			if(model.getResourceId()>0){
-				
-				ServletUtility.setBean(model, request);
-			}else if (id > 0 || op != null) {
+			if (model.getResourceId() > 0) {
+
+				ServletUtility.setModel(model, request);
+			} else if (id > 0 || op != null) {
 
 				try {
 					model = model.findByPK(id);
-					ServletUtility.setBean(model, request);
+					ServletUtility.setModel(model, request);
 				} catch (ApplicationException e) {
 					log.error(e);
 					ServletUtility.handleException(e, request, response);
@@ -125,8 +129,6 @@ public class CommentCtl extends BaseCtl {
 			}
 		}
 
-		
-		
 		ServletUtility.forward(ORSView.COMMENT_VIEW, request, response);
 	}
 

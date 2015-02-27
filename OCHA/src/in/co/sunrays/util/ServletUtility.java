@@ -162,6 +162,7 @@ public class ServletUtility {
 	public static void setBean(BaseBean bean, HttpServletRequest request) {
 		request.setAttribute("bean", bean);
 	}
+	
 	public static void setModel(BaseModel model, HttpServletRequest request) {
 		request.setAttribute("model", model);
 	}
@@ -176,7 +177,12 @@ public class ServletUtility {
 	public static BaseBean getBean(HttpServletRequest request) {
 		return (BaseBean) request.getAttribute("bean");
 	}
-
+	
+	
+	public static BaseModel getModel(HttpServletRequest request) {
+		return (BaseModel) request.getAttribute("model");
+	}
+	
 	/**
 	 * Get request parameter to display. If value is null then return empty
 	 * string

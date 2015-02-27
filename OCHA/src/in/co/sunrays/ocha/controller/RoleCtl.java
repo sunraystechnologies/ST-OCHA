@@ -99,9 +99,9 @@ public class RoleCtl extends BaseCtl {
 
 			try {
 				if (id > 0) {
-					model.update(model);
+					model.update();
 				} else {
-					long pk = model.add(model);
+					long pk = model.add();
 					model.setId(pk);
 				}
 
@@ -123,7 +123,7 @@ public class RoleCtl extends BaseCtl {
 
 			 model = (RoleModel) populateModel(request);
 			try {
-				model.delete(model);
+				model.delete();
 				ServletUtility.redirect(ORSView.ROLE_LIST_CTL, request,
 						response);
 				return;

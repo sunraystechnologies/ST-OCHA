@@ -63,12 +63,12 @@ public class EResourceModel extends BaseModel {
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			pk = nextPK("ST_EResource");
+			pk = nextPK();
 			// Get auto-generated next primary key
 			conn.setAutoCommit(false); // Begin transaction
 
-			PreparedStatement pstmt = conn
-					.prepareStatement("INSERT INTO ST_EResource VALUES(?,?,?,?,?)");
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO "
+					+ getTableName() + " VALUES(?,?,?,?,?)");
 			pstmt.setLong(1, pk);
 			pstmt.setString(2, tablesContains);
 			pstmt.setString(3, name);
@@ -103,8 +103,8 @@ public class EResourceModel extends BaseModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("DELETE FROM ST_EResource WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM "
+					+ getTableName() + " WHERE ID=?");
 			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -129,8 +129,8 @@ public class EResourceModel extends BaseModel {
 
 	public EResourceModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
-		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM ST_EResource WHERE ID=?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
+				+ " WHERE ID=?");
 		EResourceModel model = null;
 		Connection conn = null;
 		try {
@@ -168,8 +168,9 @@ public class EResourceModel extends BaseModel {
 			conn = JDBCDataSource.getConnection();
 
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("UPDATE ST_EResource SET TABLE_CONTAINS=?,NAME=?,DETAIL=? WHERE ID=?");
+			PreparedStatement pstmt = conn.prepareStatement("UPDATE "
+					+ getTableName()
+					+ " SET TABLE_CONTAINS=?,NAME=?,DETAIL=? WHERE ID=?");
 			pstmt.setString(1, tablesContains);
 			pstmt.setString(2, name);
 			pstmt.setString(3, detail);
@@ -196,8 +197,8 @@ public class EResourceModel extends BaseModel {
 	public List search(EResourceModel model, int pageNo, int pageSize)
 			throws ApplicationException {
 		log.debug("Model search Started");
-		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM ST_EResource WHERE 1=1");
+		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
+				+ " WHERE 1=1");
 
 		if (model != null) {
 			if (id > 0) {
@@ -264,6 +265,11 @@ public class EResourceModel extends BaseModel {
 	@Override
 	public String getValue() {
 		return name;
+	}
+
+	@Override
+	public String getTableName() {
+		return "ST_EResource";
 	}
 
 }

@@ -40,64 +40,78 @@ public class UserRegistrationCtl extends BaseCtl {
 	protected void preload(HttpServletRequest request) {
 		RoleModel model = new RoleModel();
 		try {
-			List l = model.list();
+			List l = model.search(null);
 			request.setAttribute("roleList", l);
 		} catch (ApplicationException e) {
 			log.error(e);
 		}
 
 	}
+
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
 		log.debug("UserRegistrationCtl Method validate Started");
 
 		boolean pass = true;
-		
+
 		String login = request.getParameter("login");
 		String dob = request.getParameter("dob");
 
 		if (DataValidator.isNull(request.getParameter("firstName"))) {
-			request.setAttribute("firstName", PropertyReader.getValue("error.require", "First Name"));
+			request.setAttribute("firstName",
+					PropertyReader.getValue("error.require", "First Name"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("lastName"))) {
-			request.setAttribute("lastName", PropertyReader.getValue("error.require", "Last Name"));
+			request.setAttribute("lastName",
+					PropertyReader.getValue("error.require", "Last Name"));
 			pass = false;
 		}
 		if (DataValidator.isNull(login)) {
 			request.setAttribute("login",
 					PropertyReader.getValue("error.require", "Login Id"));
 			pass = false;
-		} if (DataValidator.isNull(request.getParameter("collegeId"))) {
-			request.setAttribute("collegeId", PropertyReader.getValue("error.require", "College Id"));
-			pass = false;
-		} if (DataValidator.isNull(request.getParameter("fatherName"))) {
-			request.setAttribute("fatherName", PropertyReader.getValue("error.require", "Father Name"));
-			pass = false;
-		}if (DataValidator.isNull(request.getParameter("motherName"))) {
-			request.setAttribute("motherName", PropertyReader.getValue("error.require", "Mother Name"));
-			pass = false;
-		}if (DataValidator.isNull(request.getParameter("address"))) {
-			request.setAttribute("address", PropertyReader.getValue("error.require", "Address"));
+		}
+		if (DataValidator.isNull(request.getParameter("collegeId"))) {
+			request.setAttribute("collegeId",
+					PropertyReader.getValue("error.require", "College Id"));
 			pass = false;
 		}
-		
+		if (DataValidator.isNull(request.getParameter("fatherName"))) {
+			request.setAttribute("fatherName",
+					PropertyReader.getValue("error.require", "Father Name"));
+			pass = false;
+		}
+		if (DataValidator.isNull(request.getParameter("motherName"))) {
+			request.setAttribute("motherName",
+					PropertyReader.getValue("error.require", "Mother Name"));
+			pass = false;
+		}
+		if (DataValidator.isNull(request.getParameter("address"))) {
+			request.setAttribute("address",
+					PropertyReader.getValue("error.require", "Address"));
+			pass = false;
+		}
+
 		else if (!DataValidator.isEmail(login)) {
 			request.setAttribute("login",
 					PropertyReader.getValue("error.email", "Login "));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("password"))) {
-			request.setAttribute("password", PropertyReader.getValue("error.require", "Password"));
+			request.setAttribute("password",
+					PropertyReader.getValue("error.require", "Password"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("confirmPassword"))) {
-			request.setAttribute("confirmPassword", PropertyReader.getValue("error.require", "Confirm Password"));
+			request.setAttribute("confirmPassword", PropertyReader.getValue(
+					"error.require", "Confirm Password"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("gender"))) {
-			request.setAttribute("gender", PropertyReader.getValue("error.require", "Gender"));
+			request.setAttribute("gender",
+					PropertyReader.getValue("error.require", "Gender"));
 			pass = false;
 		}
 		if (DataValidator.isNull(dob)) {
@@ -130,17 +144,20 @@ public class UserRegistrationCtl extends BaseCtl {
 		UserBean bean = new UserBean();
 
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
-		
-		//bean.setRoleId(RoleBean.STUDENT);
+
+		// bean.setRoleId(RoleBean.STUDENT);
 		bean.setRoleId(DataUtility.getLong(request.getParameter("roleId")));
 
 		bean.setFirstName(DataUtility.getString(request
 				.getParameter("firstName")));
 
 		bean.setLastName(DataUtility.getString(request.getParameter("lastName")));
-		bean.setCollegeId(DataUtility.getString(request.getParameter("collegeId")));
-		bean.setFatherName(DataUtility.getString(request.getParameter("fatherName")));
-		bean.setMotherName(DataUtility.getString(request.getParameter("motherName")));
+		bean.setCollegeId(DataUtility.getString(request
+				.getParameter("collegeId")));
+		bean.setFatherName(DataUtility.getString(request
+				.getParameter("fatherName")));
+		bean.setMotherName(DataUtility.getString(request
+				.getParameter("motherName")));
 		bean.setAddress(DataUtility.getString(request.getParameter("address")));
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
 
@@ -152,7 +169,7 @@ public class UserRegistrationCtl extends BaseCtl {
 		bean.setGender(DataUtility.getString(request.getParameter("gender")));
 
 		bean.setDob(DataUtility.getDate(request.getParameter("dob")));
-		
+
 		populateDTO(bean, request);
 
 		log.debug("UserRegistrationCtl Method populatebean Ended");

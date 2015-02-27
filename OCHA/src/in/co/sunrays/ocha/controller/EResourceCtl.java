@@ -24,38 +24,44 @@ public class EResourceCtl extends BaseCtl {
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-		
+
 		log.debug("EResourceCtl Method validate Started");
 
 		boolean pass = true;
 
 		if (DataValidator.isNull(request.getParameter("tableContains"))) {
-			request.setAttribute("tableContains", PropertyReader.getValue("error.require", "tableContains"));
+			request.setAttribute("tableContains",
+					PropertyReader.getValue("error.require", "tableContains"));
 			pass = false;
 		}
 
 		if (DataValidator.isNull(request.getParameter("name"))) {
-			request.setAttribute("name", PropertyReader.getValue("error.require", "name"));
-			pass = false;
-		}if (DataValidator.isNull(request.getParameter("detail"))) {
-			request.setAttribute("detail", PropertyReader.getValue("error.require", "detail"));
+			request.setAttribute("name",
+					PropertyReader.getValue("error.require", "name"));
 			pass = false;
 		}
-		
+		if (DataValidator.isNull(request.getParameter("detail"))) {
+			request.setAttribute("detail",
+					PropertyReader.getValue("error.require", "detail"));
+			pass = false;
+		}
+
 		log.debug("EResourceCtl Method validate Ended");
 
 		return pass;
-		
+
 	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		EResourceModel model=new EResourceModel();
+		EResourceModel model = new EResourceModel();
 		model.setId(DataUtility.getLong(request.getParameter("id")));
-		model.setTablesContains(DataUtility.getString(request.getParameter("tableContains")));
+		model.setTablesContains(DataUtility.getString(request
+				.getParameter("tableContains")));
 		model.setName(DataUtility.getString(request.getParameter("name")));
 		model.setDetail(DataUtility.getString(request.getParameter("detail")));
 		model.setCreatedOn(DataUtility.getCurrentTimestamp());
@@ -70,7 +76,7 @@ public class EResourceCtl extends BaseCtl {
 					model.setId(pk);
 				}
 
-				ServletUtility.setBean(model, request);
+				ServletUtility.setModel(model, request);
 				ServletUtility.setSuccessMessage("Data is successfully saved",
 						request);
 
@@ -78,7 +84,7 @@ public class EResourceCtl extends BaseCtl {
 				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
-			} 
+			}
 		} else if (OP_DELETE.equalsIgnoreCase(op)) {
 
 			try {
@@ -95,8 +101,8 @@ public class EResourceCtl extends BaseCtl {
 
 		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
 
-			ServletUtility
-					.redirect(ORSView.ERESOURCE_LIST_CTL, request, response);
+			ServletUtility.redirect(ORSView.ERESOURCE_LIST_CTL, request,
+					response);
 			return;
 
 		} else { // View page
@@ -105,7 +111,7 @@ public class EResourceCtl extends BaseCtl {
 
 				try {
 					model = model.findByPK(id);
-					ServletUtility.setBean(model, request);
+					ServletUtility.setModel(model, request);
 				} catch (ApplicationException e) {
 					log.error(e);
 					ServletUtility.handleException(e, request, response);
@@ -114,8 +120,6 @@ public class EResourceCtl extends BaseCtl {
 			}
 		}
 
-		
-		
 		ServletUtility.forward(ORSView.ERESOURCE_VIEW, request, response);
 	}
 
@@ -124,5 +128,5 @@ public class EResourceCtl extends BaseCtl {
 		// TODO Auto-generated method stub
 		return ORSView.ERESOURCE_VIEW;
 	}
-	
+
 }

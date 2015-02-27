@@ -151,9 +151,9 @@ public class StudentCtl extends BaseCtl {
 
 			try {
 				if (id > 0) {
-					model.update(bean);
+					model.update();
 				} else {
-					long pk = model.add(bean);
+					long pk = model.add();
 					bean.setId(pk);
 				}
 
@@ -177,7 +177,7 @@ public class StudentCtl extends BaseCtl {
 
 			StudentBean bean = (StudentBean) populateBean(request);
 			try {
-				model.delete(bean);
+				model.delete();
 				ServletUtility.redirect(ORSView.STUDENT_LIST_CTL, request,
 						response);
 				return;

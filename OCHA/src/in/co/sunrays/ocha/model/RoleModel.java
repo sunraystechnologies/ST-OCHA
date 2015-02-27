@@ -72,48 +72,18 @@ public class RoleModel extends BaseModel {
 	}
 
 	/**
-	 * Find next PK of Role
-	 * 
-	 * @throws DatabaseException
-	 */
-	public Integer nextPK() throws DatabaseException {
-		log.debug("Model nextPK Started");
-		Connection conn = null;
-		int pk = 0;
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn
-					.prepareStatement("SELECT MAX(ID) FROM ST_ROLE");
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				pk = rs.getInt(1);
-			}
-			rs.close();
-
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new DatabaseException("Exception : Exception in getting PK");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-		log.debug("Model nextPK End");
-		return pk + 1;
-	}
-
-	/**
 	 * Add a Role
 	 * 
 	 * @param model
 	 * @throws DatabaseException
 	 * 
 	 */
-	public long add(RoleModel model) throws ApplicationException,
-			DuplicateRecordException {
+	public long add() throws ApplicationException, DuplicateRecordException {
 		log.debug("Model add Started");
 		Connection conn = null;
-		int pk = 0;
+		long pk = 0;
 
-		RoleModel duplicataRole = findByName(model.getName());
+		RoleModel duplicataRole = findByName(name);
 		// Check if create Role already exist
 		if (duplicataRole != null) {
 			throw new DuplicateRecordException("Role already exists");
@@ -125,15 +95,15 @@ public class RoleModel extends BaseModel {
 			// Get auto-generated next primary key
 			System.out.println(pk + " in ModelJDBC");
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("INSERT INTO ST_ROLE VALUES(?,?,?,?,?,?,?)");
-			pstmt.setInt(1, pk);
-			pstmt.setString(2, model.getName());
-			pstmt.setString(3, model.getDescription());
-			pstmt.setString(4, model.getCreatedBy());
-			pstmt.setString(5, model.getModifiedBy());
-			pstmt.setTimestamp(6, model.getCreatedDatetime());
-			pstmt.setTimestamp(7, model.getModifiedDatetime());
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO "
+					+ getTableName() + " VALUES(?,?,?,?,?,?,?)");
+			pstmt.setLong(1, pk);
+			pstmt.setString(2, name);
+			pstmt.setString(3, description);
+			pstmt.setString(4, createdBy);
+			pstmt.setString(5, modifiedBy);
+			pstmt.setTimestamp(6, createdDatetime);
+			pstmt.setTimestamp(7, modifiedDatetime);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -160,15 +130,15 @@ public class RoleModel extends BaseModel {
 	 * @param model
 	 * @throws DatabaseException
 	 */
-	public void delete(RoleModel model) throws ApplicationException {
+	public void delete() throws ApplicationException {
 		log.debug("Model delete Started");
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("DELETE FROM ST_ROLE WHERE ID=?");
-			pstmt.setLong(1, model.getId());
+			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM "
+					+ getTableName() + " WHERE ID=?");
+			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -281,14 +251,13 @@ public class RoleModel extends BaseModel {
 	 * @throws DatabaseException
 	 */
 
-	public void update(RoleModel model) throws ApplicationException,
-			DuplicateRecordException {
+	public void update() throws ApplicationException, DuplicateRecordException {
 		log.debug("Model update Started");
 		Connection conn = null;
 
-		RoleModel duplicataRole = findByName(model.getName());
+		RoleModel duplicataRole = findByName(name);
 		// Check if updated Role already exist
-		if (duplicataRole != null && duplicataRole.getId() != model.getId()) {
+		if (duplicataRole != null && duplicataRole.getId() != id) {
 			throw new DuplicateRecordException("Role already exists");
 		}
 		try {
@@ -296,14 +265,16 @@ public class RoleModel extends BaseModel {
 
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn
-					.prepareStatement("UPDATE ST_ROLE SET NAME=?,DESCRIPTION=?,CREATED_BY=?,MODIFIED_BY=?,CREATED_DATETIME=?,MODIFIED_DATETIME=? WHERE ID=?");
-			pstmt.setString(1, model.getName());
-			pstmt.setString(2, model.getDescription());
-			pstmt.setString(3, model.getCreatedBy());
-			pstmt.setString(4, model.getModifiedBy());
-			pstmt.setTimestamp(5, model.getCreatedDatetime());
-			pstmt.setTimestamp(6, model.getModifiedDatetime());
-			pstmt.setLong(7, model.getId());
+					.prepareStatement("UPDATE "
+							+ getTableName()
+							+ " SET NAME=?,DESCRIPTION=?,CREATED_BY=?,MODIFIED_BY=?,CREATED_DATETIME=?,MODIFIED_DATETIME=? WHERE ID=?");
+			pstmt.setString(1, name);
+			pstmt.setString(2, description);
+			pstmt.setString(3, createdBy);
+			pstmt.setString(4, modifiedBy);
+			pstmt.setTimestamp(5, createdDatetime);
+			pstmt.setTimestamp(6, modifiedDatetime);
+			pstmt.setLong(7, id);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -408,69 +379,9 @@ public class RoleModel extends BaseModel {
 		return list;
 	}
 
-	/**
-	 * Get List of Role
-	 * 
-	 * @return list : List of Role
-	 * @throws DatabaseException
-	 */
-
-	public List list() throws ApplicationException {
-		return list(0, 0);
+	@Override
+	public String getTableName() {
+		return "ST_ROLE";
 	}
-
-	/**
-	 * Get List of Role with pagination
-	 * 
-	 * @return list : List of Role
-	 * @param pageNo
-	 *            : Current Page No.
-	 * @param pageSize
-	 *            : Size of Page
-	 * @throws DatabaseException
-	 */
-
-	public List list(int pageNo, int pageSize) throws ApplicationException {
-		log.debug("Model list Started");
-		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("select * from ST_ROLE");
-		// if page size is greater than zero then apply pagination
-		if (pageSize > 0) {
-			// Calculate start record index
-			pageNo = (pageNo - 1) * pageSize;
-			sql.append(" limit " + pageNo + "," + pageSize);
-		}
-
-		Connection conn = null;
-
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				RoleModel model = new RoleModel();
-				model.setId(rs.getLong(1));
-				model.setName(rs.getString(2));
-				model.setDescription(rs.getString(3));
-				model.setCreatedBy(rs.getString(4));
-				model.setModifiedBy(rs.getString(5));
-				model.setCreatedDatetime(rs.getTimestamp(6));
-				model.setModifiedDatetime(rs.getTimestamp(7));
-				list.add(model);
-			}
-			rs.close();
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new ApplicationException(
-					"Exception : Exception in getting list of Role");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-
-		log.debug("Model list End");
-		return list;
-
-	}
-
 
 }
