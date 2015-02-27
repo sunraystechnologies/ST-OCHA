@@ -12,6 +12,22 @@ import java.sql.Timestamp;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Base Model containing common attributes and methods.
+ * 
+ * It is implements Comparable interface that compares two object on the basis
+ * of primary key ID.
+ * 
+ * It implements DropdownListBean that is required to make a MODEL list to
+ * Dropdown List.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
+
 public abstract class BaseModel implements Serializable, DropdownListBean,
 		Comparable<BaseModel> {
 
@@ -22,6 +38,9 @@ public abstract class BaseModel implements Serializable, DropdownListBean,
 	 */
 	protected long id;
 
+	/**
+	 * User name that created this record. 
+	 */
 	protected String createdBy;
 	protected String modifiedBy;
 
@@ -79,7 +98,7 @@ public abstract class BaseModel implements Serializable, DropdownListBean,
 	}
 
 	/**
-	 * If ids are equal then objects are equal.
+	 * If ids (primary keys) are equal then objects are equal.
 	 */
 	public int compareTo(BaseModel next) {
 		return (int) (id - next.getId());

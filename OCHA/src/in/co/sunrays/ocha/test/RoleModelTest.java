@@ -38,8 +38,7 @@ public class RoleModelTest {
 		// testFindByPK();
 		// testFindByName();
 		// testSearch();
-		   testList();
-		
+		testList();
 
 	}
 
@@ -54,10 +53,10 @@ public class RoleModelTest {
 			RoleModel model = new RoleModel();
 			// SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-			//bean.setId(1L);
+			// bean.setId(1L);
 			model.setName("shivam");
 			model.setDescription("kumar");
-			long pk = model.add(model);
+			long pk = model.add();
 			RoleModel addedmodel = model.findByPK(pk);
 			if (addedmodel == null) {
 				System.out.println("Test add fail");
@@ -79,7 +78,7 @@ public class RoleModelTest {
 			RoleModel model = new RoleModel();
 			long pk = 3L;
 			model.setId(pk);
-			model.delete(model);
+			model.delete();
 			RoleModel deletedmodel = model.findByPK(pk);
 			if (deletedmodel != null) {
 				System.out.println("Test Delete fail");
@@ -96,10 +95,10 @@ public class RoleModelTest {
 
 		try {
 			RoleModel model = new RoleModel();
-			 model = model.findByPK(6L);
+			model = model.findByPK(6L);
 			model.setName("12");
 			model.setDescription("Ejjjjjjjjng");
-			model.update(model);
+			model.update();
 
 			RoleModel updatedbean = model.findByPK(6L);
 			if (!"12".equals(updatedbean.getName())) {
@@ -176,6 +175,7 @@ public class RoleModelTest {
 		}
 
 	}
+
 	/**
 	 * Tests get List.
 	 */
@@ -183,8 +183,7 @@ public class RoleModelTest {
 
 		try {
 			RoleModel model = new RoleModel();
-			List list = new ArrayList();
-			list = model.list(1, 10);
+			List list = model.search(model, 1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test list fail");
 			}

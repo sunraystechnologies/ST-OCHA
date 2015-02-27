@@ -63,7 +63,7 @@ public class CommentModel extends BaseModel {
 		this.createdOn = createdOn;
 	}
 
-	public long add(CommentModel model) throws ApplicationException {
+	public long add() throws ApplicationException {
 
 		Connection conn = null;
 		long pk = 0;

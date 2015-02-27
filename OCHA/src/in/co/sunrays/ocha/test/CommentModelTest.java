@@ -20,10 +20,10 @@ public class CommentModelTest {
 	 */
 	public static void main(String[] args) throws DuplicateRecordException {
 		// testAdd();
-		//testDelete();
-		//testUpdate();
-		//testFindByPK();
-		//testSearch();
+		// testDelete();
+		// testUpdate();
+		// testFindByPK();
+		// testSearch();
 		testList();
 
 	}
@@ -37,7 +37,7 @@ public class CommentModelTest {
 			model.setText("Test");
 			// model.setCreatedOn((new Timestamp(new Date().getTime())));
 
-			long pk = model.add(model);
+			long pk = model.add();
 			System.out.println("Test add succ");
 		} catch (ApplicationException e) {
 			e.printStackTrace();
@@ -88,12 +88,12 @@ public class CommentModelTest {
 		}
 
 	}
-	
+
 	public static void testSearch() {
 		try {
 			List list = new ArrayList();
 			model.setText("Demo");
-			//bean.setAddress("borawan");
+			// bean.setAddress("borawan");
 			list = model.search(model, 1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test Search fail");
@@ -110,12 +110,12 @@ public class CommentModelTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void testList() {
 
 		try {
 			List list = new ArrayList();
-			list = model.list(1, 10);
+			list = model.search(null, 1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test list fail");
 			}

@@ -118,7 +118,7 @@ public class EResourceModelTest {
 
 		try {
 			List list = new ArrayList();
-			list = model.list(1, 10);
+			list = model.search(model,1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test list fail");
 			}

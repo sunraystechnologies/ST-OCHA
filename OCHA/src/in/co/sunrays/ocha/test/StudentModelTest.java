@@ -36,14 +36,14 @@ public class StudentModelTest {
 	 * @throws ParseException
 	 */
 	public static void main(String[] args) throws ParseException {
-		 // testAdd();
-		 // testDelete();
-		 // testUpdate();
-		 // testFindByPK();
-		 // testFindByEmailId();
-		 // testSearch();
-		    testList();
-		 
+		// testAdd();
+		// testDelete();
+		// testUpdate();
+		// testFindByPK();
+		// testFindByEmailId();
+		// testSearch();
+		testList();
+
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class StudentModelTest {
 			StudentBean bean = new StudentBean();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-			//bean.setId(1L);
+			// bean.setId(1L);
 			bean.setFirstName("ram");
 			bean.setLastName("kumawat");
 			bean.setDob(sdf.parse("31/12/1990"));
@@ -68,7 +68,7 @@ public class StudentModelTest {
 			bean.setModifiedBy("Admin");
 			bean.setCreatedDatetime(new Timestamp(new Date().getTime()));
 			bean.setModifiedDatetime(new Timestamp(new Date().getTime()));
-			long pk = model.add(bean);
+			long pk = model.add();
 			StudentBean addedbean = model.findByPK(pk);
 			if (addedbean == null) {
 				System.out.println("Test add fail");
@@ -90,7 +90,7 @@ public class StudentModelTest {
 			StudentBean bean = new StudentBean();
 			long pk = 10L;
 			bean.setId(pk);
-			model.delete(bean);
+			model.delete();
 			StudentBean deletedbean = model.findByPK(pk);
 			if (deletedbean != null) {
 				System.out.println("Test Delete fail");
@@ -110,7 +110,7 @@ public class StudentModelTest {
 			bean.setCollegeId(4L);
 			bean.setFirstName("ankit");
 			bean.setLastName("sharma");
-			model.update(bean);
+			model.update();
 
 			StudentBean updatedbean = model.findByPK(3L);
 			if (!"rr".equals(updatedbean.getFirstName())) {
@@ -199,7 +199,7 @@ public class StudentModelTest {
 		}
 
 	}
-	 
+
 	/**
 	 * Tests get List.
 	 */
@@ -208,7 +208,7 @@ public class StudentModelTest {
 		try {
 			StudentBean bean = new StudentBean();
 			List list = new ArrayList();
-			list = model.list(1, 10);
+			list = model.search(null,1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test list fail");
 			}
