@@ -13,8 +13,22 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Model contains Comment attributes and its Create, Read, Update and Delete
+ * methods.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
+
 public class CommentModel extends BaseModel {
 
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(CommentModel.class);
 
 	private long resourceId = 0;
@@ -63,6 +77,12 @@ public class CommentModel extends BaseModel {
 		this.createdOn = createdOn;
 	}
 
+	/**
+	 * Adds a record
+	 * 
+	 * @return
+	 * @throws ApplicationException
+	 */
 	public long add() throws ApplicationException {
 
 		Connection conn = null;
@@ -76,8 +96,11 @@ public class CommentModel extends BaseModel {
 
 			conn.setAutoCommit(false); // Begin transaction
 
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO "
-					+ getTableName() + " VALUES(?,?,?,?,?,?)");
+			String sql = "INSERT INTO " + getTableName()
+					+ " VALUES(?,?,?,?,?,?)";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, pk);
 			pstmt.setLong(2, resourceId);
 			pstmt.setString(3, text);
@@ -107,14 +130,23 @@ public class CommentModel extends BaseModel {
 		return pk;
 	}
 
+	/**
+	 * Deletes a record
+	 * 
+	 * @throws ApplicationException
+	 */
+
 	public void delete() throws ApplicationException {
 		log.debug("Model delete Started");
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM "
-					+ getTableName() + " WHERE ID=?");
+
+			String sql = "DELETE FROM " + getTableName() + " WHERE ID=?";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 
 			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
@@ -138,10 +170,20 @@ public class CommentModel extends BaseModel {
 		log.debug("Model delete Started");
 	}
 
+	/**
+	 * Finds record by Primary Key ( ID)
+	 * 
+	 * @param pk
+	 * @return
+	 * @throws ApplicationException
+	 */
 	public CommentModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByName Started");
+
 		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
 				+ " WHERE ID=?");
+		log.info("SQL : " + sql);
+
 		CommentModel model = null;
 		Connection conn = null;
 		try {
@@ -170,8 +212,15 @@ public class CommentModel extends BaseModel {
 		return model;
 	}
 
+	/**
+	 * Updates a records
+	 * 
+	 * @throws ApplicationException
+	 */
 	public void update() throws ApplicationException {
+
 		log.debug("Model update Started");
+
 		Connection conn = null;
 
 		try {
@@ -179,8 +228,11 @@ public class CommentModel extends BaseModel {
 			conn = JDBCDataSource.getConnection();
 
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("UPDATE "
-					+ getTableName() + " SET text=? WHERE ID=?");
+
+			String sql = "UPDATE " + getTableName() + " SET text=? WHERE ID=?";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, text);
 			pstmt.setLong(2, id);
 			pstmt.executeUpdate();
@@ -202,23 +254,31 @@ public class CommentModel extends BaseModel {
 		log.debug("Model update End");
 	}
 
-	public List search(CommentModel model, int pageNo, int pageSize)
-			throws ApplicationException {
+	/**
+	 * Searches records on the basis of model NOT NULL attributes with
+	 * pagination.
+	 * 
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public List search(int pageNo, int pageSize) throws ApplicationException {
+
 		log.debug("Model search Started");
+
 		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
 				+ " WHERE 1=1");
 
-		if (model != null) {
-			if (id > 0) {
-				sql.append(" AND id = " + id);
-			}
-			if (text != null && text.length() > 0) {
-				sql.append(" AND text like '" + text + "%'");
-			}
-			if (resourceId > 0) {
-				sql.append(" AND resourceId =" + id);
-			}
-
+		if (id > 0) {
+			sql.append(" AND id = " + id);
+		}
+		if (text != null && text.length() > 0) {
+			sql.append(" AND text like '" + text + "%'");
+		}
+		if (resourceId > 0) {
+			sql.append(" AND resourceId =" + id);
 		}
 
 		// if page size is greater than zero then apply pagination
@@ -230,6 +290,8 @@ public class CommentModel extends BaseModel {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
+		log.info("SQL : " + sql);
+
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -237,7 +299,7 @@ public class CommentModel extends BaseModel {
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				model = new CommentModel();
+				CommentModel model = new CommentModel();
 				model.setId(rs.getLong(1));
 				model.setResourceId(rs.getLong(2));
 				model.setText(rs.getString(3));
@@ -259,20 +321,35 @@ public class CommentModel extends BaseModel {
 		return list;
 	}
 
-	public List search(CommentModel model) throws ApplicationException {
-		return search(model, 0, 0);
+	/**
+	 * Searches records on the basis of model NOT NULL attributes
+	 * 
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public List search() throws ApplicationException {
+		return search(0, 0);
 	}
 
+	/**
+	 * Returns Drop Down List key
+	 */
 	@Override
 	public String getKey() {
 		return id + "";
 	}
 
+	/**
+	 * Returns Drop Down List Value
+	 */
 	@Override
 	public String getValue() {
 		return text;
 	}
 
+	/**
+	 * Returns name of table
+	 */
 	@Override
 	public String getTableName() {
 		return "ST_COMMENT";

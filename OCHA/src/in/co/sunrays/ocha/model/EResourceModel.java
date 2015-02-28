@@ -13,8 +13,22 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Model contains E-Resource attributes and its Create, Read, Update and Delete
+ * methods.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
+
 public class EResourceModel extends BaseModel {
 
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(EResourceModel.class);
 
 	private String name = null;
@@ -54,6 +68,12 @@ public class EResourceModel extends BaseModel {
 		this.createdOn = createdOn;
 	}
 
+	/**
+	 * Adds a record
+	 * 
+	 * @return
+	 * @throws ApplicationException
+	 */
 	public long add() throws ApplicationException {
 
 		log.debug("Model add Started");
@@ -67,8 +87,10 @@ public class EResourceModel extends BaseModel {
 			// Get auto-generated next primary key
 			conn.setAutoCommit(false); // Begin transaction
 
-			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO "
-					+ getTableName() + " VALUES(?,?,?,?,?)");
+			String sql = "INSERT INTO " + getTableName() + " VALUES(?,?,?,?,?)";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, pk);
 			pstmt.setString(2, tablesContains);
 			pstmt.setString(3, name);
@@ -97,14 +119,23 @@ public class EResourceModel extends BaseModel {
 		return pk;
 	}
 
+	/**
+	 * Deletes a record
+	 * 
+	 * @throws ApplicationException
+	 */
+
 	public void delete() throws ApplicationException {
 		log.debug("Model delete Started");
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM "
-					+ getTableName() + " WHERE ID=?");
+
+			String sql = "DELETE FROM " + getTableName() + " WHERE ID=?";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -127,10 +158,20 @@ public class EResourceModel extends BaseModel {
 		log.debug("Model delete Started");
 	}
 
+	/**
+	 * Finds record by Primary Key ( ID)
+	 * 
+	 * @param pk
+	 * @return
+	 * @throws ApplicationException
+	 */
 	public EResourceModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
+
 		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
 				+ " WHERE ID=?");
+		log.info("SQL : " + sql);
+
 		EResourceModel model = null;
 		Connection conn = null;
 		try {
@@ -159,6 +200,11 @@ public class EResourceModel extends BaseModel {
 		return model;
 	}
 
+	/**
+	 * Updates a records
+	 * 
+	 * @throws ApplicationException
+	 */
 	public void update() throws ApplicationException {
 		log.debug("Model update Started");
 		Connection conn = null;
@@ -168,9 +214,12 @@ public class EResourceModel extends BaseModel {
 			conn = JDBCDataSource.getConnection();
 
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("UPDATE "
-					+ getTableName()
-					+ " SET TABLE_CONTAINS=?,NAME=?,DETAIL=? WHERE ID=?");
+
+			String sql = "UPDATE " + getTableName()
+					+ " SET TABLE_CONTAINS=?,NAME=?,DETAIL=? WHERE ID=?";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, tablesContains);
 			pstmt.setString(2, name);
 			pstmt.setString(3, detail);
@@ -194,26 +243,32 @@ public class EResourceModel extends BaseModel {
 		log.debug("Model update End");
 	}
 
-	public List search(EResourceModel model, int pageNo, int pageSize)
-			throws ApplicationException {
+	/**
+	 * Searches records on the basis of model NOT NULL attributes with
+	 * pagination.
+	 * 
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public List search(int pageNo, int pageSize) throws ApplicationException {
 		log.debug("Model search Started");
 		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
 				+ " WHERE 1=1");
 
-		if (model != null) {
-			if (id > 0) {
-				sql.append(" AND id = " + id);
-			}
-			if (tablesContains != null && tablesContains.length() > 0) {
-				sql.append(" AND TABLE_CONTAINS like '" + tablesContains + "%'");
-			}
-			if (name != null && name.length() > 0) {
-				sql.append(" AND NAME like '" + name + "%'");
-			}
-			if (detail != null && detail.length() > 0) {
-				sql.append(" AND DETAIL like '" + detail + "%'");
-			}
-
+		if (id > 0) {
+			sql.append(" AND id = " + id);
+		}
+		if (tablesContains != null && tablesContains.length() > 0) {
+			sql.append(" AND TABLE_CONTAINS like '" + tablesContains + "%'");
+		}
+		if (name != null && name.length() > 0) {
+			sql.append(" AND NAME like '" + name + "%'");
+		}
+		if (detail != null && detail.length() > 0) {
+			sql.append(" AND DETAIL like '" + detail + "%'");
 		}
 
 		// if page size is greater than zero then apply pagination
@@ -225,6 +280,8 @@ public class EResourceModel extends BaseModel {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
+		log.info("SQL : " + sql);
+
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -232,7 +289,7 @@ public class EResourceModel extends BaseModel {
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				model = new EResourceModel();
+				EResourceModel model = new EResourceModel();
 				model.setId(rs.getLong(1));
 				model.setTablesContains(rs.getString(2));
 				model.setName(rs.getString(3));
@@ -250,18 +307,31 @@ public class EResourceModel extends BaseModel {
 		}
 
 		log.debug("Model search End");
+
 		return list;
 	}
 
-	public List search(EResourceModel model) throws ApplicationException {
-		return search(model, 0, 0);
+	/**
+	 * Searches records on the basis of model NOT NULL attributes
+	 * 
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public List search() throws ApplicationException {
+		return search(0, 0);
 	}
 
+	/**
+	 * Returns Drop Down List Value
+	 */
 	@Override
 	public String getKey() {
 		return id + "";
 	}
 
+	/**
+	 * Returns name of table
+	 */
 	@Override
 	public String getValue() {
 		return name;

@@ -8,9 +8,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class CommentModelTest {
+/**
+ * Comment Model testcase tests CommentModel methods.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
 
-	public static CommentModel model = new CommentModel();
+public class CommentModelTest {
 
 	/**
 	 * Main method to call test methods.
@@ -19,18 +27,24 @@ public class CommentModelTest {
 	 * @throws DuplicateRecordException
 	 */
 	public static void main(String[] args) throws DuplicateRecordException {
-		// testAdd();
+		testAdd();
 		// testDelete();
 		// testUpdate();
 		// testFindByPK();
-		// testSearch();
-		testList();
+		testSearch();
 
 	}
 
+	/**
+	 * Tests Add operation.
+	 * 
+	 * @throws DuplicateRecordException
+	 */
 	public static void testAdd() throws DuplicateRecordException {
 
 		try {
+
+			CommentModel model = new CommentModel();
 			// bean.setId(2L);
 			model.setId(3l);
 			model.setResourceId(2l);
@@ -38,15 +52,21 @@ public class CommentModelTest {
 			// model.setCreatedOn((new Timestamp(new Date().getTime())));
 
 			long pk = model.add();
-			System.out.println("Test add succ");
+			System.out.println("Comment successfully added");
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}
 
 	}
 
+	/**
+	 * Tests Delete operation.
+	 * 
+	 * @throws DuplicateRecordException
+	 */
 	public static void testDelete() {
 
+		CommentModel model = new CommentModel();
 		try {
 			long pk = 1L;
 			model.setId(pk);
@@ -58,7 +78,15 @@ public class CommentModelTest {
 		}
 	}
 
+	/**
+	 * Tests Update operation.
+	 * 
+	 * @throws DuplicateRecordException
+	 */
+
 	public static void testUpdate() {
+
+		CommentModel model = new CommentModel();
 
 		try {
 			model = model.findByPK(2L);
@@ -72,7 +100,16 @@ public class CommentModelTest {
 
 	}
 
+	/**
+	 * Tests Find By PK operation.
+	 * 
+	 * @throws DuplicateRecordException
+	 */
+
 	public static void testFindByPK() {
+
+		CommentModel model = new CommentModel();
+
 		try {
 			long pk = 3L;
 			model = model.findByPK(pk);
@@ -89,45 +126,32 @@ public class CommentModelTest {
 
 	}
 
+	/**
+	 * Tests Search operation.
+	 * 
+	 * @throws DuplicateRecordException
+	 */
+
 	public static void testSearch() {
+
+		CommentModel model = new CommentModel();
+
 		try {
 			List list = new ArrayList();
 			model.setText("Demo");
 			// bean.setAddress("borawan");
-			list = model.search(model, 1, 10);
+			list = model.search(1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test Search fail");
 			}
 			Iterator it = list.iterator();
 			while (it.hasNext()) {
 				model = (CommentModel) it.next();
-				System.out.println(model.getId());
-				System.out.println(model.getText());
-				System.out.println(model.getResourceId());
-				System.out.println(model.getCreatedOn());
+				System.out.print(model.getId());
+				System.out.print("\t" + model.getText());
+				System.out.print("\t" + model.getResourceId());
+				System.out.println("\t" + model.getCreatedOn());
 			}
-		} catch (ApplicationException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void testList() {
-
-		try {
-			List list = new ArrayList();
-			list = model.search(null, 1, 10);
-			if (list.size() < 0) {
-				System.out.println("Test list fail");
-			}
-			Iterator it = list.iterator();
-			while (it.hasNext()) {
-				model = (CommentModel) it.next();
-				System.out.println(model.getId());
-				System.out.println(model.getText());
-				System.out.println(model.getResourceId());
-				System.out.println(model.getCreatedOn());
-			}
-
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}

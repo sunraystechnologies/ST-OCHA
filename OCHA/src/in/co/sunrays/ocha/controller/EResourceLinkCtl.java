@@ -17,9 +17,7 @@ import org.apache.log4j.Logger;
 
 public class EResourceLinkCtl extends BaseCtl {
 
-
 	private static Logger log = Logger.getLogger(EResourceLinkCtl.class);
-
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -35,7 +33,6 @@ public class EResourceLinkCtl extends BaseCtl {
 
 		pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader
 				.getValue("page.size")) : pageSize;
-
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 
@@ -55,7 +52,7 @@ public class EResourceLinkCtl extends BaseCtl {
 				}
 
 			}
-			list = model.search(model, pageNo, pageSize);
+			list = model.search(pageNo, pageSize);
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
@@ -64,7 +61,8 @@ public class EResourceLinkCtl extends BaseCtl {
 
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
-			ServletUtility.forward(ORSView.ERESOURCE_LINK_VIEW, request, response);
+			ServletUtility.forward(ORSView.ERESOURCE_LINK_VIEW, request,
+					response);
 		} catch (ApplicationException e) {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);

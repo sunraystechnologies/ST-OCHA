@@ -19,15 +19,15 @@ public class EResourceModelTest {
 	 * @throws DuplicateRecordException
 	 */
 	public static void main(String[] args) throws DuplicateRecordException {
-		 testAdd();
-		//testDelete();
-		//testUpdate();
-		//testFindByPK();
-		//testSearch();
-		//testList();
+		testAdd();
+		// testDelete();
+		// testUpdate();
+		// testFindByPK();
+		// testSearch();
+		// testList();
 
 	}
-	
+
 	public static void testAdd() throws DuplicateRecordException {
 
 		try {
@@ -44,7 +44,7 @@ public class EResourceModelTest {
 		}
 
 	}
-	
+
 	public static void testDelete() {
 
 		try {
@@ -89,14 +89,14 @@ public class EResourceModelTest {
 			e.printStackTrace();
 		}
 
-}
-	
+	}
+
 	public static void testSearch() {
 		try {
 			List list = new ArrayList();
 			model.setName("Tes");
-			//bean.setAddress("borawan");
-			list = model.search(model, 1, 10);
+			// bean.setAddress("borawan");
+			list = model.search(1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test Search fail");
 			}
@@ -113,12 +113,12 @@ public class EResourceModelTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void testList() {
 
 		try {
 			List list = new ArrayList();
-			list = model.search(model,1, 10);
+			list = model.search(1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test list fail");
 			}

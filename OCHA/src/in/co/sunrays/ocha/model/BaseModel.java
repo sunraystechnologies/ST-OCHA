@@ -18,8 +18,8 @@ import org.apache.log4j.Logger;
  * It implements Comparable interface that compares two objects on the basis of
  * primary key ID.
  * 
- * It implements DropdownListBean that is used to show a Model list as drop down
- * list.
+ * It implements DropdownListBean interface, that is used to make HTML Drop List
+ * from Model collection.
  * 
  * @version 1.0
  * @since 01 Feb 2015

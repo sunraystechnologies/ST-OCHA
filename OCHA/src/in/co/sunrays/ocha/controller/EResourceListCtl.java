@@ -15,10 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-public class EResourceListCtl extends BaseCtl{
+public class EResourceListCtl extends BaseCtl {
 
 	private static Logger log = Logger.getLogger(EResourceListCtl.class);
-
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -35,12 +34,12 @@ public class EResourceListCtl extends BaseCtl{
 		pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader
 				.getValue("page.size")) : pageSize;
 
-
 		String op = DataUtility.getString(request.getParameter("operation"));
 
 		EResourceModel model = new EResourceModel();
 
-		model.setTablesContains(DataUtility.getString(request.getParameter("tablesContains")));
+		model.setTablesContains(DataUtility.getString(request
+				.getParameter("tablesContains")));
 		model.setName(DataUtility.getString(request.getParameter("name")));
 
 		try {
@@ -57,7 +56,7 @@ public class EResourceListCtl extends BaseCtl{
 				}
 
 			}
-			list = model.search(model, pageNo, pageSize);
+			list = model.search(pageNo, pageSize);
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
@@ -66,7 +65,8 @@ public class EResourceListCtl extends BaseCtl{
 
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
-			ServletUtility.forward(ORSView.ERESOURCE_List_VIEW, request, response);
+			ServletUtility.forward(ORSView.ERESOURCE_List_VIEW, request,
+					response);
 		} catch (ApplicationException e) {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);

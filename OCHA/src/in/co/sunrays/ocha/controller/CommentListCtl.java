@@ -20,10 +20,10 @@ public class CommentListCtl extends BaseCtl {
 
 	private static Logger log = Logger.getLogger(CommentListCtl.class);
 
-
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
 		log.debug("CommentListCtl doGet Start");
 
 		List list = null;
@@ -36,11 +36,9 @@ public class CommentListCtl extends BaseCtl {
 		pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader
 				.getValue("page.size")) : pageSize;
 
-
 		String op = DataUtility.getString(request.getParameter("operation"));
 
 		CommentModel model = new CommentModel();
-
 
 		try {
 
@@ -56,7 +54,7 @@ public class CommentListCtl extends BaseCtl {
 				}
 
 			}
-			list = model.search(model, pageNo, pageSize);
+			list = model.search(pageNo, pageSize);
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
@@ -65,7 +63,8 @@ public class CommentListCtl extends BaseCtl {
 
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
-			ServletUtility.forward(ORSView.COMMENT_LIST_VIEW, request, response);
+			ServletUtility
+					.forward(ORSView.COMMENT_LIST_VIEW, request, response);
 		} catch (ApplicationException e) {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);

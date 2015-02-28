@@ -20,15 +20,23 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 public class CommentCtl extends BaseCtl {
+
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(CommentCtl.class);
+
+	/**
+	 * Loads preloaded data like Dropdown List.
+	 */
 
 	@Override
 	protected void preload(HttpServletRequest request) {
 		EResourceModel model = new EResourceModel();
 		try {
-			List l = model.search(model);
+			List l = model.search();
 			request.setAttribute("resourceList", l);
 		} catch (ApplicationException e) {
 			log.error(e);
@@ -36,6 +44,9 @@ public class CommentCtl extends BaseCtl {
 
 	}
 
+	/**
+	 * Validates Input data
+	 */
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
@@ -56,8 +67,7 @@ public class CommentCtl extends BaseCtl {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * Handles GET request.
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -132,6 +142,9 @@ public class CommentCtl extends BaseCtl {
 		ServletUtility.forward(ORSView.COMMENT_VIEW, request, response);
 	}
 
+	/**
+	 * Returns View page of Controller.
+	 */
 	@Override
 	protected String getView() {
 		// TODO Auto-generated method stub
