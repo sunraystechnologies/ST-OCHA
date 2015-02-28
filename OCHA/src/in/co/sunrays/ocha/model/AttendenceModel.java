@@ -1,6 +1,5 @@
 package in.co.sunrays.ocha.model;
 
-import in.co.sunrays.ocha.bean.BaseBean;
 import in.co.sunrays.ocha.bean.UserBean;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.exception.DatabaseException;
@@ -16,89 +15,82 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class AttendenceModel extends BaseBean {
+/**
+ * Model contains Attendence attributes and its Create, Read, Update and Delete
+ * methods.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
+
+public class AttendenceModel extends BaseModel {
 	private static Logger log = Logger.getLogger(AttendenceModel.class);
-	private long id;
+
 	private long studentId;
-	private String subject;  
+	private String subject;
 	private int attendence;
 	private String studentName;
 	private Timestamp createdOn = null;
+
 	public Timestamp getCreatedOn() {
 		return createdOn;
 	}
+
 	public void setCreatedOn(Timestamp createdOn) {
 		this.createdOn = createdOn;
 	}
-	public long getId() {
-		return id;
-	}
+
 	public String getStudentName() {
 		return studentName;
 	}
+
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
 	}
-	public void setId(long id) {
-		this.id = id;
-	}
+
 	public long getStudentId() {
 		return studentId;
 	}
+
 	public void setStudentId(long studentId) {
 		this.studentId = studentId;
 	}
+
 	public String getSubject() {
 		return subject;
 	}
+
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+
 	public int getAttendence() {
 		return attendence;
 	}
+
 	public void setAttendence(int attendence) {
 		this.attendence = attendence;
 	}
-	
+
 	/**
-	 * Find next PK of comment
+	 * Adds a record
 	 * 
-	 * @throws DatabaseException
+	 * @return
+	 * @throws ApplicationException
 	 */
-	public Integer nextPK() throws DatabaseException {
-		log.debug("Model nextPK Started");
-		Connection conn = null;
-		int pk = 0;
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn
-					.prepareStatement("SELECT MAX(ID) FROM ST_ATTENDENCE");
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				pk = rs.getInt(1);
-			}
-			rs.close();
-
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new DatabaseException("Exception : Exception in getting PK");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-		log.debug("Model nextPK End");
-		return pk + 1;
-	}
-
-	public long add(AttendenceModel model) throws ApplicationException {
+	public long add() throws ApplicationException {
 
 		log.debug("Model add Started");
+
 		UserModel smodel = new UserModel();
 		UserBean bean = smodel.findByPK(studentId);
-		System.out.println("bbbbb"+bean);
+		AttendenceModel model=new AttendenceModel();
 		model.setStudentName(bean.getFirstName());
 		Connection conn = null;
-		int pk = 0;
+		long pk = 0;
 
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -106,8 +98,11 @@ public class AttendenceModel extends BaseBean {
 			// Get auto-generated next primary key
 			conn.setAutoCommit(false); // Begin transaction
 
-			PreparedStatement pstmt = conn
-					.prepareStatement("INSERT INTO ST_ATTENDENCE VALUES(?,?,?,?,?,?)");
+			String sql = "INSERT INTO " + getTableName()
+					+ " VALUES(?,?,?,?,?,?)";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, pk);
 			pstmt.setLong(2, studentId);
 			pstmt.setString(3, studentName);
@@ -129,7 +124,7 @@ public class AttendenceModel extends BaseBean {
 						"Exception : add rollback exception " + ex.getMessage());
 			}
 			throw new ApplicationException(
-					"Exception : Exception in add College");
+					"Exception : Exception in add Attendence");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -137,14 +132,21 @@ public class AttendenceModel extends BaseBean {
 		return pk;
 	}
 
+	/**
+	 * Deletes a record
+	 * 
+	 * @throws ApplicationException
+	 */
 	public void delete() throws ApplicationException {
 		log.debug("Model delete Started");
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("DELETE FROM ST_ATTENDENCE WHERE ID=?");
+			String sql = "DELETE FROM " + getTableName() + " WHERE ID=?";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -160,17 +162,27 @@ public class AttendenceModel extends BaseBean {
 								+ ex.getMessage());
 			}
 			throw new ApplicationException(
-					"Exception : Exception in delete comment");
+					"Exception : Exception in delete Attendence");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		log.debug("Model delete Started");
 	}
 
+	/**
+	 * Finds record by Primary Key ( ID)
+	 * 
+	 * @param pk
+	 * @return
+	 * @throws ApplicationException
+	 */
 	public AttendenceModel findByPK(long pk) throws ApplicationException {
-		log.debug("Model findByName Started");
-		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM ST_ATTENDENCE WHERE ID=?");
+		log.debug("Model findByPk Started");
+
+		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
+				+ " WHERE ID=?");
+		log.info("SQL : " + sql);
+
 		AttendenceModel model = null;
 		Connection conn = null;
 		try {
@@ -192,7 +204,7 @@ public class AttendenceModel extends BaseBean {
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
 			throw new ApplicationException(
-					"Exception : Exception in getting comment by PK");
+					"Exception : Exception in getting Attendence by PK");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -200,6 +212,11 @@ public class AttendenceModel extends BaseBean {
 		return model;
 	}
 
+	/**
+	 * Updates a records
+	 * 
+	 * @throws ApplicationException
+	 */
 	public void update() throws ApplicationException {
 		log.debug("Model update Started");
 		Connection conn = null;
@@ -209,8 +226,11 @@ public class AttendenceModel extends BaseBean {
 			conn = JDBCDataSource.getConnection();
 
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("UPDATE ST_ATTENDENCE SET subject=?,attendence=? WHERE ID=?");
+			String sql = "UPDATE " + getTableName()
+					+ " SET subject=?,attendence=? WHERE ID=?";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, subject);
 			pstmt.setInt(2, attendence);
 			pstmt.setLong(3, id);
@@ -226,18 +246,29 @@ public class AttendenceModel extends BaseBean {
 						"Exception : Delete rollback exception "
 								+ ex.getMessage());
 			}
-			throw new ApplicationException("Exception in updating Comment ");
+			throw new ApplicationException("Exception in updating Attendence ");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		log.debug("Model update End");
 	}
 
+	/**
+	 * Searches records on the basis of model NOT NULL attributes with
+	 * pagination.
+	 * 
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 * @throws ApplicationException
+	 */
 	public List search(AttendenceModel model, int pageNo, int pageSize)
 			throws ApplicationException {
 		log.debug("Model search Started");
 		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM ST_ATTENDENCE WHERE 1=1");
+				"SELECT * FROM " + getTableName()
+				+ " WHERE 1=1");
 
 		if (model != null) {
 			if (id > 0) {
@@ -261,6 +292,7 @@ public class AttendenceModel extends BaseBean {
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
+		log.info("SQL : " + sql);
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -281,7 +313,7 @@ public class AttendenceModel extends BaseBean {
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
 			throw new ApplicationException(
-					"Exception : Exception in search Comment");
+					"Exception : Exception in search Attendence");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -290,67 +322,39 @@ public class AttendenceModel extends BaseBean {
 		return list;
 	}
 
+	/**
+	 * Searches records on the basis of model NOT NULL attributes
+	 * 
+	 * @return
+	 * @throws ApplicationException
+	 */
 	public List search(AttendenceModel model) throws ApplicationException {
 		return search(model, 0, 0);
 	}
 
-	public List list() throws ApplicationException {
-		return list(0, 0);
-	}
-
-	public List list(int pageNo, int pageSize) throws ApplicationException {
-		log.debug("Model list Started");
-		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("select * from ST_ATTENDENCE");
-		// if page size is greater than zero then apply pagination
-		if (pageSize > 0) {
-			// Calculate start record index
-			pageNo = (pageNo - 1) * pageSize;
-			sql.append(" limit " + pageNo + "," + pageSize);
-		}
-
-		Connection conn = null;
-
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				AttendenceModel model = new AttendenceModel();
-				model.setId(rs.getLong(1));
-				model.setStudentId(rs.getLong(2));
-				model.setStudentName(rs.getString(3));
-				model.setSubject(rs.getString(4));
-				model.setAttendence(rs.getInt(5));
-				model.setCreatedOn(rs.getTimestamp(6));
-				list.add(model);
-			}
-			rs.close();
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new ApplicationException(
-					"Exception : Exception in getting list of users");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-
-		log.debug("Model list End");
-		return list;
-
-	}
 	
-	public List listAttendence(AttendenceModel model,int pageNo, int pageSize)
+	/**
+	 * Finds record by Student ID
+	 * 
+	 * @param pk
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public List findByStudentPk(AttendenceModel model, int pageNo, int pageSize)
 			throws ApplicationException {
 		log.debug("Model list Started");
 		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("select * from ST_ATTENDENCE where studentId="+model.getStudentId());
+		StringBuffer sql = new StringBuffer(
+				"select * from  " + getTableName()
+				+ " where studentId="
+						+ model.getStudentId());
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
 			pageNo = (pageNo - 1) * pageSize;
 			sql.append(" limit " + pageNo + "," + pageSize);
 		}
-
+		log.info("SQL : " + sql);
 		Connection conn = null;
 
 		try {
@@ -358,7 +362,7 @@ public class AttendenceModel extends BaseBean {
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-		          model = new AttendenceModel();
+				model = new AttendenceModel();
 				model.setId(rs.getLong(1));
 				model.setStudentId(rs.getLong(2));
 				model.setStudentName(rs.getString(3));
@@ -379,18 +383,35 @@ public class AttendenceModel extends BaseBean {
 		log.debug("Model list End");
 		return list;
 	}
-	public List listAttendence(AttendenceModel model) throws ApplicationException {
-		return listAttendence(model, 0, 0);
+
+	public List findByStudentPk(AttendenceModel model)
+			throws ApplicationException {
+		return findByStudentPk(model, 0, 0);
 	}
+
+	/**
+	 * Returns Drop Down List key
+	 */
 	@Override
 	public String getKey() {
-		// TODO Auto-generated method stub
-		return id+"";
+		return id + "";
 	}
+
+	/**
+	 * Returns Drop Down List Value
+	 */
 	@Override
 	public String getValue() {
-		// TODO Auto-generated method stub
-		return studentName;
+		return subject;
 	}
+
+	/**
+	 * Returns name of table
+	 */
+	@Override
+	public String getTableName() {
+		return "ST_ATTENDENCE";
+	}
+
 
 }

@@ -106,7 +106,7 @@ public class LoginCtl extends BaseCtl {
 		List<NoticeModel> noticeList = null;
 
 		try {
-			noticeList = nModel.search(null);
+			noticeList = nModel.search();
 			request.setAttribute("noticeList", noticeList);
 		} catch (ApplicationException e1) {
 		}

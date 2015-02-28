@@ -79,11 +79,11 @@ public class AttendenceCtl extends BaseCtl {
 				if (id > 0) {
 					model.update();
 				} else {
-					long pk = model.add(model);
+					long pk = model.add();
 					model.setId(pk);
 				}
 
-				ServletUtility.setBean(model, request);
+				ServletUtility.setModel(model, request);
 				ServletUtility.setSuccessMessage("Data is successfully saved",
 						request);
 
@@ -118,7 +118,7 @@ public class AttendenceCtl extends BaseCtl {
 
 				try {
 					model = model.findByPK(id);
-					ServletUtility.setBean(model, request);
+					ServletUtility.setModel(model, request);
 				} catch (ApplicationException e) {
 					log.error(e);
 					ServletUtility.handleException(e, request, response);

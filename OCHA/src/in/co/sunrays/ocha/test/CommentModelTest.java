@@ -20,6 +20,8 @@ import java.util.List;
 
 public class CommentModelTest {
 
+	public static CommentModel model = new CommentModel();
+
 	/**
 	 * Main method to call test methods.
 	 * 
@@ -27,11 +29,11 @@ public class CommentModelTest {
 	 * @throws DuplicateRecordException
 	 */
 	public static void main(String[] args) throws DuplicateRecordException {
-		testAdd();
-		// testDelete();
-		// testUpdate();
-		// testFindByPK();
-		testSearch();
+		// testAdd();
+		//testDelete();
+		//testUpdate();
+		//testFindByPK();
+		//testSearch();
 
 	}
 

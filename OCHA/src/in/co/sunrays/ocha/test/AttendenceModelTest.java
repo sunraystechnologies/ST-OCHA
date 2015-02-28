@@ -24,27 +24,7 @@ public class AttendenceModelTest {
 		//testUpdate();
 		//testFindByPK();
 		//testSearch();
-		testList();
 
 	}
-	public static void testList() {
 
-		try {
-			List list = new ArrayList();
-			list = model.list(1, 10);
-			if (list.size() < 0) {
-				System.out.println("Test list fail");
-			}
-			Iterator it = list.iterator();
-			while (it.hasNext()) {
-				model = (AttendenceModel) it.next();
-				System.out.println(model.getId());
-				System.out.println(model.getStudentName());
-
-			}
-
-		} catch (ApplicationException e) {
-			e.printStackTrace();
-		}
-	}
 }

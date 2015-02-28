@@ -15,7 +15,7 @@
 
 		<%@ include file="Header.jsp"%>
 		<script type="text/javascript" src="./js/calendar.js"></script>
-		<jsp:useBean id="bean" class="in.co.sunrays.ocha.model.EResourceModel" 
+		<jsp:useBean id="model" class="in.co.sunrays.ocha.model.EResourceModel" 
 			scope="request"></jsp:useBean>
 
 		<center>
@@ -30,8 +30,8 @@
 				</font>
 			</H2>
 
-			<input type="hidden" name="id" value="<%=bean.getId()%>">
-			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(bean.getCreatedOn())%>">
+			<input type="hidden" name="id" value="<%=model.getId()%>">
+			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(model.getCreatedOn())%>">
 			
 
 			<table>
@@ -39,13 +39,13 @@
 				<tr>
 					<th>Table Contains*</th>
 					<td><input type="text" name="tableContains"
-						value="<%=DataUtility.getStringData(bean.getTablesContains())%>"><font
+						value="<%=DataUtility.getStringData(model.getTablesContains())%>"><font
 						color="red"> <%=ServletUtility.getErrorMessage("tableContains", request)%></font></td>
 				</tr>
 				<tr>
 					<th>Name*</th>
 					<td><input type="text" name="name"
-						value="<%=DataUtility.getStringData(bean.getName())%>"><font
+						value="<%=DataUtility.getStringData(model.getName())%>"><font
 						color="red"> <%=ServletUtility.getErrorMessage("name", request)%></font></td>
 				</tr>
 
@@ -53,7 +53,7 @@
 				<tr>
 					<th>Detail</th>
 					<td><input type="text" name="detail" 
-					value="<%=DataUtility.getStringData(bean.getDetail())%>">
+					value="<%=DataUtility.getStringData(model.getDetail())%>">
 						
 					<font color="red"> <%=ServletUtility.getErrorMessage("detail", request)%></font></td>
 				</tr>
@@ -62,7 +62,7 @@
 					<td colspan="2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 						&nbsp; <input type="submit" name="operation" value="<%=EResourceCtl.OP_SAVE%>">
 							<%
-				 	if (bean.getId() > 0) {
+				 	if (model.getId() > 0) {
 				 %> &emsp;<input type="submit" name="operation"
 						value="<%=EResourceCtl.OP_DELETE%>"> <%
 				 	}

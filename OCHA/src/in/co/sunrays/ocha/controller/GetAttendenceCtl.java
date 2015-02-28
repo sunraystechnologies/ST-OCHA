@@ -56,7 +56,7 @@ model.setStudentId(userId);
 				}
 
 			}
-			list = model.listAttendence(model, pageNo, pageSize);
+			list = model.findByStudentPk(model, pageNo, pageSize);
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);

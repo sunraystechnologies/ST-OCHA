@@ -14,7 +14,7 @@
 
 		<%@ include file="Header.jsp"%>
 		<script type="text/javascript" src="../js/calendar.js"></script>
-		<jsp:useBean id="bean" class="in.co.sunrays.ocha.model.NoticeModel" 
+		<jsp:useBean id="model" class="in.co.sunrays.ocha.model.NoticeModel" 
 			scope="request"></jsp:useBean>
 
 		<center>
@@ -29,8 +29,8 @@
 				</font>
 			</H2>
 
-			<input type="hidden" name="id" value="<%=bean.getId()%>">
-			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(bean.getCreatedOn())%>">
+			<input type="hidden" name="id" value="<%=model.getId()%>">
+			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(model.getCreatedOn())%>">
 			
 
 			<table>
@@ -38,13 +38,13 @@
 				<tr>
 					<th>Subject*</th>
 					<td><input type="text" name="subject"
-						value="<%=DataUtility.getStringData(bean.getSubject())%>"><font
+						value="<%=DataUtility.getStringData(model.getSubject())%>"><font
 						color="red"> <%=ServletUtility.getErrorMessage("subject", request)%></font></td>
 				</tr>
 				<tr>
 					<th>Detail*</th>
 					<td><input type="text" name="detail"
-						value="<%=DataUtility.getStringData(bean.getDetails())%>"><font
+						value="<%=DataUtility.getStringData(model.getDetails())%>"><font
 						color="red"> <%=ServletUtility.getErrorMessage("detail", request)%></font></td>
 				</tr>
 
@@ -54,7 +54,7 @@
 					<td>
 					
 					<input type="text" name="expireDate" readonly="readonly"
-						value="<%=DataUtility.getDateString(bean.getExpireDate())%>">
+						value="<%=DataUtility.getDateString(model.getExpireDate())%>">
 					<a href="javascript:getCalendar(document.forms[0].expireDate);">
 							<img src="../img/cal.jpg" width="16" height="15" border="0"
 							alt="Calender">
@@ -67,7 +67,7 @@
 					<td colspan="2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 						&nbsp; <input type="submit" name="operation" value="<%=NoticeCtl.OP_SAVE%>">
 							<%
-				 	if (bean.getId() > 0) {
+				 	if (model.getId() > 0) {
 				 %> &emsp;<input type="submit" name="operation"
 						value="<%=NoticeCtl.OP_DELETE%>"> <%
 				 	}

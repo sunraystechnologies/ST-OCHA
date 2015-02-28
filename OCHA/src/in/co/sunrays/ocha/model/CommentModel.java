@@ -122,7 +122,7 @@ public class CommentModel extends BaseModel {
 						"Exception : add rollback exception " + ex.getMessage());
 			}
 			throw new ApplicationException(
-					"Exception : Exception in add College");
+					"Exception : Exception in add Comment");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -208,7 +208,7 @@ public class CommentModel extends BaseModel {
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
-		log.debug("Model findByName End");
+		log.debug("Model findByPk End");
 		return model;
 	}
 

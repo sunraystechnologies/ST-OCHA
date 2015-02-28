@@ -15,83 +15,70 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class NoticeModel extends BaseBean{
-	
+/**
+ * Model contains Notice attributes and its Create, Read, Update and Delete
+ * methods.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
+public class NoticeModel extends BaseModel {
+
 	private static Logger log = Logger.getLogger(NoticeModel.class);
-	
-	private long id = 0;
+
 	private String subject = null;
 	private String details = null;
 	private Timestamp createdOn = null;
 	private Date expireDate;
 
-	public static Logger getLog() {
-		return log;
-	}
 	public Date getExpireDate() {
 		return expireDate;
 	}
+
 	public void setExpireDate(Date expireDate) {
 		this.expireDate = expireDate;
 	}
-	public static void setLog(Logger log) {
-		NoticeModel.log = log;
-	}
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+
 	public String getSubject() {
 		return subject;
 	}
+
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+
 	public String getDetails() {
 		return details;
 	}
+
 	public void setDetails(String details) {
 		this.details = details;
 	}
+
 	public Timestamp getCreatedOn() {
 		return createdOn;
 	}
+
 	public void setCreatedOn(Timestamp createdOn) {
 		this.createdOn = createdOn;
 	}
 
-	public Integer nextPK() throws DatabaseException {
-		log.debug("Model nextPK Started");
-		Connection conn = null;
-		int pk = 0;
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn
-					.prepareStatement("SELECT MAX(ID) FROM ST_Notice");
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				pk = rs.getInt(1);
-			}
-			rs.close();
+	/**
+	 * Adds a record
+	 * 
+	 * @return
+	 * @throws ApplicationException
+	 */
 
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new DatabaseException("Exception : Exception in getting PK");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-		log.debug("Model nextPK End");
-		return pk + 1;
-	}
-	
 	public long add() throws ApplicationException {
 
 		log.debug("Model add Started");
 
 		Connection conn = null;
-		int pk = 0;
+		long pk = 0;
 
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -99,14 +86,15 @@ public class NoticeModel extends BaseBean{
 			// Get auto-generated next primary key
 			conn.setAutoCommit(false); // Begin transaction
 
-			PreparedStatement pstmt = conn
-					.prepareStatement("INSERT INTO ST_Notice VALUES(?,?,?,?,?)");
+			String sql = "INSERT INTO " + getTableName() + " VALUES(?,?,?,?,?)";
+			log.info("SQL : " + sql);
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, pk);
 			pstmt.setString(2, subject);
 			pstmt.setString(3, details);
 			java.util.Date date = new Date();
 			pstmt.setTimestamp(4, new java.sql.Timestamp(date.getTime()));
-			pstmt.setDate(5,new java.sql.Date(getExpireDate().getTime()));
+			pstmt.setDate(5, new java.sql.Date(getExpireDate().getTime()));
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -121,22 +109,30 @@ public class NoticeModel extends BaseBean{
 						"Exception : add rollback exception " + ex.getMessage());
 			}
 			throw new ApplicationException(
-					"Exception : Exception in add College");
+					"Exception : Exception in add Notice");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		log.debug("Model add End");
 		return pk;
 	}
-	
+
+	/**
+	 * Deletes a record
+	 * 
+	 * @throws ApplicationException
+	 */
+
 	public void delete() throws ApplicationException {
 		log.debug("Model delete Started");
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("DELETE FROM ST_Notice WHERE ID=?");
+			String sql = "DELETE FROM  " + getTableName() + " WHERE ID=?";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -152,17 +148,27 @@ public class NoticeModel extends BaseBean{
 								+ ex.getMessage());
 			}
 			throw new ApplicationException(
-					"Exception : Exception in delete comment");
+					"Exception : Exception in delete Notice");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		log.debug("Model delete Started");
 	}
+
+	/**
+	 * Finds record by Primary Key ( ID)
+	 * 
+	 * @param pk
+	 * @return
+	 * @throws ApplicationException
+	 */
 	
 	public NoticeModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
-		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM ST_Notice WHERE ID=?");
+		
+		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName() + " WHERE ID=?");
+		log.info("SQL : " + sql);
+
 		NoticeModel model = null;
 		Connection conn = null;
 		try {
@@ -186,10 +192,15 @@ public class NoticeModel extends BaseBean{
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
-		log.debug("Model findByName End");
+		log.debug("Model findByPk End");
 		return model;
 	}
-	
+
+	/**
+	 * Updates a records
+	 * 
+	 * @throws ApplicationException
+	 */
 	public void update() throws ApplicationException {
 		log.debug("Model update Started");
 		Connection conn = null;
@@ -199,8 +210,10 @@ public class NoticeModel extends BaseBean{
 			conn = JDBCDataSource.getConnection();
 
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn
-					.prepareStatement("UPDATE ST_Notice SET SUBJECT=?,DETAILS=?,EXPIRE_DATE=? WHERE ID=?");
+			String sql = "UPDATE " + getTableName() + " SET SUBJECT=?,DETAILS=?,EXPIRE_DATE=? WHERE ID=?";
+			log.info("SQL : " + sql);
+
+			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, subject);
 			pstmt.setString(2, details);
 			pstmt.setDate(3, new java.sql.Date(getExpireDate().getTime()));
@@ -217,20 +230,32 @@ public class NoticeModel extends BaseBean{
 						"Exception : Delete rollback exception "
 								+ ex.getMessage());
 			}
-			throw new ApplicationException("Exception in updating Comment ");
+			throw new ApplicationException("Exception in updating Notice ");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		log.debug("Model update End");
 	}
 
-	public List search(NoticeModel model, int pageNo, int pageSize)
+	/**
+	 * Searches records on the basis of model NOT NULL attributes with
+	 * pagination.
+	 * 
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public List search(int pageNo, int pageSize)
 			throws ApplicationException {
+		
 		log.debug("Model search Started");
+		
 		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM ST_Notice WHERE 1=1 AND DATE(NOW()) <= DATE(EXPIRE_DATE)");
+				"SELECT * FROM " + getTableName()
+				+ " WHERE 1=1 AND DATE(NOW()) <= DATE(EXPIRE_DATE)");
 
-		if (model != null) {
 			if (id > 0) {
 				sql.append(" AND id = " + id);
 			}
@@ -240,11 +265,9 @@ public class NoticeModel extends BaseBean{
 			if (details != null && details.length() > 0) {
 				sql.append(" AND DETAILS like '" + details + "%'");
 			}
-			if (expireDate != null ) {
+			if (expireDate != null) {
 				sql.append(" AND EXPIRE_DATE like '" + expireDate + "%'");
 			}
-
-		}
 
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
@@ -255,6 +278,7 @@ public class NoticeModel extends BaseBean{
 			// sql.append(" limit " + pageNo + "," + pageSize);
 		}
 
+		log.info("SQL : " + sql);
 		ArrayList list = new ArrayList();
 		Connection conn = null;
 		try {
@@ -262,7 +286,7 @@ public class NoticeModel extends BaseBean{
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				model = new NoticeModel();
+				NoticeModel	model = new NoticeModel();
 				model.setId(rs.getLong(1));
 				model.setSubject(rs.getString(2));
 				model.setDetails(rs.getString(3));
@@ -274,7 +298,7 @@ public class NoticeModel extends BaseBean{
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
 			throw new ApplicationException(
-					"Exception : Exception in search Comment");
+					"Exception : Exception in search Notice");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -283,64 +307,39 @@ public class NoticeModel extends BaseBean{
 		return list;
 	}
 
-	public List search(NoticeModel model) throws ApplicationException {
-		return search(model, 0, 0);
+	/**
+	 * Searches records on the basis of model NOT NULL attributes
+	 * 
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public List search() throws ApplicationException {
+		return search( 0, 0);
 	}
 
-	public List list() throws ApplicationException {
-		return list(0, 0);
-	}
 
-	public List list(int pageNo, int pageSize) throws ApplicationException {
-		log.debug("Model list Started");
-		ArrayList list = new ArrayList();
-		StringBuffer sql = new StringBuffer("select * from ST_Notice");
-		// if page size is greater than zero then apply pagination
-		if (pageSize > 0) {
-			// Calculate start record index
-			pageNo = (pageNo - 1) * pageSize;
-			sql.append(" limit " + pageNo + "," + pageSize);
-		}
-
-		Connection conn = null;
-
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				NoticeModel model = new NoticeModel();
-				model.setId(rs.getLong(1));
-				model.setSubject(rs.getString(2));
-				model.setDetails(rs.getString(3));
-				model.setCreatedOn(rs.getTimestamp(4));
-				model.setExpireDate(rs.getDate(5));
-				list.add(model);
-			}
-			rs.close();
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new ApplicationException(
-					"Exception : Exception in getting list of users");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-
-		log.debug("Model list End");
-		return list;
-
-	}
-
+	/**
+	 * Returns Drop Down List key
+	 */
 	@Override
 	public String getKey() {
-		// TODO Auto-generated method stub
-		return id+"";
+		return id + "";
 	}
+
+	/**
+	 * Returns Drop Down List Value
+	 */
 	@Override
 	public String getValue() {
-		// TODO Auto-generated method stub
 		return subject;
 	}
 
+	/**
+	 * Returns name of table
+	 */
+	@Override
+	public String getTableName() {
+		return "ST_NOTICE";
+	}
 
 }

@@ -19,7 +19,7 @@
 
 		<%@ include file="Header.jsp"%>
 		<script type="text/javascript" src="./js/calendar.js"></script>
-		<jsp:useBean id="bean" class="in.co.sunrays.ocha.model.AttendenceModel" 
+		<jsp:useBean id="model" class="in.co.sunrays.ocha.model.AttendenceModel" 
 			scope="request"></jsp:useBean>
        <%
 			List l = (List) request.getAttribute("userList");
@@ -36,8 +36,8 @@
 				</font>
 			</H2>
 
-			<input type="hidden" name="id" value="<%=bean.getId()%>">
-			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(bean.getCreatedOn())%>">
+			<input type="hidden" name="id" value="<%=model.getId()%>">
+			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(model.getCreatedOn())%>">
 			
 
 			<table>
@@ -45,18 +45,18 @@
 				<tr>
 					<th>Student Name*</th>
 					<td><%=HTMLUtility.getList("studentId",
-					String.valueOf(bean.getStudentName()), l) %></td>
+					String.valueOf(model.getStudentName()), l) %></td>
 				</tr>
 				<tr>
 					<th>Subject*</th>
 					<td><input type="text" name="subject"
-						value="<%=DataUtility.getStringData(bean.getSubject())%>"><font
+						value="<%=DataUtility.getStringData(model.getSubject())%>"><font
 						color="red"> <%=ServletUtility.getErrorMessage("subject", request)%></font></td>
 				</tr>
 					<tr>
 					<th>Attendance*</th>
 					<td><input type="text" name="attendance"
-						value="<%=DataUtility.getStringData(bean.getAttendence())%>"><font
+						value="<%=DataUtility.getStringData(model.getAttendence())%>"><font
 						color="red"> <%=ServletUtility.getErrorMessage("attendance", request)%></font></td>
 				</tr>
 				<tr>
@@ -64,7 +64,7 @@
 					<td colspan="2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 						&nbsp; <input type="submit" name="operation" value="<%=AttendenceCtl.OP_SAVE%>">
 							<%
-				 	if (bean.getId() > 0) {
+				 	if (model.getId() > 0) {
 				 %> &emsp;<input type="submit" name="operation"
 						value="<%=AttendenceCtl.OP_DELETE%>"> <%
 				 	}

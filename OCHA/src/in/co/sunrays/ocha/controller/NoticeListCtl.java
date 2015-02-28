@@ -57,7 +57,7 @@ public class NoticeListCtl extends BaseCtl {
 				}
 
 			}
-			list = model.search(model, pageNo, pageSize);
+			list = model.search(pageNo, pageSize);
 			ServletUtility.setList(list, request);
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);

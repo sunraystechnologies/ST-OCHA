@@ -72,7 +72,7 @@ public class NoticeCtl extends BaseCtl {
 					model.setId(pk);
 				}
 
-				ServletUtility.setBean(model, request);
+				ServletUtility.setModel(model, request);
 				ServletUtility.setSuccessMessage("Data is successfully saved",
 						request);
 
@@ -104,10 +104,10 @@ public class NoticeCtl extends BaseCtl {
 		} else { // View page
 
 			if (id > 0 || op != null) {
-				NoticeModel bean;
+			
 				try {
-					bean = model.findByPK(id);
-					ServletUtility.setBean(bean, request);
+					model = model.findByPK(id);
+					ServletUtility.setModel(model, request);
 				} catch (ApplicationException e) {
 					log.error(e);
 					ServletUtility.handleException(e, request, response);

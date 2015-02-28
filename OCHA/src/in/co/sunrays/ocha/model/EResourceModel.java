@@ -196,7 +196,7 @@ public class EResourceModel extends BaseModel {
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
-		log.debug("Model findByName End");
+		log.debug("Model findByPk End");
 		return model;
 	}
 
@@ -236,7 +236,7 @@ public class EResourceModel extends BaseModel {
 						"Exception : Delete rollback exception "
 								+ ex.getMessage());
 			}
-			throw new ApplicationException("Exception in updating Comment ");
+			throw new ApplicationException("Exception in updating ERsource ");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -301,7 +301,7 @@ public class EResourceModel extends BaseModel {
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
 			throw new ApplicationException(
-					"Exception : Exception in search Comment");
+					"Exception : Exception in search ERsource");
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
