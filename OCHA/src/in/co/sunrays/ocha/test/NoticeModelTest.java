@@ -23,9 +23,7 @@ public class NoticeModelTest {
 		//testDelete();
 		//testUpdate();
 		//testFindByPK();
-		//testSearch();
-		testList();
-
+		testSearch();
 	}
 	
 	public static void testAdd() throws DuplicateRecordException {
@@ -96,7 +94,7 @@ public class NoticeModelTest {
 			List list = new ArrayList();
 			model.setSubject("Tes");
 			//bean.setAddress("borawan");
-			list = model.search(model, 1, 10);
+			list = model.search(1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test Search fail");
 			}
@@ -114,27 +112,4 @@ public class NoticeModelTest {
 		}
 	}
 	
-	public static void testList() {
-
-		try {
-			List list = new ArrayList();
-			list = model.list(1, 10);
-			if (list.size() < 0) {
-				System.out.println("Test list fail");
-			}
-			Iterator it = list.iterator();
-			while (it.hasNext()) {
-				model = (NoticeModel) it.next();
-				System.out.println(model.getId());
-				System.out.println(model.getSubject());
-				System.out.println(model.getDetails());
-				System.out.println(model.getCreatedOn());
-				System.out.println(model.getExpireDate());
-			}
-
-		} catch (ApplicationException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

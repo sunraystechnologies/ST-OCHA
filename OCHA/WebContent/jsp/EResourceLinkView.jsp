@@ -1,12 +1,12 @@
 
 <%@page import="in.co.sunrays.ocha.model.EResourceModel"%>
-<%@page import="in.co.sunrays.ocha.controller.EResourceListCtl"%>
-<%@page import="in.co.sunrays.ocha.model.NoticeModel"%>
-<%@page import="in.co.sunrays.ocha.controller.NoticeListCtl"%>
-<%@page import="in.co.sunrays.ocha.controller.UserListCtl"%>
-<%@page import="in.co.sunrays.util.ServletUtility"%>
-<%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="in.co.sunrays.ocha.controller.BaseCtl"%>
+<%@page import="in.co.sunrays.util.HTMLUtility"%>
+<%@page import="in.co.sunrays.util.DataUtility"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
+
+<%@page import="java.util.List"%>
 
 <html>
 <body>
@@ -14,6 +14,7 @@
 	<%@include file="Header.jsp"%>
 
 	<center>
+	
 		<h1>ERsource Link List</h1>
 
 		<form action="<%=ORSView.ERESOURCE_LINK_CTL%>">
@@ -48,9 +49,9 @@
 			<table width="100%">
 				<tr>
 					<td ><input type="submit" name="operation"
-						value="<%=EResourceListCtl.OP_PREVIOUS%>"></td>
+						value="<%=BaseCtl.OP_PREVIOUS%>"></td>
 					 <td align="right"><input type="submit" name="operation"
-						value="<%=EResourceListCtl.OP_NEXT%>"></td>
+						value="<%=BaseCtl.OP_NEXT%>"></td>
 				</tr>
 			</table>
 			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
