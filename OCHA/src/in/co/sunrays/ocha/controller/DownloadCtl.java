@@ -44,7 +44,7 @@ public class DownloadCtl extends HttpServlet {
 		System.out.println("Deleted");
 		 ServletUtility.forward("/jsp/TimeTableListView.jsp", request, response);
 	}
-}else{
+}else if(op.equalsIgnoreCase("Download")){
 		System.out.println("ggg"+fileName);
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition",

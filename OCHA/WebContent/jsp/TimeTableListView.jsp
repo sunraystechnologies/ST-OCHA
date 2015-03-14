@@ -41,7 +41,7 @@ int index=1;
 	<tr>
 		<td><%=index+i%></td>
 		<td><%=f%></td>
-<td><a href="<%=ORSView.Download_CTL %>?fileName=<%=f%>">Download</a></td>
+<td><a href="<%=ORSView.Download_CTL %>?fileName=<%=f%>&operation=Download">Download</a></td>
  <%
 			if (userBean.getRoleId() == RoleModel.ADMIN) {
 		%>

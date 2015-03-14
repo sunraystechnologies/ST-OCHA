@@ -38,7 +38,7 @@ function showCalendar(CONTROL,START_YEAR,END_YEAR,FORMAT){
 	FormatAs = FORMAT;
 
 	var strFeatures = "width=" + CalWidth + ",height=140" + ",left=" + LEFT + ",top=" + TOP;
-	var CalWindow = window.open("/ORSProject3/./jsp/HTMLCalendar.htm","Calendar", strFeatures)
+	var CalWindow = window.open("/OCHA/./jsp/HTMLCalendar.htm","Calendar", strFeatures)
 	CalWindow.focus();
 } //End Function
 

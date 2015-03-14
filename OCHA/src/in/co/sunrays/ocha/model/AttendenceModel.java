@@ -278,7 +278,7 @@ public class AttendenceModel extends BaseModel {
 				sql.append(" AND subject like '" + subject + "%'");
 			}
 			if (studentName != null && studentName.length() > 0) {
-				sql.append(" AND studentName like '" + studentName + "%'");
+				sql.append(" AND student_name like '" + studentName + "%'");
 			}
 
 		}
