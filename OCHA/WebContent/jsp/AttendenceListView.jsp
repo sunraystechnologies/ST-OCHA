@@ -14,30 +14,47 @@
 
 <html>
 <body>
-
+<div class="container">
+    <div class="row">
+        <div  class="col-md-2">
 	<%@include file="Header.jsp"%>
-
-	<center>
-		<h1>Attendance List</h1>
-
-		<form action="<%=ORSView.ATTENDENCE_LIST_CTL%>">
-<table width="100%">
-				<tr>
-					<td align="center"><label>Student Name</label> <input
-						type="text" name="studentName"
-						value="<%=ServletUtility.getParameter("studentName", request)%>">
-						&emsp; <label>Subject:</label> <input type="text" name="subject"
-						value="<%=ServletUtility.getParameter("subject", request)%>">
-						&emsp; <input type="submit" name="operation" value="<%=AttendenceListCtl.OP_SEARCH %>">
-					</td>
-				</tr>
-			</table>
+        </div>
+        <div class="col-md-10">
+        	
+					<h2 align="Center"  style="margin-top: 140px">
+					<hr>
+					Attendance List
+					</h2>
+					<form action="<%=ORSView.ATTENDENCE_LIST_CTL%>" class="form-inline">
+					  	 <div class="form-group">
+					<label for="inputstudentName" class="control-label  col-md-5">Student Name</label>
+		<div class="col-md-2">
+						<input type="text" class="form-control" name="studentName" id="studentName"
+							placeholder="Student Name" value="<%=ServletUtility.getParameter("studentName", request)%>">
+					</div>
+					</div>
+					<div class="form-group">
+				<label for="inputLoginId" class="control-label col-md-4">Subject</label>
+					<div class="col-md-2">
+						<input type="text" class="form-control" name="Subject" id="Subject"
+						value="<%=ServletUtility.getParameter("Subject", request)%>"	placeholder="Subject">
+					</div>
+		</div>
+				<div class="form-group">
+						<button name="operation" value="<%=AttendenceListCtl.OP_SEARCH %>" type="submit" class="col-md-offset-1 btn btn-info">
+							<span class="btn-save-label">
+						<i class="glyphicon glyphicon-search"></i>
+						</span>
+						Search
+						</button>
+						</div>
 			<br>
-
-			<table border="1" width="100%">
+		<br>
+		<div class="table-responsive">
+						<table class="table table-bordered table-hover" >
 				<tr>
-				<th>Student Name</th>
 					<th>Subject</th>
+					<th>Total Attendance</th>
 					<th>Attendance</th>
 					<th>Edit</th>
 				</tr>
@@ -57,8 +74,8 @@
 						AttendenceModel model = it.next();
 				%>
 				<tr>
-					<td><%=model.getStudentName()%></td>
 					<td><%=model.getSubject()%></td>
+						<td><%=model.getTotalAttendence()%></td>
 					<td><%=model.getAttendence()%></td>
 					<td><a href="AttendenceCtl?id=<%=model.getId()%>">Edit</a></td>
 				</tr>
@@ -66,20 +83,24 @@
 					}
 				%>
 			</table>
+						
 			<table width="100%">
 				<tr>
 					<td ><input type="submit" name="operation"
-						value="<%=AttendenceListCtl.OP_PREVIOUS%>"></td>
+						value="<%=AttendenceListCtl.OP_PREVIOUS%>" class="btn btn-info"></td>
 					 <td ><input type="submit"
-						name="operation" value="<%=AttendenceListCtl.OP_DELETE%>"></td>
+						name="operation" value="<%=AttendenceListCtl.OP_DELETE%>" class="btn btn-info"></td>
 					 <td align="right"><input type="submit" name="operation"
-						value="<%=AttendenceListCtl.OP_NEXT%>"></td>
+						value="<%=AttendenceListCtl.OP_NEXT%>" class="btn btn-info"></td>
 				</tr>
 			</table>
 			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
 				type="hidden" name="pageSize" value="<%=pageSize%>">
+						</div>
 		</form>
-	</center>
-	<%@include file="Footer.jsp"%>
+					</div>
+					</div>
+					</div>
+
 </body>
 </html>

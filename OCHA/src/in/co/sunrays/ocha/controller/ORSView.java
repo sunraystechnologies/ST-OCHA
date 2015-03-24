@@ -28,8 +28,9 @@ public interface ORSView {
 	public String USER_LIST_VIEW = PAGE_FOLDER + "/UserListView.jsp";
 	public String COLLEGE_VIEW = PAGE_FOLDER + "/CollegeView.jsp";
 	public String COLLEGE_LIST_VIEW = PAGE_FOLDER + "/CollegeListView.jsp";
-	public String NOTICE_LIST_VIEW = PAGE_FOLDER + "/NoticeListView.jsp";
-	public String NOTICE_VIEW = PAGE_FOLDER + "/NoticeView.jsp";
+	public String NOTICE_LIST_VIEW =APP_CONTEXT+ PAGE_FOLDER + "/NoticeListView.jsp";
+	public String NOTICE_VIEW = APP_CONTEXT + PAGE_FOLDER + "/NoticeView.jsp";
+	public String NOTICE_VIEW1 = PAGE_FOLDER + "/NoticeView.jsp";
 	public String STUDENT_VIEW = PAGE_FOLDER + "/StudentView.jsp";
 	public String STUDENT_LIST_VIEW = PAGE_FOLDER + "/StudentListView.jsp";
 	public String ROLE_VIEW = PAGE_FOLDER + "/RoleView.jsp";

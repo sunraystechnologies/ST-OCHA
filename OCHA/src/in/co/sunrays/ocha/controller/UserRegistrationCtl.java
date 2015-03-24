@@ -78,6 +78,16 @@ public class UserRegistrationCtl extends BaseCtl {
 					PropertyReader.getValue("error.require", "College Id"));
 			pass = false;
 		}
+		if (DataValidator.isNull(request.getParameter("branch"))) {
+			request.setAttribute("branch",
+					PropertyReader.getValue("error.require", "Branch"));
+			pass = false;
+		}
+		if (DataValidator.isNull(request.getParameter("year"))) {
+			request.setAttribute("year",
+					PropertyReader.getValue("error.require", "Year"));
+			pass = false;
+		}
 		if (DataValidator.isNull(request.getParameter("fatherName"))) {
 			request.setAttribute("fatherName",
 					PropertyReader.getValue("error.require", "Father Name"));
@@ -123,6 +133,11 @@ public class UserRegistrationCtl extends BaseCtl {
 					PropertyReader.getValue("error.date", "Date Of Birth"));
 			pass = false;
 		}
+		if (DataValidator.isNull(request.getParameter("mobileNo"))) {
+			request.setAttribute("mobileNo",
+					PropertyReader.getValue("error.require", "Mobile No"));
+			pass = false;
+		}
 		if (!request.getParameter("password").equals(
 				request.getParameter("confirmPassword"))
 				&& !"".equals(request.getParameter("confirmPassword"))) {
@@ -154,13 +169,19 @@ public class UserRegistrationCtl extends BaseCtl {
 		bean.setLastName(DataUtility.getString(request.getParameter("lastName")));
 		bean.setCollegeId(DataUtility.getString(request
 				.getParameter("collegeId")));
+		bean.setCollegeCode(DataUtility.getString(request
+				.getParameter("collegeCode")));
+		bean.setBranch(DataUtility.getString(request
+				.getParameter("branch")));
+		bean.setYear(DataUtility.getString(request
+				.getParameter("year")));
 		bean.setFatherName(DataUtility.getString(request
 				.getParameter("fatherName")));
 		bean.setMotherName(DataUtility.getString(request
 				.getParameter("motherName")));
 		bean.setAddress(DataUtility.getString(request.getParameter("address")));
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
-
+		bean.setMobileNo(DataUtility.getString(request.getParameter("mobileNo")));
 		bean.setPassword(DataUtility.getString(request.getParameter("password")));
 
 		bean.setConfirmPassword(DataUtility.getString(request

@@ -1,4 +1,4 @@
 <HR>
 <CENTER>
-	<H3>c) Copyrights SUNRAYS Technologies </H3>
+	<H3>Copyright ©  SGSITS INDORE </H3>
 </CENTER>

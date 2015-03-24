@@ -5,7 +5,7 @@
 
 
 	<h1 align="Center">
-		<img src="img/customLogo.jpg" width="318" height="127" border="0">
+		<img src="img/SGSITS_Indore.png" width="200" height="90" border="0">
 	</h1>
 	<h1 align="Center">
 		<font size="10px" color="red"><a

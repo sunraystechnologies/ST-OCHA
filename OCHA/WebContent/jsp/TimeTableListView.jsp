@@ -11,8 +11,19 @@
     </head>
  
     <body> 
-       <%@ include file="Header.jsp"%>
-    <table border="1" width="100%">
+    <div class="container">
+    <div class="row">
+        <div  class="col-md-2">
+        <%@include file="Header.jsp"%>
+        </div>
+        <div class="col-md-10">
+        	
+					<h2 align="Center"  style="margin-top: 140px">
+					<hr>
+					Time Table  List
+					</h2>
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover" >
 				<tr>
 				<th>ID</th>
 					<th>FileName</th>
@@ -51,7 +62,11 @@ int index=1;
 	<%
 		}
 	%>
-</table>
-      	<%@ include file="Footer.jsp"%>
+						</table>
+						</div>
+					</div>
+					</div>
+					</div>
+	
     </body>
 </html>

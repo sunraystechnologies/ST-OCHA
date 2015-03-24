@@ -105,7 +105,7 @@ public class UserModel {
 			pstmt.setString(16, bean.getModifiedBy());
 			pstmt.setTimestamp(17,bean.getCreatedDatetime());
 			pstmt.setTimestamp(18,bean.getModifiedDatetime());
-			pstmt.setString(19, bean.getCollegeId());
+			pstmt.setString(19,bean.getCollegeCode()+""+bean.getBranch()+""+bean.getYear()+""+ bean.getCollegeId());
 			pstmt.setString(20, bean.getFatherName());
 			pstmt.setString(21, bean.getMotherName());
 			pstmt.setString(22, bean.getAddress());
@@ -785,7 +785,7 @@ public class UserModel {
 		EmailMessage msg = new EmailMessage();
 
 		msg.setTo(beanExist.getLogin());
-		msg.setSubject("SUNARYS ORS Password has been changed Successfully.");
+		msg.setSubject("SGSITS OCHA  Password has been changed Successfully.");
 		msg.setMessage(message);
 		msg.setMessageType(EmailMessage.HTML_MSG);
 
@@ -826,7 +826,7 @@ public class UserModel {
 		EmailMessage msg = new EmailMessage();
 
 		msg.setTo(bean.getLogin());
-		msg.setSubject("Registration is successful for ORS Project SUNRAYS Technologies");
+		msg.setSubject("Registration is successful for OCHA Project SGSITS INDORE");
 		msg.setMessage(message);
 		msg.setMessageType(EmailMessage.HTML_MSG);
 
@@ -907,7 +907,7 @@ public class UserModel {
 		String message = EmailBuilder.getForgetPasswordMessage(map);
 		EmailMessage msg = new EmailMessage();
 		msg.setTo(login);
-		msg.setSubject("SUNARYS ORS Password reset");
+		msg.setSubject("SGSITS INDORE Password reset");
 		msg.setMessage(message);
 		msg.setMessageType(EmailMessage.HTML_MSG);
 		EmailUtility.sendMail(msg);

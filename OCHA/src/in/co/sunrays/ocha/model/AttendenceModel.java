@@ -30,19 +30,55 @@ public class AttendenceModel extends BaseModel {
 	private static Logger log = Logger.getLogger(AttendenceModel.class);
 
 	private long studentId;
+	private long BranchId;
+	private long subjectId;
 	private String subject;
 	private int attendence;
 	private String studentName;
-	private Timestamp createdOn = null;
+	private String BranchName;
+	private int totalAttendence;
 
-	public Timestamp getCreatedOn() {
+
+	public long getBranchId() {
+		return BranchId;
+	}
+
+	public void setBranchId(long branchId) {
+		BranchId = branchId;
+	}
+
+	public long getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(long subjectId) {
+		this.subjectId = subjectId;
+	}
+
+	private Date createdOn = null;
+
+	
+	public Date getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(Timestamp createdOn) {
+	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
+	public int getTotalAttendence() {
+		return totalAttendence;
+	}
 
+	public void setTotalAttendence(int totalAttendence) {
+		this.totalAttendence = totalAttendence;
+	}
+	public String getBranchName() {
+		return BranchName;
+	}
+
+	public void setBranchName(String branchName) {
+		BranchName = branchName;
+	}
 	public String getStudentName() {
 		return studentName;
 	}
@@ -84,11 +120,19 @@ public class AttendenceModel extends BaseModel {
 	public long add() throws ApplicationException {
 
 		log.debug("Model add Started");
-
 		UserModel smodel = new UserModel();
 		UserBean bean = smodel.findByPK(studentId);
 		AttendenceModel model=new AttendenceModel();
 		model.setStudentName(bean.getFirstName());
+		studentName=bean.getFirstName()+""+bean.getLastName();
+		
+		BranchModel branchModel=new BranchModel();
+		branchModel=branchModel.findByPK(BranchId);
+		BranchName=branchModel.getBranchName();
+		
+		SubjectModel subjectModel=new SubjectModel();
+		subjectModel=subjectModel.findByPK(subjectId);
+		subject=subjectModel.getSubjectName();
 		Connection conn = null;
 		long pk = 0;
 
@@ -99,7 +143,7 @@ public class AttendenceModel extends BaseModel {
 			conn.setAutoCommit(false); // Begin transaction
 
 			String sql = "INSERT INTO " + getTableName()
-					+ " VALUES(?,?,?,?,?,?)";
+					+ " VALUES(?,?,?,?,?,?,?,?,?,?)";
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -108,8 +152,11 @@ public class AttendenceModel extends BaseModel {
 			pstmt.setString(3, studentName);
 			pstmt.setString(4, subject);
 			pstmt.setInt(5, attendence);
-			java.util.Date date = new Date();
-			pstmt.setTimestamp(6, new java.sql.Timestamp(date.getTime()));
+			pstmt.setDate(6, new java.sql.Date(createdOn.getTime()));
+			pstmt.setString(7, BranchName);
+			pstmt.setInt(8, totalAttendence);
+			pstmt.setLong(9, BranchId);
+			pstmt.setLong(10, subjectId);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -197,7 +244,11 @@ public class AttendenceModel extends BaseModel {
 				model.setStudentName(rs.getString(3));
 				model.setSubject(rs.getString(4));
 				model.setAttendence(rs.getInt(5));
-				model.setCreatedOn(rs.getTimestamp(6));
+				model.setCreatedOn(rs.getDate(6));
+				model.setBranchName(rs.getString(7));
+				model.setTotalAttendence(rs.getInt(8));
+				model.setBranchId(rs.getLong(9));
+				model.setSubjectId(rs.getLong(10));
 
 			}
 			rs.close();
@@ -306,7 +357,11 @@ public class AttendenceModel extends BaseModel {
 				model.setStudentName(rs.getString(3));
 				model.setSubject(rs.getString(4));
 				model.setAttendence(rs.getInt(5));
-				model.setCreatedOn(rs.getTimestamp(6));
+				model.setCreatedOn(rs.getDate(6));
+				model.setBranchName(rs.getString(7));
+				model.setTotalAttendence(rs.getInt(8));
+				model.setBranchId(rs.getLong(9));
+				model.setSubjectId(rs.getLong(10));
 				list.add(model);
 			}
 			rs.close();
@@ -368,7 +423,11 @@ public class AttendenceModel extends BaseModel {
 				model.setStudentName(rs.getString(3));
 				model.setSubject(rs.getString(4));
 				model.setAttendence(rs.getInt(5));
-				model.setCreatedOn(rs.getTimestamp(6));
+				model.setCreatedOn(rs.getDate(6));
+				model.setBranchName(rs.getString(7));
+				model.setTotalAttendence(rs.getInt(8));
+				model.setBranchId(rs.getLong(9));
+				model.setSubjectId(rs.getLong(10));
 				list.add(model);
 			}
 			rs.close();
