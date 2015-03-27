@@ -6,15 +6,22 @@ import in.co.sunrays.util.DataUtility;
 import in.co.sunrays.util.PropertyReader;
 import in.co.sunrays.util.ServletUtility;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.ResourceBundle;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+<<<<<<< HEAD
 /**
  * Contains navigation logic for Comment Views.
  * 
@@ -25,6 +32,9 @@ import org.apache.log4j.Logger;
  * @URL www.sunrays.co.in
  */
 public class NoticeListCtl extends BaseCtl {
+=======
+public class NoticeListCtl extends HttpServlet{
+>>>>>>> a85860ba8a491504b47a8134c301a4aed4b3191a
 
 	/**
 	 * Logger to log the messages.
@@ -32,7 +42,7 @@ public class NoticeListCtl extends BaseCtl {
 
 	private static Logger log = Logger.getLogger(NoticeListCtl.class);
 
-
+/*
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -92,5 +102,55 @@ public class NoticeListCtl extends BaseCtl {
 	@Override
 	protected String getView() {
 		return ORSView.NOTICE_LIST_VIEW;
+	}*/
+	
+	private static final int BYTES_DOWNLOAD = 1024;
+	private final ResourceBundle resourceBundle = ResourceBundle
+			.getBundle("in.co.sunrays.bundle.system");
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String fileName = request.getParameter("fileName");
+		String op = request.getParameter("operation");
+		String UPLOAD_DIRECTORY = resourceBundle.getString("log.noticepath");
+		 File filepath = new File(UPLOAD_DIRECTORY+fileName);
+		/* System.out.println(fileName);
+		String pathname = "/media/ncs02/Workspace/My_Workspace/ORSProject4/WebContent/TimeTable/";
+
+		File f = new File(pathname, fileName);
+		Scanner in = new Scanner(f);
+		PrintWriter out = response.getWriter();
+		String line = null;
+		while (in.hasNext()) {
+			line = in.nextLine();
+			out.println(line);
+		}
+		in.close();
+		out.close();
+*/	if(op.equalsIgnoreCase("Delete")){
+	if(filepath.delete()){
+		System.out.println("Deleted");
+		 ServletUtility.forward("/jsp/NoticeListView.jsp", request, response);
 	}
-}
+}else if(op.equalsIgnoreCase("Download")){
+		System.out.println("ggg"+fileName);
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition",
+	                     "attachment;filename="+fileName);
+		ServletContext ctx = getServletContext();
+		InputStream is = ctx.getResourceAsStream("Notice/"+fileName);
+	 System.out.println("sss"+is);
+		int read=0;
+		byte[] bytes = new byte[BYTES_DOWNLOAD];
+		OutputStream os = response.getOutputStream();
+	 
+		while((read = is.read(bytes))!= -1){
+			os.write(bytes, 0, read);
+	}
+		os.flush();
+		os.close();	
+	
+	   }
+	}
+	
+	}
+

@@ -12,15 +12,20 @@
 
 <html>
 <body>
-
+<div class="container">
+    <div class="row">
+        <div  class="col-md-2">
 	<%@include file="Header.jsp"%>
-
-	<center>
-		<h1>Comment List</h1>
-
-		<form action="<%=ORSView.COMMENT_LIST_CTL%>">
-
-			<table border="1" width="100%">
+        </div>
+        <div class="col-md-10">
+        	
+					<h2 align="Center"  style="margin-top: 140px">
+					<hr>
+					Comment List
+					</h2>
+						<form action="<%=ORSView.COMMENT_LIST_CTL%>" class="form-inline">
+<div class="table-responsive">
+						<table class="table table-bordered table-hover" >
 				<tr>
 				<th>ID</th>
 					<th>EReSource Name</th>
@@ -52,20 +57,25 @@
 					}
 				%>
 			</table>
+						
 			<table width="100%">
 				<tr>
-					<td ><input type="submit" name="operation"
+					<td ><input type="submit" name="operation" class="btn btn-info"
 						value="<%=CommentListCtl.OP_PREVIOUS%>"></td>
 					 <td ><input type="submit"
-						name="operation" value="<%=CommentListCtl.OP_DELETE%>"></td>
-					 <td align="right"><input type="submit" name="operation"
+						name="operation" class="btn btn-info" value="<%=CommentListCtl.OP_DELETE%>"></td>
+					 <td align="right"><input type="submit" name="operation" class="btn btn-info"
 						value="<%=CommentListCtl.OP_NEXT%>"></td>
 				</tr>
 			</table>
 			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
 				type="hidden" name="pageSize" value="<%=pageSize%>">
+						</div>
 		</form>
-	</center>
-	<%@include file="Footer.jsp"%>
+					</div>
+					</div>
+					</div>
+
+
 </body>
 </html>

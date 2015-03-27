@@ -10,17 +10,20 @@
 
 <html>
 <body>
-
+<div class="container">
+    <div class="row">
+        <div  class="col-md-2">
 	<%@include file="Header.jsp"%>
-
-	<center>
+        </div>
+        <div class="col-md-10">
 	
-		<h1>ERsource Link List</h1>
-
+					<h2 align="Center"  style="margin-top: 140px">
+					<hr>
+			ERsource Link List
+					</h2>
 		<form action="<%=ORSView.ERESOURCE_LINK_CTL%>">
-
-
-			<table border="1" width="100%">
+						<div class="table-responsive">
+						<table class="table table-bordered table-hover" >
 				<tr>
 					<th>Table Contains</th>
 				</tr>
@@ -48,16 +51,19 @@
 			</table>
 			<table width="100%">
 				<tr>
-					<td ><input type="submit" name="operation"
+					<td ><input type="submit" name="operation"  class="btn btn-info"
 						value="<%=BaseCtl.OP_PREVIOUS%>"></td>
-					 <td align="right"><input type="submit" name="operation"
+					 <td align="right"><input type="submit" name="operation"  class="btn btn-info"
 						value="<%=BaseCtl.OP_NEXT%>"></td>
 				</tr>
 			</table>
 			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
 				type="hidden" name="pageSize" value="<%=pageSize%>">
+						</div>
 		</form>
-	</center>
-	<%@include file="Footer.jsp"%>
+					</div>
+					</div>
+					</div>
+
 </body>
 </html>

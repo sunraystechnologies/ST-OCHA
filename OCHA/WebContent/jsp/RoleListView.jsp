@@ -7,23 +7,37 @@
 
 <html>
 <body>
-
+<div class="container">
+    <div class="row">
+        <div  class="col-md-2">
 	<%@include file="Header.jsp"%>
-
-	<center>
-		<h1>Role List</h1>
-
-		<form action="<%=ORSView.ROLE_LIST_CTL%>">
-			<table width="100%">
-				<tr>
-					<td align="center"><label>Name :</label> <input type="text"
-						name="name"
-						value="<%=ServletUtility.getParameter("name", request)%>">
-						&nbsp; <input type="submit" name="operation" value="<%=RoleListCtl.OP_SEARCH %>">
-					</td>
-				</tr>
-			</table>
-			<table border="1" width="100%">
+        </div>
+        <div class="col-md-10">
+        	
+					<h2 align="Center"  style="margin-top: 140px">
+					<hr>
+				Role List
+					</h2>
+						<form action="<%=ORSView.ROLE_LIST_CTL%>" class="form-inline">
+						 <div class="form-group">
+					<label for="inputName" class="control-label  col-md-3">Name</label>
+		<div class="col-md-2">
+						<input type="text" class="form-control" name="name" id="name"
+							placeholder="Name" value="<%=ServletUtility.getParameter("name", request)%>">
+							</div>
+								</div>
+								<div class="form-group">
+						<button name="operation" value="<%=RoleListCtl.OP_SEARCH %>" type="submit" class=" btn btn-info">
+							<span class="btn-save-label">
+						<i class="glyphicon glyphicon-search"></i>
+						</span>
+						Search
+						</button>
+						</div>
+		<br>
+		<br>
+			<div class="table-responsive">
+						<table class="table table-bordered table-hover" >
 				<tr>
 					<th>S.No.</th>
 					<th>Id</th>
@@ -56,19 +70,26 @@
 					}
 				%>
 			</table>
+						
 			<table width="100%">
 				<tr>
-					<td><input type="submit" name="operation"
+					<td><input type="submit" class="btn btn-info" name="operation"
 						value="<%=RoleListCtl.OP_PREVIOUS%>"></td>
 					<td></td>
-					<td align="right"><input type="submit" name="operation"
+					<td align="right"><input type="submit" class="btn btn-info" name="operation"
 						value="<%=RoleListCtl.OP_NEXT%>"></td>
 				</tr>
 			</table>
 			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
 				type="hidden" name="pageSize" value="<%=pageSize%>">
+						</div>
+				
+				
 		</form>
-	</center>
-	<%@include file="Footer.jsp"%>
+					</div>
+					</div>
+					</div>
+
+	
 </body>
 </html>

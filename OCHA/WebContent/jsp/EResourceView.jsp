@@ -1,5 +1,4 @@
 <%@page import="in.co.sunrays.ocha.controller.EResourceCtl"%>
-<%@page import="in.co.sunrays.ocha.controller.NoticeCtl"%>
 <%@page import="in.co.sunrays.util.DataUtility"%>
 <%@page import="in.co.sunrays.util.ServletUtility"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -8,71 +7,86 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+
 </head>
 <body>
-<form action="<%=ORSView.ERESOURCE_CTL%>">
-
-		<%@ include file="Header.jsp"%>
-		<script type="text/javascript" src="./js/calendar.js"></script>
 		<jsp:useBean id="model" class="in.co.sunrays.ocha.model.EResourceModel" 
 			scope="request"></jsp:useBean>
-
-		<center>
-			<h1>E-Resource</h1>
-
-			<H2>
+<div class="container">
+    <div class="row">
+        <div  class="col-md-2">
+        <%@include file="Header.jsp"%>
+        </div>
+        <div class="col-md-10">
+        	<h3 align="Center"  style="margin-top: 140px">
+					<hr>
+				E-Resource
+					</h3>
+					<h3 class="col-md-offset-4">
 				<font color="green"> <%=ServletUtility.getSuccessMessage(request)%>
 				</font>
-			</H2>
-			<H2>
-				<font color="red"> <%=ServletUtility.getErrorMessage(request)%>
-				</font>
-			</H2>
-
+					<font color="red" >  <%=ServletUtility.getErrorMessage(request)%>
+					</font></h3>
 			<input type="hidden" name="id" value="<%=model.getId()%>">
 			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(model.getCreatedOn())%>">
+					<form action="<%=ORSView.ERESOURCE_CTL%>" class="form-horizontal">
+						<div class="form-group">
+					<label for="inputtableContains" class="control-label col-md-offset-2 col-md-2">
+					Table Contains</label>
+					<div class="col-md-3">
+						<input type="text" class="form-control" name="tableContains" id="tableContains"
+							placeholder="Table Contains" value="<%=DataUtility.getStringData(model.getTablesContains())%>"><font
+						color="red"> <%=ServletUtility.getErrorMessage("tableContains", request)%></font>
+					</div>
+				</div>	
 			
-
-			<table>
-
-				<tr>
-					<th>Table Contains*</th>
-					<td><input type="text" name="tableContains"
-						value="<%=DataUtility.getStringData(model.getTablesContains())%>"><font
-						color="red"> <%=ServletUtility.getErrorMessage("tableContains", request)%></font></td>
-				</tr>
-				<tr>
-					<th>Name*</th>
-					<td><input type="text" name="name"
-						value="<%=DataUtility.getStringData(model.getName())%>"><font
-						color="red"> <%=ServletUtility.getErrorMessage("name", request)%></font></td>
-				</tr>
-
-
-				<tr>
-					<th>Detail</th>
-					<td><input type="text" name="detail" 
-					value="<%=DataUtility.getStringData(model.getDetail())%>">
+				<div class="form-group">
+					<label for="inputDetail" class="control-label col-md-offset-2 col-md-2">
+					Detail</label>
+					<div class="col-md-3">
+						<input type="text" class="form-control" name="detail" id="detail"
+							placeholder="Detail" value="<%=DataUtility.getStringData(model.getDetail())%>">
 						
-					<font color="red"> <%=ServletUtility.getErrorMessage("detail", request)%></font></td>
-				</tr>
-				<tr>
-					<th></th>
-					<td colspan="2">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-						&nbsp; <input type="submit" name="operation" value="<%=EResourceCtl.OP_SAVE%>">
+					<font color="red"> <%=ServletUtility.getErrorMessage("detail", request)%></font>
+					</div>
+				</div>	
+					<div class="form-group">
+					<label for="inputName" class="control-label col-md-offset-2 col-md-2">
+					Name</label>
+					<div class="col-md-3">
+						<input type="text" class="form-control" name="name" id="name"
+							placeholder="Name"value="<%=DataUtility.getStringData(model.getName())%>"><font
+						color="red"> <%=ServletUtility.getErrorMessage("name", request)%></font>
+					</div>
+				</div>	
+						
+					<div class="form-group">
+				<div class="col-md-offset-4 ">
+						<button name="operation" style="margin-left: 20px" class="btn icon-btn-save btn-success" value="<%=EResourceCtl.OP_SAVE%>" type="submit">
+						<span class="btn-save-label">
+						<i class="glyphicon glyphicon-floppy-disk"></i>
+						</span>
+						save</button>
 							<%
 				 	if (model.getId() > 0) {
-				 %> &emsp;<input type="submit" name="operation"
-						value="<%=EResourceCtl.OP_DELETE%>"> <%
+				 %>
+				 	<button name="operation" class="btn btn-success"  value="<%=EResourceCtl.OP_DELETE%>" type="submit">
+						
+						Delete
+							</button>
+				  <%
 				 	}
-				 %>&emsp; <input type="submit" name="operation"
-						value="<%=EResourceCtl.OP_CANCEL%>">
-					</td>
-				</tr>
-			</table>
+				 %><button name="operation" class="btn btn-success" value="<%=EResourceCtl.OP_CANCEL%>" type="submit">
+						
+						Cancel
+							</button>
+						</div>
+						</div>
 	</form>
-	</center>
-	<%@ include file="Footer.jsp"%>
+					</div>
+					</div>
+					</div>
+		
+
 </body>
 </html>

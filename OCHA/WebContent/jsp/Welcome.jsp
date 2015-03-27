@@ -1,30 +1,26 @@
 <%@page import="in.co.sunrays.ocha.controller.ORSView"%>
+
 <html>
 <body>
-	<form action="<%=ORSView.WELCOME_CTL%>">
-		<%@ include file="Header.jsp"%>
-					<h1 align="Center">
-						<font size="10px" color="red">Welcome to OCHA </font>
-					</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+         <%@include file="Header.jsp"%>
+        </div>
+        <div class="col-md-10">
 		
-	            	<%
-	            	UserBean beanUserBean = (UserBean) session.getAttribute("user");
-						if (beanUserBean != null) {
-							if (beanUserBean.getRoleId() == RoleModel.STUDENT) {
-					%>
+          	<form action="<%=ORSView.WELCOME_CTL%>">
 		
-					<h2 align="Center">
-						<a href="<%=ORSView.GET_MARKSHEET_CTL%>">Click here to see your
-							Marksheet </a>
-					</h2>
+					<h1 align="Center" style="margin-top: 400px">
 			         
-			         <%
-							}
-						}
-			         %>
+						<font size="10px" color="red">Welcome to Online College Helpdesk Application</font>
+					</h1>
 				
 				</form>
-		
-		<%@ include file="Footer.jsp"%>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

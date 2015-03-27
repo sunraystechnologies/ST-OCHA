@@ -30,7 +30,10 @@ public class UserBean extends BaseBean {
      * Last Name of User
      */
     private String lastName;
+    private String collegeCode;
     private String collegeId;
+    private String branch;
+    private String year;
     private String fatherName;
     private String motherName;
     private String address;
@@ -44,6 +47,7 @@ public class UserBean extends BaseBean {
      * Password of User
      */
     private String password;
+
     /**
      * Confirm Password of User
      */
@@ -88,6 +92,22 @@ public class UserBean extends BaseBean {
     /**
      * accessor
      */
+
+    public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
 
 	public String getMobileNo() {
 		return mobileNo;
@@ -151,6 +171,13 @@ public class UserBean extends BaseBean {
 
 	public void setDob(Date dob) {
 		this.dob = dob;
+	}
+    public String getCollegeCode() {
+		return collegeCode;
+	}
+
+	public void setCollegeCode(String collegeCode) {
+		this.collegeCode = collegeCode;
 	}
 
 	public long getRoleId() {

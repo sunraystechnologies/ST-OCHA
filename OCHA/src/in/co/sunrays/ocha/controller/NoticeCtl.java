@@ -7,15 +7,22 @@ import in.co.sunrays.util.DataValidator;
 import in.co.sunrays.util.PropertyReader;
 import in.co.sunrays.util.ServletUtility;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 
+<<<<<<< HEAD
 
 /**
  * Contains navigation logic for Comment Views.
@@ -35,6 +42,54 @@ public class NoticeCtl extends BaseCtl {
 	 * Logger to log the messages.
 	 */
 	private static Logger log = Logger.getLogger(NoticeCtl.class);
+=======
+public class NoticeCtl extends HttpServlet{
+
+	private static final long serialVersionUID = 1L;
+	
+	  
+	 //private final String UPLOAD_DIRECTORY = "/media/ncs02/Workspace/My_Workspace/OCHA/WebContent/TimeTable/";
+	
+	private final ResourceBundle resourceBundle = ResourceBundle
+			.getBundle("in.co.sunrays.bundle.system");
+	  
+	    @Override
+	    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	            throws ServletException, IOException {
+	
+	      
+	        //process only if its multipart content
+	        if(ServletFileUpload.isMultipartContent(request)){
+	        	String UPLOAD_DIRECTORY = resourceBundle.getString("log.noticepath");
+	            try {
+	                List<FileItem> multiparts = new ServletFileUpload(
+	                                         new DiskFileItemFactory()).parseRequest(request);
+	              
+	                for(FileItem item : multiparts){
+	                    if(!item.isFormField()){
+	                        String name = new File(item.getName()).getName();
+	                        item.write( new File(UPLOAD_DIRECTORY + File.separator + name));
+	                    }
+	                }
+	           
+	               //File uploaded successfully
+	               request.setAttribute("message", "File Uploaded Successfully");
+	            } catch (Exception ex) {
+	               request.setAttribute("message", "File Upload Failed due to " + ex);
+	            }          
+	         
+	        }else{
+	            request.setAttribute("message",
+	                                 "Sorry this Servlet only handles file upload request");
+	        }
+	    
+	       // request.getRequestDispatcher("/result.jsp").forward(request, response);
+	        ServletUtility.forward(ORSView.NOTICE_VIEW1, request, response);
+	     
+	    }
+
+/*	private static Logger log = Logger.getLogger(NoticeCtl.class);
+>>>>>>> a85860ba8a491504b47a8134c301a4aed4b3191a
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
@@ -62,10 +117,10 @@ public class NoticeCtl extends BaseCtl {
 		return pass;
 		
 	}
-	/**
+	*//**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
-	 */
+	 *//*
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		NoticeModel model=new NoticeModel();
@@ -140,6 +195,6 @@ public class NoticeCtl extends BaseCtl {
 		// TODO Auto-generated method stub
 		System.out.println("vieeeeeew");
 		return ORSView.NOTICE_VIEW;
-	}
+	}*/
 
 }

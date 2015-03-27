@@ -11,27 +11,44 @@
 <html>
 <body>
 
+<div class="container">
+    <div class="row">
+        <div  class="col-md-2">
 	<%@include file="Header.jsp"%>
-
-	<center>
-		<h1>ERsource List</h1>
-
-		<form action="<%=ORSView.ERESOURCE_LIST_CTL%>">
-
-			<table width="100%">
-				<tr>
-					<td align="center"><label>Table Contains:</label> <input
-						type="text" name="tablesContains"
-						value="<%=ServletUtility.getParameter("tablesContains", request)%>">
-						&emsp; <label>Name:</label> <input type="text" name="name"
-						value="<%=ServletUtility.getParameter("name", request)%>">
-						&emsp; <input type="submit" name="operation" value="<%=EResourceListCtl.OP_SEARCH %>">
-					</td>
-				</tr>
-			</table>
+        </div>
+        <div class="col-md-10">
+        	
+					<h2 align="Center"  style="margin-top: 140px">
+					<hr>
+				ERsource List
+					</h2>
+						<form action="<%=ORSView.ERESOURCE_LIST_CTL%>" class="form-inline">
+						    	 <div class="form-group">
+					<label for="inputtableContains" class="control-label  col-md-5">Table Contains</label>
+		<div class="col-md-2">
+						<input type="text" class="form-control" name="tablesContains" id="tablesContains"
+							placeholder="Table Contains" value="<%=ServletUtility.getParameter("tablesContains", request)%>">
+					</div>
+					</div>
+					<div class="form-group">
+				<label for="inputName" class="control-label col-md-4">Name</label>
+					<div class="col-md-2">
+						<input type="text" class="form-control" name="name" id="name"
+					value="<%=ServletUtility.getParameter("name", request)%>"	placeholder="Name">
+					</div>
+		</div>
+				<div class="form-group">
+						<button name="operation" value="<%=EResourceListCtl.OP_SEARCH %>" type="submit" class="col-md-offset-1 btn btn-info">
+							<span class="btn-save-label">
+						<i class="glyphicon glyphicon-search"></i>
+						</span>
+						Search
+						</button>
+						</div>
 			<br>
-
-			<table border="1" width="100%">
+		<br>
+		<div class="table-responsive">
+						<table class="table table-bordered table-hover" >
 				<tr>
 				<th>ID</th>
 					<th>Table Contains</th>
@@ -65,20 +82,29 @@
 					}
 				%>
 			</table>
+						
+
 			<table width="100%">
 				<tr>
 					<td ><input type="submit" name="operation"
-						value="<%=EResourceListCtl.OP_PREVIOUS%>"></td>
+						value="<%=EResourceListCtl.OP_PREVIOUS%>" class="btn btn-info"></td>
 					 <td ><input type="submit"
-						name="operation" value="<%=EResourceListCtl.OP_DELETE%>"></td>
+						name="operation" value="<%=EResourceListCtl.OP_DELETE%>" class="btn btn-info"></td>
 					 <td align="right"><input type="submit" name="operation"
-						value="<%=EResourceListCtl.OP_NEXT%>"></td>
+						value="<%=EResourceListCtl.OP_NEXT%>" class="btn btn-info"></td>
 				</tr>
 			</table>
 			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
 				type="hidden" name="pageSize" value="<%=pageSize%>">
+						</div>
+						
 		</form>
-	</center>
-	<%@include file="Footer.jsp"%>
+					
+					</div>
+					</div>
+					</div>
+
+
+
 </body>
 </html>
