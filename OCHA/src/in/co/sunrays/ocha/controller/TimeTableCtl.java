@@ -17,18 +17,28 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+/**
+ * Contains navigation logic for Comment Views.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
+
 public class TimeTableCtl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
   
-	 //private final String UPLOAD_DIRECTORY = "/media/ncs02/Workspace/My_Workspace/OCHA/WebContent/TimeTable/";
+	// private final String UPLOAD_DIRECTORY =
+	// "/media/ncs02/Workspace/My_Workspace/OCHA/WebContent/TimeTable/";
 	
 	private final ResourceBundle resourceBundle = ResourceBundle
 			.getBundle("in.co.sunrays.bundle.system");
 	  
 	    @Override
-	    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	            throws ServletException, IOException {
-	
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 	      
 	        //process only if its multipart content
 	        if(ServletFileUpload.isMultipartContent(request)){
@@ -40,14 +50,16 @@ public class TimeTableCtl extends HttpServlet {
 	                for(FileItem item : multiparts){
 	                    if(!item.isFormField()){
 	                        String name = new File(item.getName()).getName();
-	                        item.write( new File(UPLOAD_DIRECTORY + File.separator + name));
+						item.write(new File(UPLOAD_DIRECTORY + File.separator
+								+ name));
 	                    }
 	                }
 	           
 	               //File uploaded successfully
 	               request.setAttribute("message", "File Uploaded Successfully");
 	            } catch (Exception ex) {
-	               request.setAttribute("message", "File Upload Failed due to " + ex);
+				request.setAttribute("message", "File Upload Failed due to "
+						+ ex);
 	            }          
 	         
 	        }else{
@@ -55,7 +67,8 @@ public class TimeTableCtl extends HttpServlet {
 	                                 "Sorry this Servlet only handles file upload request");
 	        }
 	    
-	       // request.getRequestDispatcher("/result.jsp").forward(request, response);
+		// request.getRequestDispatcher("/result.jsp").forward(request,
+		// response);
 	        ServletUtility.forward(ORSView.TIMETABLE1_VIEW, request, response);
 	     
 	    }

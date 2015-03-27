@@ -16,8 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+
 /**
- * Contains EResource navigation logics .
+ * Contains navigation logic for Comment Views.
  * 
  * @version 1.0
  * @since 01 Feb 2015
@@ -69,7 +70,8 @@ public class EResourceCtl extends BaseCtl {
 	}
 
 	/**
-	 * Handles GET request.
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {

@@ -15,10 +15,29 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+
+/**
+ * Contains navigation logic for Comment Views.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
+
 public class AttendenceListCtl extends BaseCtl {
 
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(AttendenceListCtl.class);
 
+
+	/**
+	 * Handles GET request.
+	 * 
+	 */
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -76,6 +95,10 @@ public class AttendenceListCtl extends BaseCtl {
 		log.debug("AttendenceListCtl doGet End");
 	}
 
+	
+	/**
+	 * Returns View page of Controller.
+	 */
 	@Override
 	protected String getView() {
 		return ORSView.ATTENDENCE_LIST_VIEW;

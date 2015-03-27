@@ -32,6 +32,10 @@ public class RoleCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Logger to log the messages.
+	 */
+
 	private static Logger log = Logger.getLogger(RoleCtl.class);
 
 	@Override

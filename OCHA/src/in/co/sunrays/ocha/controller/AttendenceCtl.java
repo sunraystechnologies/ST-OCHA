@@ -22,9 +22,25 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-public class AttendenceCtl extends BaseCtl {
+/**
+ * Contains navigation logic for Comment Views.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
 
+public class AttendenceCtl extends BaseCtl {
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(AttendenceCtl.class);
+
+	/**
+	 * Loads pre-loaded data like Dropdown List.
+	 */
 	@Override
 	protected void preload(HttpServletRequest request) {
 		UserModel model = new UserModel();
@@ -36,6 +52,9 @@ public class AttendenceCtl extends BaseCtl {
 		}
 
 	}
+	/**
+	 * Validates Input data
+	 */
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 		
@@ -44,13 +63,18 @@ public class AttendenceCtl extends BaseCtl {
 		boolean pass = true;
 
 		if (DataValidator.isNull(request.getParameter("subject"))) {
-			request.setAttribute("subject", PropertyReader.getValue("error.require", "subject"));
+			request.setAttribute("subject",
+					PropertyReader.getValue("error.require", "subject"));
 			pass = false;
-		}if (DataValidator.isNull(request.getParameter("attendance"))) {
-			request.setAttribute("attendance", PropertyReader.getValue("error.require", "attendance"));
+		}
+		if (DataValidator.isNull(request.getParameter("attendance"))) {
+			request.setAttribute("attendance",
+					PropertyReader.getValue("error.require", "attendance"));
 			pass = false;
-		}if (DataValidator.isNull(request.getParameter("studentId"))) {
-			request.setAttribute("studentId", PropertyReader.getValue("error.require", "Student Name"));
+		}
+		if (DataValidator.isNull(request.getParameter("studentId"))) {
+			request.setAttribute("studentId",
+					PropertyReader.getValue("error.require", "Student Name"));
 			pass = false;
 		}
 
@@ -60,6 +84,7 @@ public class AttendenceCtl extends BaseCtl {
 		return pass;
 		
 	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -70,8 +95,10 @@ public class AttendenceCtl extends BaseCtl {
 		AttendenceModel model=new AttendenceModel();
 		model.setId(DataUtility.getLong(request.getParameter("id")));
 		model.setSubject(DataUtility.getString(request.getParameter("subject")));
-		model.setStudentId(DataUtility.getLong(request.getParameter("studentId")));
-		model.setAttendence(DataUtility.getInt(request.getParameter("attendance")));
+		model.setStudentId(DataUtility.getLong(request
+				.getParameter("studentId")));
+		model.setAttendence(DataUtility.getInt(request
+				.getParameter("attendance")));
 		long id = DataUtility.getLong(request.getParameter("id"));
 		String op = DataUtility.getString(request.getParameter("operation"));
 		if (OP_SAVE.equalsIgnoreCase(op)) {
@@ -108,8 +135,8 @@ public class AttendenceCtl extends BaseCtl {
 
 		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
 
-			ServletUtility
-					.redirect(ORSView.ATTENDENCE_LIST_CTL, request, response);
+			ServletUtility.redirect(ORSView.ATTENDENCE_LIST_CTL, request,
+					response);
 			return;
 
 		} else { // View page
@@ -127,11 +154,11 @@ public class AttendenceCtl extends BaseCtl {
 			}
 		}
 
-		
-		
 		ServletUtility.forward(ORSView.ATTENDENCE_VIEW, request, response);
 	}
-
+	/**
+	 * Returns View page of Controller.
+	 */
 	@Override
 	protected String getView() {
 		// TODO Auto-generated method stub

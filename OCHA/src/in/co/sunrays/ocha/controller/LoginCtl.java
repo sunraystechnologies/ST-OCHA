@@ -38,6 +38,11 @@ public class LoginCtl extends BaseCtl {
 	public static final String OP_SIGN_UP = "SignUp";
 	public static final String OP_LOG_OUT = "logout";
 
+
+	/**
+	 * Logger to log the messages.
+	 */
+
 	private static Logger log = Logger.getLogger(LoginCtl.class);
 
 	@Override

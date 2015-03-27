@@ -30,8 +30,14 @@ import org.apache.log4j.Logger;
 
 public class StudentCtl extends BaseCtl {
 
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(StudentCtl.class);
 
+	/**
+	 * Loads pre-loaded data like Dropdown List.
+	 */
 	@Override
 	protected void preload(HttpServletRequest request) {
 	//	CollegeModel model = new CollegeModel();
@@ -43,7 +49,9 @@ public class StudentCtl extends BaseCtl {
 		}*/
 
 	}
-
+	/**
+	 * Validates Input data
+	 */
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 

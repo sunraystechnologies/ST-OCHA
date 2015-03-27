@@ -28,6 +28,11 @@ import org.apache.log4j.Logger;
 
 public class StudentListCtl extends BaseCtl {
 
+
+	/**
+	 * Logger to log the messages.
+	 */
+
 	private static Logger log = Logger.getLogger(StudentListCtl.class);
 
 	@Override
@@ -42,7 +47,10 @@ public class StudentListCtl extends BaseCtl {
 
 		return bean;
 	}
-
+	/**
+	 * Handles GET request.
+	 * 
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -97,7 +105,9 @@ public class StudentListCtl extends BaseCtl {
 		}
 		log.debug("StudentListCtl doGet End");
 	}
-
+	/**
+	 * Returns View page of Controller.
+	 */
 	@Override
 	protected String getView() {
 		return ORSView.STUDENT_LIST_VIEW;

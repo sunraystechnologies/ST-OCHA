@@ -23,6 +23,10 @@ public class WelcomeCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Logger to log the messages.
+	 */
+
 	private static Logger log = Logger.getLogger(WelcomeCtl.class);
 	
 	/**
@@ -38,6 +42,9 @@ public class WelcomeCtl extends BaseCtl {
 		log.debug("WelcomeCtl Method doGet Ended");
 	}
 
+	/**
+	 * Returns View page of Controller.
+	 */
 	@Override
 	protected String getView() {
 		return ORSView.WELCOME_VIEW;

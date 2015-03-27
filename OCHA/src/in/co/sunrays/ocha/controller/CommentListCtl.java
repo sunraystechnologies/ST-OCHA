@@ -18,7 +18,15 @@ import org.apache.log4j.Logger;
 
 public class CommentListCtl extends BaseCtl {
 
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(CommentListCtl.class);
+
+	/**
+	 * Handles GET request.
+	 * 
+	 */
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -72,6 +80,10 @@ public class CommentListCtl extends BaseCtl {
 		}
 		log.debug("CommentListCtl doGet End");
 	}
+
+	/**
+	 * Returns View page of Controller.
+	 */
 
 	@Override
 	protected String getView() {

@@ -33,8 +33,15 @@ public class ChangePasswordCtl extends BaseCtl {
 
 	public static final String OP_CHANGE_MY_PROFILE = "Change My Profile";
 
+	/**
+	 * Logger to log the messages.
+	 */
+
 	private static Logger log = Logger.getLogger(ChangePasswordCtl.class);
 
+	/**
+	 * Validates Input data
+	 */
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 

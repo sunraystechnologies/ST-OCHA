@@ -15,7 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Contains navigation logic for Comment Views.
+ * 
+ * @version 1.0
+ * @since 01 Feb 2015
+ * @author SUNRAYS Developer
+ * @Copyright (c) sunRays Technologies. All rights reserved.
+ * @URL www.sunrays.co.in
+ */
 public class NoticeListCtl extends BaseCtl {
+
+	/**
+	 * Logger to log the messages.
+	 */
 
 	private static Logger log = Logger.getLogger(NoticeListCtl.class);
 

@@ -34,8 +34,14 @@ public class UserRegistrationCtl extends BaseCtl {
 
 	public static final String OP_SIGN_UP = "SignUp";
 
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(UserRegistrationCtl.class);
 
+	/**
+	 * Loads pre-loaded data like Dropdown List.
+	 */
 	@Override
 	protected void preload(HttpServletRequest request) {
 		RoleModel model = new RoleModel();
@@ -48,6 +54,9 @@ public class UserRegistrationCtl extends BaseCtl {
 
 	}
 
+	/**
+	 * Validates Input data
+	 */
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
@@ -223,6 +232,10 @@ public class UserRegistrationCtl extends BaseCtl {
 
 		log.debug("UserRegistrationCtl Method doGet Ended");
 	}
+
+	/**
+	 * Returns View page of Controller.
+	 */
 
 	@Override
 	protected String getView() {

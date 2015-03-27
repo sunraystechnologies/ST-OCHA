@@ -34,7 +34,15 @@ public class UserCtl extends BaseCtl {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Logger to log the messages.
+	 */
+
 	private static Logger log = Logger.getLogger(UserCtl.class);
+
+	/**
+	 * Loads pre-loaded data like Dropdown List.
+	 */
 
 	@Override
 	protected void preload(HttpServletRequest request) {
@@ -48,6 +56,9 @@ public class UserCtl extends BaseCtl {
 
 	}
 
+	/**
+	 * Validates Input data
+	 */
 	@Override
 	protected boolean validate(HttpServletRequest request) {
 
@@ -81,12 +92,14 @@ public class UserCtl extends BaseCtl {
 		}
 
 		if (DataValidator.isNull(request.getParameter("password"))) {
-			request.setAttribute("password", PropertyReader.getValue("error.require", "Password"));
+			request.setAttribute("password",
+					PropertyReader.getValue("error.require", "Password"));
 			pass = false;
 		}
 
 		if (DataValidator.isNull(request.getParameter("confirmPassword"))) {
-			request.setAttribute("confirmPassword", PropertyReader.getValue("error.require", "Confirm Password"));
+			request.setAttribute("confirmPassword", PropertyReader.getValue(
+					"error.require", "Confirm Password"));
 			pass = false;
 		}
 
@@ -231,6 +244,10 @@ public class UserCtl extends BaseCtl {
 
 		log.debug("UserCtl Method doGet Ended");
 	}
+
+	/**
+	 * Returns View page of Controller.
+	 */
 
 	@Override
 	protected String getView() {

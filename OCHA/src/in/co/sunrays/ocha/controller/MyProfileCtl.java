@@ -33,6 +33,9 @@ public class MyProfileCtl extends BaseCtl {
 
 	public static final String OP_CHANGE_MY_PASSWORD = "ChangePassword";
 
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(MyProfileCtl.class);
 
 	@Override

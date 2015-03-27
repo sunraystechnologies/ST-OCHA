@@ -26,6 +26,11 @@ import org.apache.log4j.Logger;
  */
 
 public class RoleListCtl extends BaseCtl {
+	
+
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(RoleListCtl.class);
 
 	@Override
@@ -35,6 +40,10 @@ public class RoleListCtl extends BaseCtl {
 		return model;
 	}
 
+	/**
+	 * Handles GET request.
+	 * 
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {

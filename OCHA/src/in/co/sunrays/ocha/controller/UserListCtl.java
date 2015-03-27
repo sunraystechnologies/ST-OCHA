@@ -27,6 +27,10 @@ import org.apache.log4j.Logger;
  */
 
 public class UserListCtl extends BaseCtl {
+
+	/**
+	 * Logger to log the messages.
+	 */
 	private static Logger log = Logger.getLogger(UserListCtl.class);
 	
 	
@@ -46,6 +50,10 @@ public class UserListCtl extends BaseCtl {
 		return bean;
 	}
 
+	/**
+	 * Handles GET request.
+	 * 
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -119,6 +127,9 @@ public class UserListCtl extends BaseCtl {
 		log.debug("UserListCtl doGet End");
 	}
 
+	/**
+	 * Returns View page of Controller.
+	 */
 	@Override
 	protected String getView() {
 		return ORSView.USER_LIST_VIEW;

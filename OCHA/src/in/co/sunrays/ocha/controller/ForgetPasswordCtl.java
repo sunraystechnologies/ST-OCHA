@@ -29,6 +29,9 @@ import org.apache.log4j.Logger;
  */
 
 public class ForgetPasswordCtl extends BaseCtl {
+	/**
+	 * Logger to log the messages.
+	 */
 
 	private static Logger log = Logger.getLogger(ForgetPasswordCtl.class);
 

@@ -38,7 +38,7 @@ public class CommentCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(CommentCtl.class);
 
 	/**
-	 * Loads preloaded data like Dropdown List.
+	 * Loads pre-loaded data like Dropdown List.
 	 */
 
 	@Override
@@ -77,7 +77,9 @@ public class CommentCtl extends BaseCtl {
 
 	/**
 	 * Handles GET request.
+	 * 
 	 */
+
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
