@@ -1,4 +1,6 @@
 
+<%@page import="in.co.sunrays.ocha.controller.LoginCtl"%>
+<%@page import="in.co.sunrays.ocha.controller.BaseCtl"%>
 <%@page import="in.co.sunrays.ocha.controller.ORSView"%>
 <%@page import="java.util.List"%>
 <%@page import="in.co.sunrays.ocha.controller.UserRegistrationCtl"%>
@@ -6,217 +8,150 @@
 <%@page import="in.co.sunrays.util.HTMLUtility"%>
 <%@page import="in.co.sunrays.util.DataUtility"%>
 <%@page import="in.co.sunrays.util.ServletUtility"%>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
-<!-- Optional theme -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="js/bootstrap.js"></script>
- <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+<jsp:useBean id="bean" class="in.co.sunrays.ocha.bean.UserBean"
+	scope="request"></jsp:useBean>
 
-	<script>
-$(function() {
-    $('.date-picker').datepicker( );
-});
-</script>
-<html>
-<body>
+<%
+	HashMap<String, String> gMap = new HashMap<String, String>();
+	gMap.put("M", "Male");
+	gMap.put("F", "Female");
 
-<div class="container">
+	HashMap<String, String> collegeCodeMap = new HashMap<String, String>();
+	collegeCodeMap.put("IT", "IT");
+	collegeCodeMap.put("CS", "CS");
+	collegeCodeMap.put("EC", "EC");
+	collegeCodeMap.put("CE", "CE");
+	collegeCodeMap.put("ME", "ME");
 
-	<div class="row" style="margin-top: 30px">
-		<img alt="" src="<%=ORSView.APP_CONTEXT%>/img/SGSITS_Indore.png"  width="200"
-					height="90">
-		<span class=" col-md-offset-3 " style="font-size: 25pt;">User Registration</span>
+	HashMap<String, String> yearMap = new HashMap<String, String>();
+	yearMap.put("11", "11");
+	yearMap.put("12", "12");
+	yearMap.put("13", "13");
+	yearMap.put("14", "14");
+	yearMap.put("15", "15");
+	yearMap.put("16", "16");
+%>
 
-					<div class=" col-md-offset-3 " style="margin-top: -40px" >
-<hr>
-</div>
-	</div>
+<%
+	String userRole = "Student";
+	int roleId = DataUtility.getInt(request.getParameter("roleId"));
+	if (roleId == 0) {
+		roleId = 2;
+	}
+	if (roleId == 3) {
+		userRole = "Staff";
+	}
+%>
 
-	<h3 class=" col-md-offset-4 ">
-	<font color="green"> <%=ServletUtility.getSuccessMessage(request)%>
-				</font><font color="red" > <%=ServletUtility.getErrorMessage(request)%>
-					</font></h3>
-					<jsp:useBean id="bean" class="in.co.sunrays.ocha.bean.UserBean"
-			scope="request"></jsp:useBean>		
-			<input type="hidden" name="id" value="<%=bean.getId()%>">
-			<input type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
-			<input type="hidden" name="modifiedBy" value="<%=bean.getModifiedBy()%>"> 
-			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(bean.getCreatedDatetime())%>">
-			<input type="hidden" name="modifiedDatetime" value="<%=DataUtility.getTimestamp(bean.getModifiedDatetime())%>">
-			
-					
-	<form action="<%=ORSView.USER_REGISTRATION_CTL%>" class="form-horizontal">
 
-     <%
-			List l = (List) request.getAttribute("roleList");
-		%>
+<h1><%=userRole%> Registration</h1>
 
-		<div class="form-group">
-					<label for="inputfirstName" class="control-label col-md-offset-3 col-md-2">
-					First Name</label>
-					<div class="col-md-3">
-						<input type="text" class="form-control" name="firstName" id="firstName"
-							placeholder="First Name" value="<%=DataUtility.getStringData(bean.getFirstName())%>">  <font color="red"> <%=ServletUtility.getErrorMessage("firstName", request)%></font>
-					</div>
-				</div>	
-						<div class="form-group">
-					<label for="inputlastName" class="control-label col-md-offset-3 col-md-2">Last Name</label>
-					<div class="col-md-3">
-						<input type="text" class="form-control" name="lastName" id="lastName"
-							placeholder="Last Name" value="<%=DataUtility.getStringData(bean.getLastName())%>"> <font color="red"> <%=ServletUtility.getErrorMessage("lastName", request)%></font>
-					</div>
-				</div>
-				
-						<div class="form-group ">
-					<label for="inputCollegeId" class="control-label col-md-offset-3 col-md-2">College ID</label>
-					<div class="col-md-7 ">
-					<input type="text"   name="collegeCode"
-						value="0801" readonly="readonly" style="width: 60px;height: 35px">
-						<select  id="branch" name="branch" style="width: 52px;height: 35px">
-							<option value="IT">IT</option>
-						<option value="CS">CS</option>
-						<option value="EC">EC</option>
-						<option value="CE">CE</option>
-						<option value="ME">ME</option>
-							
-						</select> 
-						<select  name="year" style="width: 52px;height: 35px">
-						<option value="11">11</option>
-						<option value="12">12</option>
-						<option value="13">13</option>
-						<option value="14">14</option>
-						<option value="15">15</option>
-						</select>
-						<input type="text" name="collegeId" 
-						value="<%=DataUtility.getStringData(bean.getCollegeId())%>" style="width: 85px;height: 35px">
-						<font color="red"> <%=ServletUtility.getErrorMessage("branch", request)%></font>
-						<font
-						color="red"> <%=ServletUtility.getErrorMessage("collegeId", request)%></font>
-							<font
-						color="red"> <%=ServletUtility.getErrorMessage("year", request)%></font>
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="inputfatherName" class="control-label col-md-offset-3 col-md-2">
-					Father Name</label>
-					<div class="col-md-3">
-						<input type="text" class="form-control" name="fatherName" id="fatherName"
-							placeholder="Father Name" value="<%=DataUtility.getStringData(bean.getFatherName())%>">  <font color="red"> <%=ServletUtility.getErrorMessage("fatherName", request)%></font>
-					</div>
-				</div>	
-				<div class="form-group">
-					<label for="inputmotherName" class="control-label col-md-offset-3 col-md-2">
-					Mother Name</label>
-					<div class="col-md-3">
-						<input type="text" class="form-control" name="motherName" id="motherName"
-							placeholder="Mother Name" value="<%=DataUtility.getStringData(bean.getFatherName())%>">  <font color="red"> <%=ServletUtility.getErrorMessage("motherName", request)%></font>
-					</div>
-				</div>	
-				
-				<div class="form-group">
-						<label for="inputEmail"
-							class="control-label col-md-offset-2 col-md-3">Email</label>
-								<div class="col-md-3">
-							<input type="email" class="form-control" id="login" name="login"
-								placeholder="Email ID" value="<%=DataUtility.getStringData(bean.getLogin())%>">
-							<font
-						color="red"> <%=ServletUtility.getErrorMessage("login", request)%></font>
-						</div>
-				</div>
-					<div class="form-group ">
-						<label for="inputPassword"
-							class="control-label col-md-offset-2 col-md-3">Password</label>
-							<div class="col-md-3">
-							<input type="password" class="form-control" name="password"
-								id="password" placeholder="Password" value="<%=DataUtility.getStringData(bean.getLogin())%>"> 
-								<font color="red">
-								<%=ServletUtility.getErrorMessage("password", request)%></font>
-						</div>
-					</div>
-					
-							<div class="form-group ">
-						<label for="inputconfirmPassword"
-							class="control-label col-md-offset-2 col-md-3">Confirm Password</label>
-							<div class="col-md-3">
-							<input type="password" class="form-control" name="confirmPassword"
-								id="confirmPassword" placeholder="Confirm Password" value="<%=DataUtility.getStringData(bean.getConfirmPassword())%>"> 
-								<font color="red">
-								<%=ServletUtility.getErrorMessage("confirmPassword", request)%></font>
-						</div>
-					</div>
-					
-			<div class="form-group">
-							<label for="inputGender" class="control-label col-md-offset-2 col-md-3">Gender
-								</label>
-							<div class="col-md-3">
-						<%
-							HashMap map = new HashMap();
-							map.put("M", "Male");
-							map.put("F", "Female");
+<p class="error-header">
+	<%=ServletUtility.getErrorMessage(request)%>
+</p>
 
-							String htmlList = HTMLUtility.getList("gender", bean.getGender(),
-									map);
-						%> <%=htmlList%>
-							
-								<font color="red"> <%=ServletUtility.getErrorMessage("gender", request)%></font>
-							</div>
-							</div>
-							
-							<div class="form-group">
-							<label for="inputRole" class="control-label col-md-offset-2 col-md-3">Role
-								</label>
-							<div class="col-md-3">
-					<%=HTMLUtility.getList("roleId",
-					String.valueOf(bean.getRoleId()), l)%>
-								<font color="red"> <%=ServletUtility.getErrorMessage("roleId", request)%></font>
-							</div>
-						</div>
-				
-					<div class="form-group">
-					<label for="inputdob" class="control-label col-md-offset-3 col-md-2">Date Of Birth</label>
-					<div class="col-md-3">
-						<input type="text"  name="dob" id="dob"
-							 class="form-control date-picker"
-							placeholder="Date of Birth" value="<%=DataUtility.getDateString(bean.getDob())%>"><font color="red"> <%=ServletUtility.getErrorMessage("dob", request)%></font>
-					</div>
-				</div>
-					<div class="form-group">
-					<label for="inputmobileNo" class="control-label col-md-offset-3 col-md-2">
-					Mobile No</label>
-					<div class="col-md-3">
-						<input type="text" class="form-control" name="mobileNo" id="mobileNo"
-							placeholder="Mobile No" value="<%=DataUtility.getStringData(bean.getMobileNo())%>">  <font color="red"> <%=ServletUtility.getErrorMessage("mobileNo", request)%></font>
-					</div>
-				</div>	
-					<div class="form-group">
-					<label for="inputaddress" class="control-label col-md-offset-3 col-md-2">
-					Address</label>
-					<div class="col-md-3">
-						<input type="text" class="form-control" name="address" id="address"
-							placeholder="Address" value="<%=DataUtility.getStringData(bean.getAddress())%>">  <font color="red"> <%=ServletUtility.getErrorMessage("address", request)%></font>
-					</div>
-				</div>
-					<div class="form-group">
-				<div class="col-md-offset-6 ">
-						<button name="operation" class="btn icon-btn-save btn-success" value="<%=UserRegistrationCtl.OP_SIGN_UP %>" type="submit">
-						<span class="btn-save-label">
-						<i class="glyphicon glyphicon-floppy-disk"></i>
-						</span>
-						save</button>
-						</div>
-						</div>
-	
-	</form>
-	</div>
-</body>
-</html>
+<p class="success-header">
+	<%=ServletUtility.getSuccessMessage(request)%>
+</p>
+
+<%=ServletUtility.getErrorMessageHtml(request)%>
+
+
+<form action="<%=ORSView.USER_REGISTRATION_CTL%>" method="POST">
+
+	<input type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
+	<input type="hidden" name="modifiedBy"
+		value="<%=bean.getModifiedBy()%>"> <input type="hidden"
+		name="createdDatetime"
+		value="<%=DataUtility.getTimestamp(bean.getCreatedDatetime())%>">
+	<input type="hidden" name="modifiedDatetime"
+		value="<%=DataUtility.getTimestamp(bean.getModifiedDatetime())%>">
+
+
+
+	<input type="text" name="roleId" value="<%=roleId%>">
+
+	<table>
+		<tr>
+			<th>First Name*</th>
+			<td><input type="text" name="firstName"
+				value="<%=DataUtility.getStringData(bean.getFirstName())%>"><span
+				class="error"> <%=ServletUtility.getErrorMessage("firstName", request)%></span]></td>
+		</tr>
+		<tr>
+			<th>Last Name*</th>
+			<td><input type="text" name="lastName"
+				value="<%=DataUtility.getStringData(bean.getLastName())%>"><span
+				class="error"> <%=ServletUtility.getErrorMessage("lastName", request)%></span]></td>
+		</tr>
+		<tr>
+			<th>Gender</th>
+			<td><%=HTMLUtility.getList("gender", bean.getGender(), gMap)%></td>
+		</tr>
+		<tr>
+			<th>College ID</th>
+			<td><input type="hidden" name="collegeCode" value="0801">
+				0801&nbsp; Branch &nbsp; <%=HTMLUtility.getList("branch", bean.getBranch(),
+					collegeCodeMap)%> &nbsp;Year &nbsp;<%=HTMLUtility.getList("year", bean.getYear(), yearMap)%>&nbsp;
+				Course Code &nbsp; <input type="text" name="collegeId"
+				value="<%=DataUtility.getStringData(bean.getCollegeId())%>"></td>
+		</tr>
+
+		<tr>
+			<th>Login ID</th>
+			<td><input type="text" name="login"
+				value="<%=DataUtility.getStringData(bean.getLogin())%>"></td>
+		</tr>
+		<tr>
+			<th>Password</th>
+			<td><input type="text" name="password"
+				value="<%=DataUtility.getStringData(bean.getPassword())%>">
+			</td>
+		</tr>
+		<tr>
+			<th>Confirm Password</th>
+			<td><input type="text" name="confirmPassword"
+				value="<%=DataUtility.getStringData(bean.getConfirmPassword())%>">
+			</td>
+		</tr>
+		<tr>
+			<th>Mobile No*</th>
+			<td><input type="text" name="mobileNo"
+				value="<%=DataUtility.getStringData(bean.getMobileNo())%>"><font
+				color="red"> <%=ServletUtility.getErrorMessage("mobileNo", request)%></font></td>
+		</tr>
+		<tr>
+			<th>Date Of Birth (mm/dd/yyyy)</th>
+			<td><input type="text" name="dob" readonly="readonly"
+				value="<%=DataUtility.getDateString(bean.getDob())%>"> <a
+				href="javascript:getCalendar(document.forms[0].dob);"> <img
+					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15"
+					border="0" alt="Calender">
+			</a></td>
+		</tr>
+		<tr>
+			<th>Father Name</th>
+			<td><input type="text" name="fatherName"
+				value="<%=DataUtility.getStringData(bean.getFatherName())%>">
+			</td>
+		</tr>
+		<tr>
+			<th>Mother Name</th>
+			<td><input type="text" name="motherName"
+				value="<%=DataUtility.getStringData(bean.getMotherName())%>">
+			</td>
+		</tr>
+
+		<tr>
+			<th>Address</th>
+			<td><textarea name="address"><%=DataUtility.getStringData(bean.getAddress())%></textarea>
+		</tr>
+		<tr>
+			<td align="center" colspan="2"><input type="submit"
+				name="operation" value="<%=UserRegistrationCtl.OP_SIGN_UP%>"></td>
+		</tr>
+	</table>
+</form>
+

@@ -6,6 +6,7 @@ import in.co.sunrays.ocha.controller.ORSView;
 import in.co.sunrays.ocha.model.BaseModel;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -37,6 +38,24 @@ public class ServletUtility {
 	public static void forward(String page, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		RequestDispatcher rd = request.getRequestDispatcher(page);
+		rd.forward(request, response);
+	}
+
+	/**
+	 * Forward to Layout View
+	 * 
+	 * @param page
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	public static void forwardView(String page, HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
+
+		request.setAttribute("bodyPage", page);
+		RequestDispatcher rd = request
+				.getRequestDispatcher(ORSView.LAYOUT_VIEW);
 		rd.forward(request, response);
 	}
 
@@ -79,12 +98,39 @@ public class ServletUtility {
 	 */
 	public static String getErrorMessage(String property,
 			HttpServletRequest request) {
+
 		String val = (String) request.getAttribute(property);
 		if (val == null) {
-			return "";
-		} else {
-			return val;
+			val = (String) request.getAttribute("error." + property);
+			if (val == null) {
+				val = "";
+			}
 		}
+		return val;
+	}
+
+	/**
+	 * returns all input error messages
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String getErrorMessageHtml(HttpServletRequest request) {
+
+		Enumeration<String> e = request.getAttributeNames();
+
+		StringBuffer sb = new StringBuffer("<UL>");
+		String name = null;
+
+		while (e.hasMoreElements()) {
+			name = e.nextElement();
+			if (name.startsWith("error.")) {
+				sb.append("<LI class='error'>" + request.getAttribute(name)
+						+ "</LI>");
+			}
+		}
+		sb.append("</UL>");
+		return sb.toString();
 	}
 
 	/**
@@ -162,7 +208,7 @@ public class ServletUtility {
 	public static void setBean(BaseBean bean, HttpServletRequest request) {
 		request.setAttribute("bean", bean);
 	}
-	
+
 	public static void setModel(BaseModel model, HttpServletRequest request) {
 		request.setAttribute("model", model);
 	}
@@ -177,12 +223,11 @@ public class ServletUtility {
 	public static BaseBean getBean(HttpServletRequest request) {
 		return (BaseBean) request.getAttribute("bean");
 	}
-	
-	
+
 	public static BaseModel getModel(HttpServletRequest request) {
 		return (BaseModel) request.getAttribute("model");
 	}
-	
+
 	/**
 	 * Get request parameter to display. If value is null then return empty
 	 * string

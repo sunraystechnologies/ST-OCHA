@@ -1,69 +1,93 @@
 
-<%@page import="in.co.sunrays.ocha.model.EResourceModel"%>
-<%@page import="java.util.Iterator"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="in.co.sunrays.ocha.model.CommentModel"%>
+<%@page import="in.co.sunrays.ocha.controller.ORSView"%>
 <%@page import="in.co.sunrays.ocha.controller.BaseCtl"%>
-<%@page import="in.co.sunrays.util.HTMLUtility"%>
-<%@page import="in.co.sunrays.util.DataUtility"%>
+<%@page import="in.co.sunrays.ocha.model.EResourceModel"%>
 <%@page import="in.co.sunrays.util.ServletUtility"%>
-
 <%@page import="java.util.List"%>
+<%@page import="java.util.Iterator"%>
 
-<html>
-<body>
-<div class="container">
-    <div class="row">
-        <div  class="col-md-2">
-	<%@include file="Header.jsp"%>
-        </div>
-        <div class="col-md-10">
-	
-					<h2 align="Center"  style="margin-top: 140px">
-					<hr>
-			ERsource Link List
-					</h2>
-		<form action="<%=ORSView.ERESOURCE_LINK_CTL%>">
-						<div class="table-responsive">
-						<table class="table table-bordered table-hover" >
-				<tr>
-					<th>Table Contains</th>
-				</tr>
+<h1>E-Resource List</h1>
 
-				<tr>
-					<td colspan="8"><font color="red"><%=ServletUtility.getErrorMessage(request)%></font></td>
-				</tr>
+<form action="<%=ORSView.ERESOURCE_LINK_CTL%>">
 
-				<%
-					int pageNo = ServletUtility.getPageNo(request);
-					int pageSize = ServletUtility.getPageSize(request);
-					int index = ((pageNo - 1) * pageSize) + 1;
+	<table width="80%">
+		<tr>
+			<td align="left"><label> Link :</label> <input type="text"
+				name="name"
+				value="<%=ServletUtility.getParameter("name", request)%>">
+				&nbsp; <label>Detail :</label> <input type="text" name="detail"
+				value="<%=ServletUtility.getParameter("detail", request)%>">&nbsp;
+				<input type="submit" name="operation" value="<%=BaseCtl.OP_SEARCH%>"></td>
+		</tr>
+	</table>
+</form>
 
-					List list = ServletUtility.getList(request);
-					Iterator<EResourceModel> it = list.iterator();
-					while (it.hasNext()) {
-						EResourceModel model = it.next();
-				%>
-				<tr>
-					<td><a href="CommentCtl?resourceId=<%=model.getId()%>&name=<%=model.getDetail()%>"><%=model.getTablesContains()%></a></td>
-				</tr>
-				<%
+<br>
+
+<table border="0" width="80%">
+
+	<tr>
+		<th align="left">Link Resource</th>
+		<th align="left">Comments</th>
+	</tr>
+
+	<%
+		int i = 1;
+		List list = ServletUtility.getList(request);
+		Iterator<EResourceModel> it = list.iterator();
+		while (it.hasNext()) {
+			EResourceModel model = it.next();
+	%>
+	<tr>
+		<td valign="top">[<%=i++%>] <a href="<%=model.getName()%>"><%=model.getName()%></a><br><%=model.getDetail()%></td>
+		<td>
+			<%
+				CommentModel comModel = new CommentModel();
+					comModel.setResourceId(model.getId());
+					List l = comModel.search();
+					if (l == null) {
+						l = new ArrayList();
 					}
-				%>
-			</table>
-			<table width="100%">
-				<tr>
-					<td ><input type="submit" name="operation"  class="btn btn-info"
-						value="<%=BaseCtl.OP_PREVIOUS%>"></td>
-					 <td align="right"><input type="submit" name="operation"  class="btn btn-info"
-						value="<%=BaseCtl.OP_NEXT%>"></td>
-				</tr>
-			</table>
-			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
-				type="hidden" name="pageSize" value="<%=pageSize%>">
-						</div>
-		</form>
-					</div>
-					</div>
-					</div>
+					Iterator<CommentModel> comIt = l.iterator();
+					
+					for( int j = 1; comIt.hasNext(); j++) {
+						CommentModel cbj = comIt.next();
+					%>
+						<span style="font-size:10px">	<%=j %> : <%= cbj.getText() %> by <%= cbj.getName()%> </span><br>
+					<%
+					}
+			%>
+			<form action="<%=ORSView.ERESOURCE_LINK_CTL%>">
+				<input type="hidden" name="linkId" value="<%=model.getId()%>">
+				<textarea name="text" rows="3" cols="40"></textarea>
+				<BR> <input type="submit" name="operation" value="Add Comment">
+			</form>
+		</td>
+	</tr>
+	<%
+		}
+	%>
+</table>
 
-</body>
-</html>
+<form action="<%=ORSView.ERESOURCE_LINK_CTL%>">
+
+	<table width="80%">
+		<tr>
+			<td align="left"><input type="submit" name="operation"
+				value="<%=BaseCtl.OP_PREVIOUS%>"></td>
+			<td align="right"><input type="submit" name="operation"
+				value="<%=BaseCtl.OP_NEXT%>"></td>
+		</tr>
+	</table>
+
+
+	<%
+		int pageNo = ServletUtility.getPageNo(request);
+		int pageSize = ServletUtility.getPageSize(request);
+		int index = ((pageNo - 1) * pageSize) + 1;
+	%>
+	<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
+		type="hidden" name="pageSize" value="<%=pageSize%>">
+</form>

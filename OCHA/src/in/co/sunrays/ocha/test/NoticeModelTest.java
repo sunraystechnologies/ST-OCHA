@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class NoticeModelTest {
-	
+
 	public static NoticeModel model = new NoticeModel();
 
 	/**
@@ -20,19 +20,19 @@ public class NoticeModelTest {
 	 */
 	public static void main(String[] args) throws DuplicateRecordException {
 		 //testAdd();
-		//testDelete();
-		//testUpdate();
-		//testFindByPK();
+		// testDelete();
+		// testUpdate();
+		// testFindByPK();
 		testSearch();
 	}
-	
+
 	public static void testAdd() throws DuplicateRecordException {
 
 		try {
 			model.setId(4l);
 			model.setSubject("Tests");
 			model.setDetails("Demods");
-			//model.setExpireDate("2015-02-22");
+			// model.setExpireDate("2015-02-22");
 			// model.setCreatedOn((new Timestamp(new Date().getTime())));
 
 			long pk = model.add();
@@ -42,7 +42,7 @@ public class NoticeModelTest {
 		}
 
 	}
-	
+
 	public static void testDelete() {
 
 		try {
@@ -55,14 +55,14 @@ public class NoticeModelTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void testUpdate() {
 
 		try {
 			model = model.findByPK(2L);
 			model.setSubject("Testfs");
 			model.setDetails("Demdsfods");
-		//	model.setExpireDate("2015-02-23");
+			// model.setExpireDate("2015-02-23");
 			model.update();
 			System.out.println("Test Update succ");
 
@@ -87,13 +87,13 @@ public class NoticeModelTest {
 			e.printStackTrace();
 		}
 
-}
-	
+	}
+
 	public static void testSearch() {
 		try {
 			List list = new ArrayList();
-			model.setSubject("Tes");
-			//bean.setAddress("borawan");
+			//model.setSubject("Tes");
+			// bean.setAddress("borawan");
 			list = model.search(1, 10);
 			if (list.size() < 0) {
 				System.out.println("Test Search fail");
@@ -111,5 +111,5 @@ public class NoticeModelTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

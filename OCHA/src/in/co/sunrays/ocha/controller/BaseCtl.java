@@ -197,7 +197,7 @@ public abstract class BaseCtl extends HttpServlet {
 			if (!validate(request)) {
 				BaseBean bean = (BaseBean) populateBean(request);
 				ServletUtility.setBean(bean, request);
-				ServletUtility.forward(getView(), request, response);
+				ServletUtility.forwardView(getView(), request, response);
 				return;
 			}
 		}

@@ -47,11 +47,11 @@ public class UserModelTest {
 		// testSearch();
 		// testGetRoles();
 		// testList();
-		// testAuthenticate();
+		testAuthenticate();
 		// testRegisterUser();
 		// testchangePassword();
 		// testforgetPassword();
-		   testresetPassword();
+		testresetPassword();
 
 	}
 
@@ -304,8 +304,8 @@ public class UserModelTest {
 
 		try {
 			UserBean bean = new UserBean();
-			bean.setLogin("kumar@g.com");
-			bean.setPassword("rr");
+			bean.setLogin("admin@sunrays.co.in");
+			bean.setPassword("pass1234");
 			bean = model.authenticate(bean.getLogin(), bean.getPassword());
 			if (bean != null) {
 				System.out.println("Successfully login");

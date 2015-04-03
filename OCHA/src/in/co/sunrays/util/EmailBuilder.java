@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 
 		msg.append("<HTML><BODY>");
-		msg.append("Registration is successful for OCHA Project SGSITS INDORE");
+		msg.append("Registration is successful for OCHA Project SUNRAYS Technologies");
 		msg.append("<H1>Hi! Greetings from Our College!</H1>");
 		msg.append("<P>Congratulations for registering on OCHA! You can now access your OCHA account online - anywhere, anytime and enjoy the flexibility to check the Student Details.</P>");
 		msg.append("<P><B>Login Id : " + map.get("login") + "<BR>"

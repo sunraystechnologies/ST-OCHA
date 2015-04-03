@@ -28,9 +28,9 @@ public class CommentModelTest {
 	 */
 	public static void main(String[] args) throws DuplicateRecordException {
 		testAdd();
-		//testDelete();
-		//testUpdate();
-		//testFindByPK();
+		// testDelete();
+		// testUpdate();
+		// testFindByPK();
 		testSearch();
 
 	}

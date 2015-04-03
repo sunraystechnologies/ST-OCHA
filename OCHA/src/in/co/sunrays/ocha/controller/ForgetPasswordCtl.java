@@ -41,14 +41,14 @@ public class ForgetPasswordCtl extends BaseCtl {
 		log.debug("ForgetPasswordCtl Method validate Started");
 
 		boolean pass = true;
-		
+
 		String login = request.getParameter("login");
-		
+
 		if (DataValidator.isNull(login)) {
 			request.setAttribute("login",
 					PropertyReader.getValue("error.require", "Email Id"));
 			pass = false;
-		}else if (!DataValidator.isEmail(login)) {
+		} else if (!DataValidator.isEmail(login)) {
 			request.setAttribute("login",
 					PropertyReader.getValue("error.email", "Login "));
 			pass = false;
@@ -92,8 +92,7 @@ public class ForgetPasswordCtl extends BaseCtl {
 			try {
 				model.forgetPassword(bean.getLogin());
 				ServletUtility.setSuccessMessage(
-						"Password has been sent to your email id.",
-						request);
+						"Password has been sent to your email id.", request);
 			} catch (RecordNotFoundException e) {
 				ServletUtility.setErrorMessage(e.getMessage(), request);
 				log.error(e);
@@ -102,12 +101,10 @@ public class ForgetPasswordCtl extends BaseCtl {
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-				ServletUtility.forward(ORSView.FORGET_PASSWORD_VIEW, request,
-						response);
-		} else {
-			ServletUtility.forward(ORSView.FORGET_PASSWORD_VIEW, request,
-					response);
 		}
+
+		ServletUtility.forwardView(ORSView.FORGET_PASSWORD_VIEW, request,
+				response);
 
 		log.debug("ForgetPasswordCtl Method doGet Ended");
 	}

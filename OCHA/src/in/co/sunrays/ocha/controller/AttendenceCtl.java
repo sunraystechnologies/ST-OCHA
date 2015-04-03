@@ -3,9 +3,6 @@ package in.co.sunrays.ocha.controller;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.model.AttendenceModel;
 import in.co.sunrays.ocha.model.BranchModel;
-import in.co.sunrays.ocha.model.CommentModel;
-import in.co.sunrays.ocha.model.EResourceModel;
-import in.co.sunrays.ocha.model.StudentModel;
 import in.co.sunrays.ocha.model.SubjectModel;
 import in.co.sunrays.ocha.model.UserModel;
 import in.co.sunrays.util.DataUtility;
@@ -17,44 +14,28 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-/**
- * Contains navigation logic for Comment Views.
- * 
- * @version 1.0
- * @since 01 Feb 2015
- * @author SUNRAYS Developer
- * @Copyright (c) sunRays Technologies. All rights reserved.
- * @URL www.sunrays.co.in
- */
-
 public class AttendenceCtl extends BaseCtl {
-	/**
-	 * Logger to log the messages.
-	 */
+
 	private static Logger log = Logger.getLogger(AttendenceCtl.class);
 
-	/**
-	 * Loads pre-loaded data like Dropdown List.
-	 */
 	@Override
 	protected void preload(HttpServletRequest request) {
 		UserModel usermodel = new UserModel();
-		BranchModel branchModel=new BranchModel();
-		SubjectModel subjectModel=new SubjectModel();
+		BranchModel branchModel = new BranchModel();
+		SubjectModel subjectModel = new SubjectModel();
 		try {
 			List userList = usermodel.studentlist();
 			request.setAttribute("userList", userList);
-			
+
 			List branchList = branchModel.search(null);
 			request.setAttribute("branchList", branchList);
-			
+
 			List subjectList = subjectModel.search(null);
 			request.setAttribute("subjectList", subjectList);
 		} catch (ApplicationException e) {
@@ -62,24 +43,17 @@ public class AttendenceCtl extends BaseCtl {
 		}
 
 	}
-	/**
-	 * Validates Input data
-	 */
+
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-		
+
 		log.debug("AttendenceCtl Method validate Started");
 		String Attendancedate = request.getParameter("Attendancedate");
 		boolean pass = true;
 
-<<<<<<< HEAD
-		if (DataValidator.isNull(request.getParameter("subject"))) {
-			request.setAttribute("subject",
-					PropertyReader.getValue("error.require", "subject"));
-=======
 		if (DataValidator.isNull(request.getParameter("subjectId"))) {
-			request.setAttribute("subjectId", PropertyReader.getValue("error.require", "subject"));
->>>>>>> a85860ba8a491504b47a8134c301a4aed4b3191a
+			request.setAttribute("subjectId",
+					PropertyReader.getValue("error.require", "subject"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("attendance"))) {
@@ -93,16 +67,18 @@ public class AttendenceCtl extends BaseCtl {
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("branchId"))) {
-			request.setAttribute("branchId", PropertyReader.getValue("error.require", "Branch Name"));
+			request.setAttribute("branchId",
+					PropertyReader.getValue("error.require", "Branch Name"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("totalAttendance"))) {
-			request.setAttribute("totalAttendance", PropertyReader.getValue("error.require", "Total Attendance"));
+			request.setAttribute("totalAttendance", PropertyReader.getValue(
+					"error.require", "Total Attendance"));
 			pass = false;
 		}
 		if (DataValidator.isNull(Attendancedate)) {
-			request.setAttribute("Attendancedate",
-					PropertyReader.getValue("error.require", "Date Of Attendance"));
+			request.setAttribute("Attendancedate", PropertyReader.getValue(
+					"error.require", "Date Of Attendance"));
 			pass = false;
 		} else if (!DataValidator.isDate(Attendancedate)) {
 			request.setAttribute("Attendancedate",
@@ -110,44 +86,30 @@ public class AttendenceCtl extends BaseCtl {
 			pass = false;
 		}
 
-		
 		log.debug("AttendenceCtl Method validate Ended");
 
 		return pass;
-		
+
 	}
-<<<<<<< HEAD
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-=======
-	
-	
-
->>>>>>> a85860ba8a491504b47a8134c301a4aed4b3191a
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("inn post");
 		System.out.println(request.getParameter("studentId"));
 		HttpSession session = request.getSession(true);
-		AttendenceModel model=new AttendenceModel();
+		AttendenceModel model = new AttendenceModel();
 		model.setId(DataUtility.getLong(request.getParameter("id")));
-<<<<<<< HEAD
-		model.setSubject(DataUtility.getString(request.getParameter("subject")));
+		model.setSubjectId(DataUtility.getLong(request
+				.getParameter("subjectId")));
 		model.setStudentId(DataUtility.getLong(request
 				.getParameter("studentId")));
 		model.setAttendence(DataUtility.getInt(request
 				.getParameter("attendance")));
-=======
-		model.setSubjectId(DataUtility.getLong(request.getParameter("subjectId")));
-		model.setStudentId(DataUtility.getLong(request.getParameter("studentId")));
-		model.setAttendence(DataUtility.getInt(request.getParameter("attendance")));
-		model.setCreatedOn(DataUtility.getDate(request.getParameter("Attendancedate")));
+		model.setCreatedOn(DataUtility.getDate(request
+				.getParameter("Attendancedate")));
 		model.setBranchId(DataUtility.getLong(request.getParameter("branchId")));
-		model.setTotalAttendence(DataUtility.getInt(request.getParameter("totalAttendance")));
->>>>>>> a85860ba8a491504b47a8134c301a4aed4b3191a
+		model.setTotalAttendence(DataUtility.getInt(request
+				.getParameter("totalAttendance")));
 		long id = DataUtility.getLong(request.getParameter("id"));
 
 		String op = DataUtility.getString(request.getParameter("operation"));
@@ -168,7 +130,7 @@ public class AttendenceCtl extends BaseCtl {
 				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
-			} 
+			}
 		} else if (OP_DELETE.equalsIgnoreCase(op)) {
 
 			try {
@@ -206,9 +168,7 @@ public class AttendenceCtl extends BaseCtl {
 
 		ServletUtility.forward(ORSView.ATTENDENCE_VIEW, request, response);
 	}
-	/**
-	 * Returns View page of Controller.
-	 */
+
 	@Override
 	protected String getView() {
 		// TODO Auto-generated method stub

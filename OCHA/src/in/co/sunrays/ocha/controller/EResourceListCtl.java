@@ -1,6 +1,7 @@
 package in.co.sunrays.ocha.controller;
 
 import in.co.sunrays.ocha.exception.ApplicationException;
+import in.co.sunrays.ocha.model.BaseModel;
 import in.co.sunrays.ocha.model.EResourceModel;
 import in.co.sunrays.util.DataUtility;
 import in.co.sunrays.util.PropertyReader;
@@ -20,11 +21,24 @@ public class EResourceListCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(EResourceListCtl.class);
 
 	@Override
+	protected BaseModel populateModel(HttpServletRequest request) {
+
+		EResourceModel model = new EResourceModel();
+
+		model.setTablesContains(DataUtility.getString(request
+				.getParameter("tablesContains")));
+		model.setName(DataUtility.getString(request.getParameter("name")));
+		model.setDetail(DataUtility.getString(request.getParameter("detail")));
+
+		return model;
+
+	}
+
+	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		log.debug("EResourceListCtl doGet Start");
 
-		List list = null;
+		log.debug("EResourceListCtl doGet Start");
 
 		int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
 		int pageSize = DataUtility.getInt(request.getParameter("pageSize"));
@@ -36,11 +50,7 @@ public class EResourceListCtl extends BaseCtl {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 
-		EResourceModel model = new EResourceModel();
-
-		model.setTablesContains(DataUtility.getString(request
-				.getParameter("tablesContains")));
-		model.setName(DataUtility.getString(request.getParameter("name")));
+		EResourceModel model = (EResourceModel) populateModel(request);
 
 		try {
 
@@ -54,24 +64,30 @@ public class EResourceListCtl extends BaseCtl {
 				} else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
 					pageNo--;
 				}
+			} else if (OP_NEW.equalsIgnoreCase(op)) {
 
+				ServletUtility.redirect(ORSView.ERESOURCE_CTL, request,
+						response);
+				return;
 			}
-			list = model.search(pageNo, pageSize);
-			ServletUtility.setList(list, request);
+
+			List list = model.search(pageNo, pageSize);
+			
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
 			ServletUtility.setList(list, request);
-
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
-			ServletUtility.forward(ORSView.ERESOURCE_List_VIEW, request,
-					response);
+
+			ServletUtility.forwardView(ORSView.ERESOURCE_List_VIEW, request,response);
+		
 		} catch (ApplicationException e) {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
+		
 		log.debug("EResourceListCtl doGet End");
 	}
 

@@ -38,7 +38,6 @@ public class LoginCtl extends BaseCtl {
 	public static final String OP_SIGN_UP = "SignUp";
 	public static final String OP_LOG_OUT = "logout";
 
-
 	/**
 	 * Logger to log the messages.
 	 */
@@ -83,28 +82,18 @@ public class LoginCtl extends BaseCtl {
 	protected BaseBean populateBean(HttpServletRequest request) {
 
 		log.debug("LoginCtl Method populatebean Started");
-
 		UserBean bean = new UserBean();
-
-		bean.setId(DataUtility.getLong(request.getParameter("id")));
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
 		bean.setPassword(DataUtility.getString(request.getParameter("password")));
-
 		log.debug("LoginCtl Method populatebean Ended");
 
 		return bean;
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(true);
-		log.debug(" Method doGet Started");
+	@Override
+	protected void preload(HttpServletRequest request) {
 
-		String op = DataUtility.getString(request.getParameter("operation"));
+		log.debug("Preloaded Started");
 
 		NoticeModel nModel = new NoticeModel();
 
@@ -112,15 +101,42 @@ public class LoginCtl extends BaseCtl {
 
 		try {
 			noticeList = nModel.search();
+			
+			
 			request.setAttribute("noticeList", noticeList);
-		} catch (ApplicationException e1) {
+
+		} catch (ApplicationException e) {
+			log.error(e);
 		}
+
+		log.debug("Preloaded Started");
+	}
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.getSession().invalidate();
+		// ServletUtility.forward(ORSView.LOGIN_VIEW, request, response);
+		ServletUtility.forwardView(ORSView.LOGIN_VIEW, request, response);
+
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		HttpSession session = request.getSession(true);
+
+		log.debug(" Method doGet Started");
+
+		String op = DataUtility.getString(request.getParameter("operation"));
 
 		// get model
 		UserModel model = new UserModel();
-		RoleModel role = new RoleModel();
 
-		long id = DataUtility.getLong(request.getParameter("id"));
+		RoleModel role = new RoleModel();
 
 		if (OP_SIGN_IN.equalsIgnoreCase(op)) {
 
@@ -132,7 +148,9 @@ public class LoginCtl extends BaseCtl {
 
 				if (bean != null) {
 					session.setAttribute("user", bean);
+
 					session.setAttribute("userId", bean.getId());
+
 					long rollId = bean.getRoleId();
 
 					RoleModel rolemodel = role.findByPK(rollId);
@@ -175,22 +193,7 @@ public class LoginCtl extends BaseCtl {
 
 		}
 
-		else { // View page
-
-			if (id > 0 || op != null) {
-				UserBean userbean;
-				try {
-					userbean = model.findByPK(id);
-					ServletUtility.setBean(userbean, request);
-				} catch (ApplicationException e) {
-					log.error(e);
-					ServletUtility.handleException(e, request, response);
-					return;
-				}
-			}
-		}
-
-		ServletUtility.forward(ORSView.LOGIN_VIEW, request, response);
+		ServletUtility.forwardView(ORSView.LOGIN_VIEW, request, response);
 
 		log.debug("UserCtl Method doGet Ended");
 	}

@@ -93,8 +93,17 @@ public class NoticeModel extends BaseModel {
 			pstmt.setString(2, subject);
 			pstmt.setString(3, details);
 			java.util.Date date = new Date();
-			pstmt.setTimestamp(4, new java.sql.Timestamp(date.getTime()));
-			pstmt.setDate(5, new java.sql.Date(getExpireDate().getTime()));
+
+			if (date != null) {
+				pstmt.setTimestamp(4, new java.sql.Timestamp(date.getTime()));
+			} else {
+				pstmt.setTimestamp(4, null);
+			}
+			if (expireDate != null) {
+				pstmt.setDate(5, new java.sql.Date(getExpireDate().getTime()));
+			} else {
+				pstmt.setDate(5, null);
+			}
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
@@ -162,11 +171,12 @@ public class NoticeModel extends BaseModel {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	
+
 	public NoticeModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
-		
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName() + " WHERE ID=?");
+
+		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
+				+ " WHERE ID=?");
 		log.info("SQL : " + sql);
 
 		NoticeModel model = null;
@@ -210,7 +220,8 @@ public class NoticeModel extends BaseModel {
 			conn = JDBCDataSource.getConnection();
 
 			conn.setAutoCommit(false); // Begin transaction
-			String sql = "UPDATE " + getTableName() + " SET SUBJECT=?,DETAILS=?,EXPIRE_DATE=? WHERE ID=?";
+			String sql = "UPDATE " + getTableName()
+					+ " SET SUBJECT=?,DETAILS=?,EXPIRE_DATE=? WHERE ID=?";
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -247,27 +258,25 @@ public class NoticeModel extends BaseModel {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public List search(int pageNo, int pageSize)
-			throws ApplicationException {
-		
+	public List search(int pageNo, int pageSize) throws ApplicationException {
+
 		log.debug("Model search Started");
-		
-		StringBuffer sql = new StringBuffer(
-				"SELECT * FROM " + getTableName()
+
+		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
 				+ " WHERE 1=1 AND DATE(NOW()) <= DATE(EXPIRE_DATE)");
 
-			if (id > 0) {
-				sql.append(" AND id = " + id);
-			}
-			if (subject != null && subject.length() > 0) {
-				sql.append(" AND SUBJECT like '" + subject + "%'");
-			}
-			if (details != null && details.length() > 0) {
-				sql.append(" AND DETAILS like '" + details + "%'");
-			}
-			if (expireDate != null) {
-				sql.append(" AND EXPIRE_DATE like '" + expireDate + "%'");
-			}
+		if (id > 0) {
+			sql.append(" AND id = " + id);
+		}
+		if (subject != null && subject.length() > 0) {
+			sql.append(" AND SUBJECT like '" + subject + "%'");
+		}
+		if (details != null && details.length() > 0) {
+			sql.append(" AND DETAILS like '" + details + "%'");
+		}
+		if (expireDate != null) {
+			sql.append(" AND EXPIRE_DATE like '" + expireDate + "%'");
+		}
 
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
@@ -286,7 +295,7 @@ public class NoticeModel extends BaseModel {
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				NoticeModel	model = new NoticeModel();
+				NoticeModel model = new NoticeModel();
 				model.setId(rs.getLong(1));
 				model.setSubject(rs.getString(2));
 				model.setDetails(rs.getString(3));
@@ -314,9 +323,8 @@ public class NoticeModel extends BaseModel {
 	 * @throws ApplicationException
 	 */
 	public List search() throws ApplicationException {
-		return search( 0, 0);
+		return search(0, 0);
 	}
-
 
 	/**
 	 * Returns Drop Down List key

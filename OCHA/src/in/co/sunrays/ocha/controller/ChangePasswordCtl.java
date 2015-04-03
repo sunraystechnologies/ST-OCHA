@@ -52,7 +52,7 @@ public class ChangePasswordCtl extends BaseCtl {
 		String op = request.getParameter("operation");
 
 		if (OP_CHANGE_MY_PROFILE.equalsIgnoreCase(op)) {
- 
+
 			return pass;
 		}
 		if (DataValidator.isNull(request.getParameter("oldPassword"))) {
@@ -78,7 +78,7 @@ public class ChangePasswordCtl extends BaseCtl {
 
 			pass = false;
 		}
-		
+
 		log.debug("ChangePasswordCtl Method validate Ended");
 
 		return pass;
@@ -95,7 +95,7 @@ public class ChangePasswordCtl extends BaseCtl {
 
 		bean.setConfirmPassword(DataUtility.getString(request
 				.getParameter("confirmPassword")));
-		
+
 		populateDTO(bean, request);
 
 		log.debug("ChangePasswordCtl Method populatebean Ended");
@@ -103,11 +103,19 @@ public class ChangePasswordCtl extends BaseCtl {
 		return bean;
 	}
 
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		ServletUtility.forwardView(ORSView.CHANGE_PASSWORD_VIEW, request,
+				response);
+
+	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession(true);
@@ -118,7 +126,7 @@ public class ChangePasswordCtl extends BaseCtl {
 
 		// get model
 		UserModel model = new UserModel();
-		
+
 		UserBean bean = (UserBean) populateBean(request);
 
 		UserBean UserBean = (UserBean) session.getAttribute("user");
@@ -129,25 +137,25 @@ public class ChangePasswordCtl extends BaseCtl {
 
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 
-				try {
+			try {
 				boolean flag = model.changePassword(id, bean.getPassword(),
-							newPassword);
-					if (flag == true) {
+						newPassword);
+				if (flag == true) {
 					bean = model.findByLogin(UserBean.getLogin());
 					session.setAttribute("user", bean);
-						ServletUtility.setBean(bean, request);
-						ServletUtility.setSuccessMessage(
+					ServletUtility.setBean(bean, request);
+					ServletUtility.setSuccessMessage(
 							"Password has been changed Successfully.", request);
-					}
-				} catch (ApplicationException e) {
-					log.error(e);
-					ServletUtility.handleException(e, request, response);
-					return;
-
-				} catch (RecordNotFoundException e) {
-				ServletUtility.setErrorMessage("Old PassWord is Invalid",
-							request);
 				}
+			} catch (ApplicationException e) {
+				log.error(e);
+				ServletUtility.handleException(e, request, response);
+				return;
+
+			} catch (RecordNotFoundException e) {
+				ServletUtility.setErrorMessage("Old PassWord is Invalid",
+						request);
+			}
 
 		} else if (OP_CHANGE_MY_PROFILE.equalsIgnoreCase(op)) {
 			ServletUtility.redirect(ORSView.MY_PROFILE_CTL, request, response);
@@ -155,7 +163,9 @@ public class ChangePasswordCtl extends BaseCtl {
 
 		}
 
-		ServletUtility.forward(ORSView.CHANGE_PASSWORD_VIEW, request, response);
+		ServletUtility.forwardView(ORSView.CHANGE_PASSWORD_VIEW, request,
+				response);
+		
 		log.debug("ChangePasswordCtl Method doGet Ended");
 	}
 

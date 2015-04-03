@@ -108,17 +108,42 @@ public class MyProfileCtl extends BaseCtl {
 		bean.setGender(DataUtility.getString(request.getParameter("gender")));
 
 		bean.setDob(DataUtility.getDate(request.getParameter("dob")));
-		
+
 		populateDTO(bean, request);
 
 		return bean;
+	}
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		HttpSession session = request.getSession(true);
+		UserBean UserBean = (UserBean) session.getAttribute("user");
+		long id = UserBean.getId();
+
+		UserModel model = new UserModel();
+
+		if (id > 0) {
+			System.out.println("in id > 0  condition");
+			try {
+				UserBean bean = model.findByPK(id);
+				ServletUtility.setBean(bean, request);
+			} catch (ApplicationException e) {
+				log.error(e);
+				ServletUtility.handleException(e, request, response);
+				return;
+			}
+		}
+
+		ServletUtility.forwardView(ORSView.MY_PROFILE_VIEW, request, response);
+
 	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
 		log.debug("MyprofileCtl Method doGet Started");
@@ -126,7 +151,6 @@ public class MyProfileCtl extends BaseCtl {
 		UserBean UserBean = (UserBean) session.getAttribute("user");
 		long id = UserBean.getId();
 		String op = DataUtility.getString(request.getParameter("operation"));
-
 		// get model
 		UserModel model = new UserModel();
 
@@ -176,7 +200,7 @@ public class MyProfileCtl extends BaseCtl {
 
 		}
 
-		ServletUtility.forward(ORSView.MY_PROFILE_VIEW, request, response);
+		ServletUtility.forwardView(ORSView.MY_PROFILE_VIEW, request, response);
 
 		log.debug("MyProfileCtl Method doGet Ended");
 	}

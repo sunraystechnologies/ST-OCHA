@@ -19,9 +19,11 @@ public class DataUtility {
 	/**
 	 * Application Date Format
 	 */
-	public static final String APP_DATE_FORMAT = "MM/dd/yyyy";
+	public static final String APP_DATE_FORMAT = PropertyReader
+			.getValue("format.date");
 
-	public static final String APP_TIME_FORMAT = "MM/dd/yyyy HH:mm:ss";
+	public static final String APP_TIME_FORMAT = PropertyReader
+			.getValue("format.datetime");;
 
 	/**
 	 * Date formatter

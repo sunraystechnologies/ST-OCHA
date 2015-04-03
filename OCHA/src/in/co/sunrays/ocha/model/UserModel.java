@@ -610,6 +610,9 @@ public class UserModel {
 		log.debug("Model authenticate Started");
 		StringBuffer sql = new StringBuffer(
 				"SELECT * FROM ST_USER WHERE LOGIN = ? AND PASSWORD = ?");
+
+		log.info("SQL : " + sql);
+
 		UserBean bean = null;
 		Connection conn = null;
 

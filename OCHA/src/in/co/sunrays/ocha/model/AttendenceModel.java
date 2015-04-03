@@ -30,11 +30,14 @@ public class AttendenceModel extends BaseModel {
 	private static Logger log = Logger.getLogger(AttendenceModel.class);
 
 	private long studentId;
-	private long BranchId;
+
 	private long subjectId;
+	private String studentName;
+
 	private String subject;
 	private int attendence;
-	private String studentName;
+
+	private long BranchId;
 	private String BranchName;
 	private int totalAttendence;
 

@@ -278,7 +278,7 @@ public class CommentModel extends BaseModel {
 			sql.append(" AND text like '" + text + "%'");
 		}
 		if (resourceId > 0) {
-			sql.append(" AND resourceId =" + id);
+			sql.append(" AND resourceId =" + resourceId);
 		}
 
 		// if page size is greater than zero then apply pagination

@@ -1,6 +1,9 @@
 package in.co.sunrays.ocha.controller;
 
+import in.co.sunrays.ocha.bean.UserBean;
 import in.co.sunrays.ocha.exception.ApplicationException;
+import in.co.sunrays.ocha.model.BaseModel;
+import in.co.sunrays.ocha.model.CommentModel;
 import in.co.sunrays.ocha.model.EResourceModel;
 import in.co.sunrays.util.DataUtility;
 import in.co.sunrays.util.PropertyReader;
@@ -15,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * Contains navigation logic for Comment Views.
  * 
@@ -26,7 +28,6 @@ import org.apache.log4j.Logger;
  * @URL www.sunrays.co.in
  */
 
-
 public class EResourceLinkCtl extends BaseCtl {
 
 	/**
@@ -35,11 +36,24 @@ public class EResourceLinkCtl extends BaseCtl {
 	private static Logger log = Logger.getLogger(EResourceLinkCtl.class);
 
 	@Override
+	protected BaseModel populateModel(HttpServletRequest request) {
+
+		EResourceModel model = new EResourceModel();
+
+		model.setTablesContains(DataUtility.getString(request
+				.getParameter("tablesContains")));
+		model.setName(DataUtility.getString(request.getParameter("name")));
+		model.setDetail(DataUtility.getString(request.getParameter("detail")));
+
+		return model;
+
+	}
+
+	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		log.debug("EResourceLinkCtl doGet Start");
 
-		List list = null;
+		log.debug("EResourceListCtl doGet Start");
 
 		int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
 		int pageSize = DataUtility.getInt(request.getParameter("pageSize"));
@@ -51,7 +65,32 @@ public class EResourceLinkCtl extends BaseCtl {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 
-		EResourceModel model = new EResourceModel();
+		if ("Add Comment".equals(op)) {
+
+			CommentModel commentModel = new CommentModel();
+			commentModel.setText(DataUtility.getString(request
+					.getParameter("text")));
+			commentModel.setResourceId(DataUtility.getLong(request
+					.getParameter("linkId")));
+
+			UserBean userBean = (UserBean) request.getSession().getAttribute(
+					"user");
+			commentModel.setUserId(userBean.getId());
+			commentModel.setName(userBean.getFirstName() + " "
+					+ userBean.getLastName());
+			
+			try {
+				commentModel.add();
+			} catch (ApplicationException e) {
+				log.error(e);
+				ServletUtility.handleException(e, request, response);
+				return;
+			}
+			
+			op = OP_SEARCH;
+		}
+
+		EResourceModel model = (EResourceModel) populateModel(request);
 
 		try {
 
@@ -65,25 +104,26 @@ public class EResourceLinkCtl extends BaseCtl {
 				} else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
 					pageNo--;
 				}
-
 			}
-			list = model.search(pageNo, pageSize);
-			ServletUtility.setList(list, request);
+
+			List list = model.search(pageNo, pageSize);
+
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
 			ServletUtility.setList(list, request);
-
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
-			ServletUtility.forward(ORSView.ERESOURCE_LINK_VIEW, request,
-					response);
+
+			ServletUtility.forwardView(getView(), request, response);
+
 		} catch (ApplicationException e) {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
-		log.debug("EResourceLinkCtl doGet End");
+
+		log.debug("EResourceListCtl doGet End");
 	}
 
 	@Override

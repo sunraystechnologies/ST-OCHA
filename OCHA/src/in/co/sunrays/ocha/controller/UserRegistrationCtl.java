@@ -44,6 +44,7 @@ public class UserRegistrationCtl extends BaseCtl {
 	 */
 	@Override
 	protected void preload(HttpServletRequest request) {
+
 		RoleModel model = new RoleModel();
 		try {
 			List l = model.search(null);
@@ -68,93 +69,97 @@ public class UserRegistrationCtl extends BaseCtl {
 		String dob = request.getParameter("dob");
 
 		if (DataValidator.isNull(request.getParameter("firstName"))) {
-			request.setAttribute("firstName",
+			request.setAttribute("error.firstName",
 					PropertyReader.getValue("error.require", "First Name"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("lastName"))) {
-			request.setAttribute("lastName",
+			request.setAttribute("error.lastName",
 					PropertyReader.getValue("error.require", "Last Name"));
 			pass = false;
 		}
 		if (DataValidator.isNull(login)) {
-			request.setAttribute("login",
+			request.setAttribute("error.login",
 					PropertyReader.getValue("error.require", "Login Id"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("collegeId"))) {
-			request.setAttribute("collegeId",
+			request.setAttribute("error.collegeId",
 					PropertyReader.getValue("error.require", "College Id"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("branch"))) {
-			request.setAttribute("branch",
+			request.setAttribute("error.branch",
 					PropertyReader.getValue("error.require", "Branch"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("year"))) {
-			request.setAttribute("year",
+			request.setAttribute("error.year",
 					PropertyReader.getValue("error.require", "Year"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("fatherName"))) {
-			request.setAttribute("fatherName",
+			request.setAttribute("error.fatherName",
 					PropertyReader.getValue("error.require", "Father Name"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("motherName"))) {
-			request.setAttribute("motherName",
+			request.setAttribute("error.motherName",
 					PropertyReader.getValue("error.require", "Mother Name"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("address"))) {
-			request.setAttribute("address",
+			request.setAttribute("error.address",
 					PropertyReader.getValue("error.require", "Address"));
 			pass = false;
 		}
 
 		else if (!DataValidator.isEmail(login)) {
-			request.setAttribute("login",
+			request.setAttribute("error.login",
 					PropertyReader.getValue("error.email", "Login "));
 			pass = false;
 		}
-		if (DataValidator.isNull(request.getParameter("password"))) {
-			request.setAttribute("password",
+
+		String password = request.getParameter("password");
+		String conPass = request.getParameter("confirmPassword");
+
+		if (DataValidator.isNull(password)) {
+			request.setAttribute("error.password",
 					PropertyReader.getValue("error.require", "Password"));
 			pass = false;
+		}else{
+			if(!password.equals(conPass)){
+				request.setAttribute("error.confirmPassword", "Password does not match with confirm password.");
+				pass = false;
+			}
 		}
-		if (DataValidator.isNull(request.getParameter("confirmPassword"))) {
-			request.setAttribute("confirmPassword", PropertyReader.getValue(
-					"error.require", "Confirm Password"));
+		if (DataValidator.isNull(conPass)) {
+			request.setAttribute("error.confirmPassword", PropertyReader
+					.getValue("error.require", "Confirm Password"));
 			pass = false;
 		}
+
 		if (DataValidator.isNull(request.getParameter("gender"))) {
-			request.setAttribute("gender",
+			request.setAttribute("error.gender",
 					PropertyReader.getValue("error.require", "Gender"));
 			pass = false;
 		}
 		if (DataValidator.isNull(dob)) {
-			request.setAttribute("dob",
+			request.setAttribute("error.dob",
 					PropertyReader.getValue("error.require", "Date Of Birth"));
 			pass = false;
 		} else if (!DataValidator.isDate(dob)) {
-			request.setAttribute("dob",
+			request.setAttribute("error.dob",
 					PropertyReader.getValue("error.date", "Date Of Birth"));
 			pass = false;
 		}
+
 		if (DataValidator.isNull(request.getParameter("mobileNo"))) {
-			request.setAttribute("mobileNo",
+			request.setAttribute("error.mobileNo",
 					PropertyReader.getValue("error.require", "Mobile No"));
 			pass = false;
 		}
-		if (!request.getParameter("password").equals(
-				request.getParameter("confirmPassword"))
-				&& !"".equals(request.getParameter("confirmPassword"))) {
-			ServletUtility.setErrorMessage(
-					"Confirm  Password  should not be matched.", request);
 
-			pass = false;
-		}
 		log.debug("UserRegistrationCtl Method validate Ended");
 
 		return pass;
@@ -180,10 +185,8 @@ public class UserRegistrationCtl extends BaseCtl {
 				.getParameter("collegeId")));
 		bean.setCollegeCode(DataUtility.getString(request
 				.getParameter("collegeCode")));
-		bean.setBranch(DataUtility.getString(request
-				.getParameter("branch")));
-		bean.setYear(DataUtility.getString(request
-				.getParameter("year")));
+		bean.setBranch(DataUtility.getString(request.getParameter("branch")));
+		bean.setYear(DataUtility.getString(request.getParameter("year")));
 		bean.setFatherName(DataUtility.getString(request
 				.getParameter("fatherName")));
 		bean.setMotherName(DataUtility.getString(request
@@ -208,11 +211,22 @@ public class UserRegistrationCtl extends BaseCtl {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * Contains Display Logic
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
+		ServletUtility.forwardView(ORSView.USER_REGISTRATION_VIEW, request,
+				response);
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
 		System.out.println("in get method");
 		log.debug("UserRegistrationCtl Method doGet Started");
 
@@ -242,12 +256,12 @@ public class UserRegistrationCtl extends BaseCtl {
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setErrorMessage("Login id already exists",
 						request);
-				ServletUtility.forward(ORSView.USER_REGISTRATION_VIEW, request,
-						response);
+				ServletUtility.forwardView(ORSView.USER_REGISTRATION_VIEW,
+						request, response);
 			}
 
 		} else {
-			ServletUtility.forward(ORSView.USER_REGISTRATION_VIEW, request,
+			ServletUtility.forwardView(ORSView.USER_REGISTRATION_VIEW, request,
 					response);
 		}
 
