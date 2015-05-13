@@ -1,46 +1,175 @@
+<%@page import="java.util.LinkedHashMap"%>
+<%@page import="in.co.sunrays.common.controller.BaseCtl"%>
+<%@page import="in.co.sunrays.ocha.controller.ORSView"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="in.co.sunrays.util.HTMLUtility"%>
+<%@page import="in.co.sunrays.util.DataUtility"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
+<%@page import="in.co.sunrays.util.AccessUtility"%>
+<jsp:useBean id="model" class="in.co.sunrays.ocha.model.TimeTableModel"
+	scope="request"></jsp:useBean>
+<%
+	LinkedHashMap<String, String> facMap = new LinkedHashMap<String, String>();
+	facMap.put("", "--Select--");
+	facMap.put("Ram Sharma", "Ram Sharma");
+	facMap.put("Yash Sharama", "Yash Sharama");
+	facMap.put("Manoj Sharama", " Manoj Sharma");
+	facMap.put("Ramesh Sharama", "Yash Sharama");
+	facMap.put("Suresh Sharama", "Yash Sharama");
+	facMap.put("Mahendra Sharama", "Mahendra Sharama");
+	facMap.put("Rajesh Sharama", "Rajesh Sharama");
+	facMap.put("Mahesh Sharama", "Mahesh Sharama");
+	facMap.put("Saurabh", "Saurabh");
+	
+	LinkedHashMap<String, String> semesterMap = new LinkedHashMap<String, String>();
+	semesterMap.put("", "--Select--");
+	semesterMap.put("1", "1");
+	semesterMap.put("2", "2");
+	semesterMap.put("3", "3");
+	semesterMap.put("4", "4");
+	semesterMap.put("5", "5");
+	semesterMap.put("6", "6");
+	semesterMap.put("7", "7");
+	semesterMap.put("8", "8");
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>File Upload</title>
-    </head>
- 
-    <body> 
-    <div class="container">
-    <div class="row">
-        <div  class="col-md-2">
-        <%@include file="Header.jsp"%>
-        </div>
-        <div class="col-md-10">
-        	<h3 align="Center"  style="margin-top: 140px">
-					<hr>
-			Choose File to Upload in Server
-					</h3>
-    <div id="result">
-            <h3 class="col-md-offset-4 ">${requestScope["message"]}</h3>
-        </div>
-		<form action="<%=ORSView.TIMETABLE_CTL%>" method="post" enctype="multipart/form-data" class="form-horizontal">
-				<div class="form-group">
-			
-					<div class="col-md-offset-4 col-md-3">
-						<input type="file" class="form-control" name="file" id="file"/>
-						
-					</div>
-				</div>	
-				<div class="col-md-offset-4 ">
-				<button  value="upload" type="submit" class="col-md-offset-1 btn btn-info">
-				upload
-				</button>
-				</div>
+	LinkedHashMap<String, String> branchMap = new LinkedHashMap<String, String>();
+	branchMap.put("", "--Select--");
+	branchMap.put("IT", "IT");
+	branchMap.put("CS", "CS");
+	branchMap.put("EC", "EC");
+	branchMap.put("CE", "CE");
+	branchMap.put("ME", "ME");
 
-		</form>
-	</div>
-        </div>
-        </div>
+	LinkedHashMap<String, String> yearMap = new LinkedHashMap<String, String>();
+	yearMap.put("", "--Select--");
+	yearMap.put("1", "1");
+	yearMap.put("2", "2");
+	yearMap.put("3", "3");
+	yearMap.put("4", "4");
 
- 
-    </body>
-</html>
+	LinkedHashMap<String, String> subjectMap = new LinkedHashMap<String, String>();
+	subjectMap.put("", "--Select--");
+	subjectMap.put("OOT", "OOT");
+	subjectMap.put("BME", "BME");
+	subjectMap.put("M1", "M1");
+	subjectMap.put("ADA", "ADA");
+	subjectMap.put("ACA", "ACA");
+	subjectMap.put("TOC", "TOC");
+	subjectMap.put("DS", "DS");
+	subjectMap.put("OS", "OS");
+	subjectMap.put("JAVA", "JAVA");
+	subjectMap.put("SEPM", "SEPM");
+%>
+
+<p class="st-title">Add Timetable</p>
+
+
+<%=HTMLUtility.getSuccessMessage(request)%>
+<%=HTMLUtility.getErrorMessage(request)%>
+
+<form action="<%=ORSView.TIMETABLE_CTL%>" method="POST">
+	<input type="hidden" name="id" value="<%=model.getId()%>">
+
+	<table>
+		<tr>
+			<th>Date(mm/dd/yyyy)*</th>
+			<td><input type="text" name="date" readonly="readonly"
+				value="<%=DataUtility.getDateString(model.getDate())%>"> <a
+				href="javascript:getCalendar(document.forms[0].date);"> <img
+					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15"
+					border="0" alt="Calender">
+			</a></td>
+			<td>&nbsp;&nbsp;</td>
+			<td></td>
+			<td>&nbsp;&nbsp;</td>
+			<th>Branch*</th>
+			<td><%=HTMLUtility.getList("branch", model.getBranch(),
+					branchMap)%></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th>Semester*</th>
+			<td><%=HTMLUtility.getList("semester", model.getSemester() + "",
+					semesterMap)%></td>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<th>Year*</th>
+			<td><%=HTMLUtility.getList("year", model.getYear() + "", yearMap)%></td>
+			</td>
+		</tr>
+		<tr>
+			<th>Time*</th>
+			<td><input type="text" name="time1"
+				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
+			<th>Subject*</th>
+			<td><%=HTMLUtility.getList("subject", model.getSubject(),
+					subjectMap)%></td>
+			<td></td>
+			<th>Faculty*</th>
+			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
+		</tr>
+		<tr>
+			<th>Time*</th>
+			<td><input type="text" name="time1"
+				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
+			<th>Subject*</th>
+			<td><%=HTMLUtility.getList("subject", model.getSubject(),
+					subjectMap)%></td>
+			<td></td>
+			<th>Faculty*</th>
+			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
+		</tr>
+		<tr>
+			<th>Time*</th>
+			<td><input type="text" name="time1"
+				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
+			<th>Subject*</th>
+			<td><%=HTMLUtility.getList("subject", model.getSubject(),
+					subjectMap)%></td>
+			<td></td>
+			<th>Faculty*</th>
+			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
+		</tr>
+		<tr>
+			<th>Time*</th>
+			<td><input type="text" name="time1"
+				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
+			<th>Subject*</th>
+			<td><%=HTMLUtility.getList("subject", model.getSubject(),
+					subjectMap)%></td>
+			<td></td>
+			<th>Faculty*</th>
+			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
+		</tr>
+		<tr>
+			<th>Time*</th>
+			<td><input type="text" name="time1"
+				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
+			<th>Subject*</th>
+			<td><%=HTMLUtility.getList("subject", model.getSubject(),
+					subjectMap)%></td>
+			<td></td>
+			<th>Faculty*</th>
+			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
+		</tr>
+		<tr>
+			<th>Time*</th>
+			<td><input type="text" name="time1"
+				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
+			<th>Subject*</th>
+			<td><%=HTMLUtility.getList("subject", model.getSubject(),
+					subjectMap)%></td>
+			<td></td>
+			<th>Faculty*</th>
+			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
+		</tr>
+		<tr>
+			<td align="center" colspan="6"><%=HTMLUtility.getSubmitButton(BaseCtl.OP_SAVE,
+					AccessUtility.canAdd(request), request)%></td>
+		</tr>
+	</table>
+</form>
+

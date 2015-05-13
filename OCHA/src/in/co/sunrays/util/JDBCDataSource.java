@@ -1,7 +1,10 @@
 package in.co.sunrays.util;
 
+import in.co.sunrays.ocha.exception.ApplicationException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
@@ -52,7 +55,8 @@ public class JDBCDataSource {
 					.getString("acquireIncrement")));
 			datasource.cpds.setMaxPoolSize(new Integer((String) rb
 					.getString("maxPoolSize")));
-			datasource.cpds.setMaxIdleTime(DataUtility.getInt(rb.getString("timeout")));
+			datasource.cpds.setMaxIdleTime(DataUtility.getInt(rb
+					.getString("timeout")));
 			datasource.cpds.setMinPoolSize(new Integer((String) rb
 					.getString("minPoolSize")));
 
@@ -65,7 +69,7 @@ public class JDBCDataSource {
 	 * 
 	 * @return connection
 	 */
-	public static Connection getConnection() throws Exception {
+	public static Connection getConnection() throws SQLException {
 		return getInstance().cpds.getConnection();
 	}
 
@@ -80,6 +84,22 @@ public class JDBCDataSource {
 			try {
 				connection.close();
 			} catch (Exception e) {
+			}
+		}
+	}
+
+	/**
+	 * Rollback Transaction
+	 * 
+	 * @param connection
+	 * @throws SQLException
+	 */
+	public static void trnRollback(Connection connection) {
+		if (connection != null) {
+			try {
+				connection.rollback();
+			} catch (SQLException ex) {
+				throw new ApplicationException(ex);
 			}
 		}
 	}

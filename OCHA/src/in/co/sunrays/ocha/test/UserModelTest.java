@@ -1,10 +1,11 @@
 package in.co.sunrays.ocha.test;
 
-import in.co.sunrays.ocha.bean.UserBean;
+import in.co.sunrays.common.model.RoleModel;
+import in.co.sunrays.common.model.UserModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.exception.DuplicateRecordException;
 import in.co.sunrays.ocha.exception.RecordNotFoundException;
-import in.co.sunrays.ocha.model.UserModel;
+import in.co.sunrays.ocha.model.AppRole;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -39,7 +40,7 @@ public class UserModelTest {
 	 */
 	public static void main(String[] args) throws ParseException,
 			DuplicateRecordException {
-		// testAdd();
+		testAdd();
 		// testDelete();
 		// testUpdate();
 		// testFindByPK();
@@ -47,11 +48,11 @@ public class UserModelTest {
 		// testSearch();
 		// testGetRoles();
 		// testList();
-		testAuthenticate();
+		// testAuthenticate();
 		// testRegisterUser();
 		// testchangePassword();
 		// testforgetPassword();
-		testresetPassword();
+		// testresetPassword();
 
 	}
 
@@ -63,27 +64,36 @@ public class UserModelTest {
 	 */
 	public static void testAdd() throws ParseException,
 			DuplicateRecordException {
-
 		try {
-			UserBean bean = new UserBean();
-			SimpleDateFormat sdf = new SimpleDateFormat("MM-DD-yyy");
-
-			// bean.setId(5234L);
-			bean.setFirstName("cjhsghbdswv");
-			bean.setLastName("kumevbebawat");
-			bean.setLogin("abhi12@g.com");
-			bean.setPassword("pass1234");
-			bean.setDob(sdf.parse("31-12-1990"));
-			bean.setRoleId(1L);
-			bean.setUnSuccessfulLogin(2);
-			bean.setGender("Male");
-			bean.setLastLogin(new Timestamp(new Date().getTime()));
-			bean.setLock("Yes");
-			bean.setConfirmPassword("pass1234");
-			long pk = model.add(bean);
-			UserBean addedbean = model.findByPK(pk);
-			System.out.println("Test add succ");
-			if (addedbean == null) {
+			UserModel model = new UserModel();
+			model.setFirstName("mohit");
+			model.setLastName("jain");
+			model.setFatherName("ABC");
+			model.setMotherName("ABC");
+			model.setLogin("mohitjain18@gmail.com");
+			model.setPassword("pass1234");
+			model.setCollegeId("0801CS12665");
+			model.setDepartent("CSE");
+			model.setSemester(6);
+			model.setYear(3);
+			model.setDob(new Date());
+			model.setGender("Male");
+			model.setMobileNo("123456");
+			model.setAddress("Indore");
+			model.setLastLogin(new Timestamp(new Date().getTime()));
+			model.setLock(UserModel.INACTIVE);
+			model.setRegisteredIP("192.1.2.3");
+			model.setLastLoginIP("192.1.2.3");
+			model.setRoleId(AppRole.STUDENT);
+			model.setUnSuccessfulLogin(1);
+			model.setCreatedBy("Admin");
+			model.setModifiedBy("Admin");
+			model.setCreatedDatetime(new Timestamp(new Date().getTime()));
+			model.setModifiedDatetime(new Timestamp(new Date().getTime()));
+			long pk = model.add();
+			UserModel addedModel = model.findByPK(pk);
+			System.out.println("Test add success");
+			if (addedModel == null) {
 				System.out.println("Test add fail");
 			}
 		} catch (ApplicationException e) {
@@ -96,15 +106,14 @@ public class UserModelTest {
 	 * Tests delete a User
 	 */
 	public static void testDelete() {
-
 		try {
-			UserBean bean = new UserBean();
+			UserModel model = new UserModel();
 			long pk = 0L;
-			bean.setId(pk);
-			model.delete(bean);
-			System.out.println("Test Delete succ" + bean.getId());
-			UserBean deletedbean = model.findByPK(pk);
-			if (deletedbean == null) {
+			model.setId(pk);
+			model.delete();
+			System.out.println("Test Delete success " + model.getId());
+			UserModel deletedModel = model.findByPK(pk);
+			if (deletedModel == null) {
 				System.out.println("Test Delete fail");
 			}
 		} catch (ApplicationException e) {
@@ -116,18 +125,16 @@ public class UserModelTest {
 	 * Tests update a User
 	 */
 	public static void testUpdate() {
-
 		try {
-			UserBean bean = model.findByPK(1L);
-			bean.setFirstName("cmc limited");
-			bean.setLastName("pvt ltd");
-			bean.setLogin("ranjitchoudhary210@gmail.com");
-			bean.setPassword("658986");
+			UserModel model = new UserModel();
+			model = model.findByPK(1L);
+			model.setFirstName("Ram");
+			model.setLastName("Sharma");
 
-			model.update(bean);
+			model.update();
 
-			UserBean updatedbean = model.findByPK(1L);
-			if (!"ranjit".equals(updatedbean.getLogin())) {
+			UserModel updatedModel = model.findByPK(1L);
+			if (!"Ram".equals(updatedModel.getLogin())) {
 				System.out.println("Test Update fail");
 			}
 		} catch (ApplicationException e) {
@@ -142,23 +149,22 @@ public class UserModelTest {
 	 */
 	public static void testFindByPK() {
 		try {
-			UserBean bean = new UserBean();
-			long pk = 1L;
-			bean = model.findByPK(pk);
-			if (bean == null) {
+			UserModel model = new UserModel();
+			model = model.findByPK(1L);
+			if (model == null) {
 				System.out.println("Test Find By PK fail");
 			}
-			System.out.println(bean.getId());
-			System.out.println(bean.getFirstName());
-			System.out.println(bean.getLastName());
-			System.out.println(bean.getLogin());
-			System.out.println(bean.getPassword());
-			System.out.println(bean.getDob());
-			System.out.println(bean.getRoleId());
-			System.out.println(bean.getUnSuccessfulLogin());
-			System.out.println(bean.getGender());
-			System.out.println(bean.getLastLogin());
-			System.out.println(bean.getLock());
+			System.out.println(model.getId());
+			System.out.println(model.getFirstName());
+			System.out.println(model.getLastName());
+			System.out.println(model.getLogin());
+			System.out.println(model.getPassword());
+			System.out.println(model.getDob());
+			System.out.println(model.getRoleId());
+			System.out.println(model.getUnSuccessfulLogin());
+			System.out.println(model.getGender());
+			System.out.println(model.getLastLogin());
+			System.out.println(model.getLock());
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}
@@ -170,22 +176,22 @@ public class UserModelTest {
 	 */
 	public static void testFindByLogin() {
 		try {
-			UserBean bean = new UserBean();
-			bean = model.findByLogin("545");
-			if (bean == null) {
+			UserModel model = new UserModel();
+			model = model.findByLogin("rahul.sahu@nenosystems.com");
+			if (model == null) {
 				System.out.println("Test Find By PK fail");
 			}
-			System.out.println(bean.getId());
-			System.out.println(bean.getFirstName());
-			System.out.println(bean.getLastName());
-			System.out.println(bean.getLogin());
-			System.out.println(bean.getPassword());
-			System.out.println(bean.getDob());
-			System.out.println(bean.getRoleId());
-			System.out.println(bean.getUnSuccessfulLogin());
-			System.out.println(bean.getGender());
-			System.out.println(bean.getLastLogin());
-			System.out.println(bean.getLock());
+			System.out.println(model.getId());
+			System.out.println(model.getFirstName());
+			System.out.println(model.getLastName());
+			System.out.println(model.getLogin());
+			System.out.println(model.getPassword());
+			System.out.println(model.getDob());
+			System.out.println(model.getRoleId());
+			System.out.println(model.getUnSuccessfulLogin());
+			System.out.println(model.getGender());
+			System.out.println(model.getLastLogin());
+			System.out.println(model.getLock());
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}
@@ -195,29 +201,28 @@ public class UserModelTest {
 	 * Tests get Roles.
 	 */
 	public static void testGetRoles() {
-
 		try {
-			UserBean bean = new UserBean();
+			UserModel model = new UserModel();
 			List list = new ArrayList();
-			bean.setRoleId(2L);
-			list = model.getRoles(bean);
+			model.setRoleId(2L);
+			list = model.getRoles(model);
 			if (list.size() < 0) {
 				System.out.println("Test Get Roles fail");
 			}
 			Iterator it = list.iterator();
 			while (it.hasNext()) {
-				bean = (UserBean) it.next();
-				System.out.println(bean.getId());
-				System.out.println(bean.getFirstName());
-				System.out.println(bean.getLastName());
-				System.out.println(bean.getLogin());
-				System.out.println(bean.getPassword());
-				System.out.println(bean.getDob());
-				System.out.println(bean.getRoleId());
-				System.out.println(bean.getUnSuccessfulLogin());
-				System.out.println(bean.getGender());
-				System.out.println(bean.getLastLogin());
-				System.out.println(bean.getLock());
+				model = (UserModel) it.next();
+				System.out.println(model.getId());
+				System.out.println(model.getFirstName());
+				System.out.println(model.getLastName());
+				System.out.println(model.getLogin());
+				System.out.println(model.getPassword());
+				System.out.println(model.getDob());
+				System.out.println(model.getRoleId());
+				System.out.println(model.getUnSuccessfulLogin());
+				System.out.println(model.getGender());
+				System.out.println(model.getLastLogin());
+				System.out.println(model.getLock());
 			}
 		} catch (ApplicationException e) {
 			e.printStackTrace();
@@ -228,29 +233,28 @@ public class UserModelTest {
 	 * Tests get Search
 	 */
 	public static void testSearch() {
-
 		try {
-			UserBean bean = new UserBean();
+			UserModel model = new UserModel();
 			List list = new ArrayList();
-			bean.setFirstName("ranjeet");
-			list = model.search(bean, 0, 0);
+			model.setFirstName("r");
+			list = model.search(0, 0);
 			if (list.size() < 0) {
 				System.out.println("Test Serach fail");
 			}
 			Iterator it = list.iterator();
 			while (it.hasNext()) {
-				bean = (UserBean) it.next();
-				System.out.println(bean.getId());
-				System.out.println(bean.getFirstName());
-				System.out.println(bean.getLastName());
-				System.out.println(bean.getLogin());
-				System.out.println(bean.getPassword());
-				System.out.println(bean.getDob());
-				System.out.println(bean.getRoleId());
-				System.out.println(bean.getUnSuccessfulLogin());
-				System.out.println(bean.getGender());
-				System.out.println(bean.getLastLogin());
-				System.out.println(bean.getLock());
+				model = (UserModel) it.next();
+				System.out.println(model.getId());
+				System.out.println(model.getFirstName());
+				System.out.println(model.getLastName());
+				System.out.println(model.getLogin());
+				System.out.println(model.getPassword());
+				System.out.println(model.getDob());
+				System.out.println(model.getRoleId());
+				System.out.println(model.getUnSuccessfulLogin());
+				System.out.println(model.getGender());
+				System.out.println(model.getLastLogin());
+				System.out.println(model.getLock());
 			}
 
 		} catch (ApplicationException e) {
@@ -263,9 +267,8 @@ public class UserModelTest {
 	 * Tests get List.
 	 */
 	public static void testList() {
-
 		try {
-			UserBean bean = new UserBean();
+			UserModel model = new UserModel();
 			List list = new ArrayList();
 			list = model.list(1, 10);
 			if (list.size() < 0) {
@@ -273,23 +276,23 @@ public class UserModelTest {
 			}
 			Iterator it = list.iterator();
 			while (it.hasNext()) {
-				bean = (UserBean) it.next();
-				System.out.println(bean.getId());
-				System.out.println(bean.getFirstName());
-				System.out.println(bean.getLastName());
-				System.out.println(bean.getLogin());
-				System.out.println(bean.getPassword());
-				System.out.println(bean.getDob());
-				System.out.println(bean.getRoleId());
-				System.out.println(bean.getUnSuccessfulLogin());
-				System.out.println(bean.getGender());
-				System.out.println(bean.getLastLogin());
-				System.out.println(bean.getLock());
-				System.out.println(bean.getMobileNo());
-				System.out.println(bean.getCreatedBy());
-				System.out.println(bean.getModifiedBy());
-				System.out.println(bean.getCreatedDatetime());
-				System.out.println(bean.getModifiedDatetime());
+				model = (UserModel) it.next();
+				System.out.println(model.getId());
+				System.out.println(model.getFirstName());
+				System.out.println(model.getLastName());
+				System.out.println(model.getLogin());
+				System.out.println(model.getPassword());
+				System.out.println(model.getDob());
+				System.out.println(model.getRoleId());
+				System.out.println(model.getUnSuccessfulLogin());
+				System.out.println(model.getGender());
+				System.out.println(model.getLastLogin());
+				System.out.println(model.getLock());
+				System.out.println(model.getMobileNo());
+				System.out.println(model.getCreatedBy());
+				System.out.println(model.getModifiedBy());
+				System.out.println(model.getCreatedDatetime());
+				System.out.println(model.getModifiedDatetime());
 			}
 
 		} catch (ApplicationException e) {
@@ -301,19 +304,15 @@ public class UserModelTest {
 	 * Tests authenticate User.
 	 */
 	public static void testAuthenticate() {
-
 		try {
-			UserBean bean = new UserBean();
-			bean.setLogin("admin@sunrays.co.in");
-			bean.setPassword("pass1234");
-			bean = model.authenticate(bean.getLogin(), bean.getPassword());
-			if (bean != null) {
+			UserModel model = new UserModel();
+			model = model
+					.authenticate("rahul.sahu@nenosystems.com", "pass1234");
+			if (model != null) {
 				System.out.println("Successfully login");
-
 			} else {
 				System.out.println("Invalied login Id & password");
 			}
-
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}
@@ -327,26 +326,20 @@ public class UserModelTest {
 
 	public static void testRegisterUser() throws ParseException {
 		try {
-			UserBean bean = new UserBean();
+			UserModel model = new UserModel();
 			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
-			// bean.setId(8L);
-			bean.setFirstName("vipin");
-			// bean.setLastName("kumawat");
-			bean.setLogin("rranjitch11ou1dhay@gmail.com");
-			bean.setPassword("rr");
-			bean.setConfirmPassword("4444");
-			bean.setDob(sdf.parse("11/20/2015"));
-			bean.setGender("Male");
-			bean.setRoleId(2);
-			long pk = model.registerUser(bean);
-			System.out.println("Successfully register");
-			System.out.println(bean.getFirstName());
-			System.out.println(bean.getLogin());
-			System.out.println(bean.getLastName());
-			System.out.println(bean.getDob());
-			UserBean registerbean = model.findByPK(pk);
-			if (registerbean != null) {
+			model.setFirstName("Rahul");
+			model.setLogin("rahul.sahu@nenosystems.com");
+			model.setPassword("pass1234");
+			model.setDob(sdf.parse("11/20/2015"));
+			model.setGender("Male");
+			model.setRoleId(2);
+			long pk = model.registerUser();
+			UserModel registerModel = model.findByPK(pk);
+			if (registerModel != null) {
+				System.out.println("Successfully register");
+			} else {
 				System.out.println("Test registation fail");
 			}
 		} catch (ApplicationException e) {
@@ -364,12 +357,13 @@ public class UserModelTest {
 	public static void testchangePassword() {
 
 		try {
-			UserBean bean = model.findByLogin("ranjitchoudhary20@gmail.com");
-			String oldPassword = bean.getPassword();
-			bean.setId(15l);
-			bean.setPassword("88");
-			bean.setConfirmPassword("kk");
-			String newPassword = bean.getPassword();
+			UserModel model = new UserModel();
+
+			model = model.findByLogin("rahul.sahu@nenosystems.com");
+			String oldPassword = model.getPassword();
+			model.setId(15l);
+			model.setPassword("pass");
+			String newPassword = model.getPassword();
 			try {
 				model.changePassword(15L, oldPassword, newPassword);
 				System.out.println("password has been change successfully");
@@ -390,10 +384,8 @@ public class UserModelTest {
 	 */
 	public static void testforgetPassword() {
 		try {
-			boolean b = model.forgetPassword("ranjitchoudhary20@gmail.com");
-
+			boolean b = model.forgetPassword("rahul.sahu@nenosystems.com");
 			System.out.println("Suucess : Test Forget Password Success");
-
 		} catch (RecordNotFoundException e) {
 			e.printStackTrace();
 		} catch (ApplicationException e) {
@@ -407,11 +399,11 @@ public class UserModelTest {
 	 * @throws ParseException
 	 */
 	public static void testresetPassword() {
-		UserBean bean = new UserBean();
+		UserModel model = new UserModel();
 		try {
-			bean = model.findByLogin("ranjitchoudhary20@gmail.com");
-			if (bean != null) {
-				boolean pass = model.resetPassword(bean);
+			model = model.findByLogin("rahul.sahu@nenosystems.com");
+			if (model != null) {
+				boolean pass = model.resetPassword();
 				if (pass = false) {
 					System.out.println("Test Update fail");
 				}

@@ -1,8 +1,7 @@
 package in.co.sunrays.util;
 
-import in.co.sunrays.util.DataValidator;
-
 import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -139,7 +138,6 @@ public class DataUtility {
 	 * @return
 	 */
 	public static Timestamp getTimestamp(String val) {
-
 		Timestamp timeStamp = null;
 		try {
 			timeStamp = new Timestamp((timeFormatter.parse(val)).getTime());

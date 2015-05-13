@@ -1,5 +1,6 @@
 package in.co.sunrays.ocha.model;
 
+import in.co.sunrays.common.model.BaseModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.util.JDBCDataSource;
 
@@ -196,23 +197,19 @@ public class SubjectModel extends BaseModel {
 	 * @return
 	 * @throws ApplicationException
 	 */
-	public List search(SubjectModel model, int pageNo, int pageSize)
+	public List search(int pageNo, int pageSize)
 			throws ApplicationException {
 		log.debug("Model search Started");
 		StringBuffer sql = new StringBuffer(
 				"SELECT * FROM " + getTableName()
 				+ " WHERE 1=1");
 
-		if (model != null) {
 			if (id > 0) {
 				sql.append(" AND id = " + id);
 			}
 			if (subjectName != null && subjectName.length() > 0) {
 				sql.append(" AND SUBJECT_NAME like '" + subjectName + "%'");
 			}
-
-
-		}
 
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
@@ -231,7 +228,7 @@ public class SubjectModel extends BaseModel {
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				model = new SubjectModel();
+				SubjectModel model = new SubjectModel();
 				model.setId(rs.getLong(1));
 				model.setBranchId(rs.getLong(2));
 				model.setSubjectName(rs.getString(3));
@@ -258,7 +255,7 @@ public class SubjectModel extends BaseModel {
 	 * @throws ApplicationException
 	 */
 	public List search(SubjectModel model) throws ApplicationException {
-		return search(model, 0, 0);
+		return search(0, 0);
 	}
 	
 	/**

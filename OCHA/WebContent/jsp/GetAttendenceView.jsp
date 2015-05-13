@@ -8,13 +8,12 @@
 <%@page import="in.co.sunrays.ocha.controller.EResourceListCtl"%>
 <%@page import="in.co.sunrays.ocha.model.NoticeModel"%>
 <%@page import="in.co.sunrays.ocha.controller.NoticeListCtl"%>
-<%@page import="in.co.sunrays.ocha.controller.UserListCtl"%>
+<%@page import="in.co.sunrays.common.controller.UserListCtl"%>
+<%@page import="in.co.sunrays.util.HTMLUtility"%>
 <%@page import="in.co.sunrays.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 
-<html>
-<body>
 <div class="container">
     <div class="row">
         <div  class="col-md-2">
@@ -36,7 +35,7 @@
 				</tr>
 
 				<tr>
-					<td colspan="8"><font color="red"><%=ServletUtility.getErrorMessage(request)%></font></td>
+					<td colspan="8"><%=HTMLUtility.getErrorMessage(request)%></td>
 				</tr>
 
 				<%
@@ -74,6 +73,3 @@
 					</div>
 					</div>
 					</div>
-
-</body>
-</html>

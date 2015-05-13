@@ -44,7 +44,6 @@ public class DataValidator {
 	 */
 
 	public static boolean isInteger(String val) {
-
 		if (isNotNull(val)) {
 			try {
 				int i = Integer.parseInt(val);
@@ -52,7 +51,6 @@ public class DataValidator {
 			} catch (NumberFormatException e) {
 				return false;
 			}
-
 		} else {
 			return false;
 		}

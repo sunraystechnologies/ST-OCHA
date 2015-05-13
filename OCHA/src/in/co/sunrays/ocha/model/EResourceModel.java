@@ -1,5 +1,6 @@
 package in.co.sunrays.ocha.model;
 
+import in.co.sunrays.common.model.BaseModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.util.JDBCDataSource;
 
@@ -23,7 +24,6 @@ import org.apache.log4j.Logger;
  * @Copyright (c) sunRays Technologies. All rights reserved.
  * @URL www.sunrays.co.in
  */
-
 public class EResourceModel extends BaseModel {
 
 	/**
@@ -87,7 +87,7 @@ public class EResourceModel extends BaseModel {
 			// Get auto-generated next primary key
 			conn.setAutoCommit(false); // Begin transaction
 
-			String sql = "INSERT INTO " + getTableName() + " VALUES(?,?,?,?,?)";
+			String sql = "INSERT INTO ST_ERESOURCE (ID,TABLES_CONTAINS,NAME,DETAIL) VALUES(?,?,?,?)";
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -95,23 +95,18 @@ public class EResourceModel extends BaseModel {
 			pstmt.setString(2, tablesContains);
 			pstmt.setString(3, name);
 			pstmt.setString(4, detail);
-			java.util.Date date = new Date();
-			pstmt.setTimestamp(5, new java.sql.Timestamp(date.getTime()));
+			
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
+			this.setId(pk);
+			updateCreatedInfo();
+
 
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
-			try {
-				conn.rollback();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				throw new ApplicationException(
-						"Exception : add rollback exception " + ex.getMessage());
-			}
-			throw new ApplicationException(
-					"Exception : Exception in add College");
+			JDBCDataSource.trnRollback(conn);
+			throw new ApplicationException(e);
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -132,7 +127,7 @@ public class EResourceModel extends BaseModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
 
-			String sql = "DELETE FROM " + getTableName() + " WHERE ID=?";
+			String sql = "DELETE FROM ST_ERESOURCE WHERE ID=?";
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -168,8 +163,8 @@ public class EResourceModel extends BaseModel {
 	public EResourceModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
 
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
-				+ " WHERE ID=?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_ERESOURCE WHERE ID=?");
+				
 		log.info("SQL : " + sql);
 
 		EResourceModel model = null;
@@ -185,7 +180,7 @@ public class EResourceModel extends BaseModel {
 				model.setTablesContains(rs.getString(2));
 				model.setName(rs.getString(3));
 				model.setDetail(rs.getString(4));
-				model.setCreatedOn(rs.getTimestamp(5));
+				
 
 			}
 			rs.close();
@@ -215,8 +210,8 @@ public class EResourceModel extends BaseModel {
 
 			conn.setAutoCommit(false); // Begin transaction
 
-			String sql = "UPDATE " + getTableName()
-					+ " SET TABLE_CONTAINS=?,NAME=?,DETAIL=? WHERE ID=?";
+			String sql = "UPDATE ST_ERESOURCE SET TABLES_CONTAINS=?,NAME=?,DETAIL=? WHERE ID=?";
+					
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -227,16 +222,11 @@ public class EResourceModel extends BaseModel {
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
+			updateModifiedInfo();
 		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			try {
-				conn.rollback();
-			} catch (Exception ex) {
-				throw new ApplicationException(
-						"Exception : Delete rollback exception "
-								+ ex.getMessage());
-			}
-			throw new ApplicationException("Exception in updating ERsource ");
+			log.error(e);
+			JDBCDataSource.trnRollback(conn);
+			throw new ApplicationException(e);
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -254,10 +244,10 @@ public class EResourceModel extends BaseModel {
 	 * @throws ApplicationException
 	 */
 	public List search(int pageNo, int pageSize) throws ApplicationException {
+		
 		log.debug("Model search Started");
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
-				+ " WHERE 1=1");
-
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_ERESOURCE  WHERE 1=1");
+				
 		if (id > 0) {
 			sql.append(" AND id = " + id);
 		}
@@ -294,7 +284,7 @@ public class EResourceModel extends BaseModel {
 				model.setTablesContains(rs.getString(2));
 				model.setName(rs.getString(3));
 				model.setDetail(rs.getString(4));
-				model.setCreatedOn(rs.getTimestamp(5));
+			
 				list.add(model);
 			}
 			rs.close();
@@ -339,7 +329,7 @@ public class EResourceModel extends BaseModel {
 
 	@Override
 	public String getTableName() {
-		return "ST_EResource";
+		return "ST_ERESOURCE";
 	}
 
 }

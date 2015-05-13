@@ -9,7 +9,7 @@ package in.co.sunrays.ocha.exception;
  * 
  */
 
-public class DuplicateRecordException extends Exception {
+public class DuplicateRecordException extends RuntimeException {
 
 	/**
 	 * @param msg

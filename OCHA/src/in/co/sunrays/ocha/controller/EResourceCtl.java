@@ -1,10 +1,12 @@
 package in.co.sunrays.ocha.controller;
 
-import in.co.sunrays.ocha.bean.BaseBean;
-import in.co.sunrays.ocha.bean.UserBean;
+import in.co.sunrays.common.controller.BaseCtl;
+import in.co.sunrays.common.model.BaseModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
-import in.co.sunrays.ocha.model.BaseModel;
+import in.co.sunrays.ocha.model.AppRole;
+import in.co.sunrays.ocha.model.CollegeModel;
 import in.co.sunrays.ocha.model.EResourceModel;
+import in.co.sunrays.util.AccessUtility;
 import in.co.sunrays.util.DataUtility;
 import in.co.sunrays.util.DataValidator;
 import in.co.sunrays.util.PropertyReader;
@@ -47,14 +49,19 @@ public class EResourceCtl extends BaseCtl {
 		log.debug("EResourceCtl Method validate Started");
 
 		boolean pass = true;
+		if (DataValidator.isNull(request.getParameter("tablesContains"))) {
+			request.setAttribute("tablesContains",
+					PropertyReader.getValue("error.require", "Table Contains"));
+			pass = false;
+		}
 
 		if (DataValidator.isNull(request.getParameter("name"))) {
-			request.setAttribute("error.name",
+			request.setAttribute("name",
 					PropertyReader.getValue("error.require", "Link"));
 			pass = false;
 		}
 		if (DataValidator.isNull(request.getParameter("detail"))) {
-			request.setAttribute("error.detail",
+			request.setAttribute("detail",
 					PropertyReader.getValue("error.require", "Detail"));
 			pass = false;
 		}
@@ -75,27 +82,52 @@ public class EResourceCtl extends BaseCtl {
 		model.setId(DataUtility.getLong(request.getParameter("id")));
 
 		model.setTablesContains(DataUtility.getString(request
-				.getParameter("tableContains")));
+				.getParameter("tablesContains")));
 		model.setName(DataUtility.getString(request.getParameter("name")));
 		model.setDetail(DataUtility.getString(request.getParameter("detail")));
 		model.setCreatedOn(DataUtility.getCurrentTimestamp());
 
+		model = populateModel(model, request);
 		return model;
 	}
-
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * Contains Display Logic
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		Long id = DataUtility.getLong(request.getParameter("id"));
 
+		EResourceModel model = new EResourceModel();
+
+		if (id > 0) {
+			try {
+				model = model.findByPK(id);
+				ServletUtility.setModel(model, request);
+			} catch (ApplicationException e) {
+				ServletUtility.handleException(e, request, response);
+				return;
+			}
+		}
+		ServletUtility.forwardView(ORSView.ERESOURCE_VIEW, request, response);
+	}
+	
+	/**
+	 * 
+	 * Contains Submit Logic
+	 * 
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		
+		log.debug("CollegeCtl Method doGet Started");
+		String op = DataUtility.getString(request.getParameter("operation"));
+		
 		EResourceModel model = (EResourceModel) populateModel(request);
 
 		long id = model.getId();
-
-		String op = DataUtility.getString(request.getParameter("operation"));
-
+		
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 			try {
 				if (id > 0) {
@@ -152,5 +184,15 @@ public class EResourceCtl extends BaseCtl {
 		// TODO Auto-generated method stub
 		return ORSView.ERESOURCE_VIEW;
 	}
+	@Override
+	protected void setAccess(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		super.setAccess(request);
+		
+		AccessUtility.setAddAccess("" + AppRole.ADMIN, request);
+		
+		AccessUtility.setWriteAccess("" + AppRole.ADMIN, request);
 
+		
+	}
 }

@@ -1,8 +1,7 @@
 package in.co.sunrays.ocha.model;
 
-import in.co.sunrays.ocha.bean.BaseBean;
+import in.co.sunrays.common.model.BaseModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
-import in.co.sunrays.ocha.exception.DatabaseException;
 import in.co.sunrays.util.JDBCDataSource;
 
 import java.sql.Connection;
@@ -31,7 +30,7 @@ public class NoticeModel extends BaseModel {
 
 	private String subject = null;
 	private String details = null;
-	private Timestamp createdOn = null;
+	private Date createdOn;
 	private Date expireDate;
 
 	public Date getExpireDate() {
@@ -58,11 +57,14 @@ public class NoticeModel extends BaseModel {
 		this.details = details;
 	}
 
-	public Timestamp getCreatedOn() {
+	
+
+
+	public Date getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(Timestamp createdOn) {
+	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
 
@@ -76,49 +78,32 @@ public class NoticeModel extends BaseModel {
 	public long add() throws ApplicationException {
 
 		log.debug("Model add Started");
-
 		Connection conn = null;
 		long pk = 0;
-
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = nextPK();
 			// Get auto-generated next primary key
 			conn.setAutoCommit(false); // Begin transaction
 
-			String sql = "INSERT INTO " + getTableName() + " VALUES(?,?,?,?,?)";
+			String sql = "INSERT INTO ST_NOTICE (ID,SUBJECT,DETAILS,CREATED_ON,EXPIRE_DATE) VALUES(?,?,?,?,?)";
 			log.info("SQL : " + sql);
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, pk);
 			pstmt.setString(2, subject);
 			pstmt.setString(3, details);
-			java.util.Date date = new Date();
-
-			if (date != null) {
-				pstmt.setTimestamp(4, new java.sql.Timestamp(date.getTime()));
-			} else {
-				pstmt.setTimestamp(4, null);
-			}
-			if (expireDate != null) {
-				pstmt.setDate(5, new java.sql.Date(getExpireDate().getTime()));
-			} else {
-				pstmt.setDate(5, null);
-			}
+			pstmt.setDate(4, new java.sql.Date(createdOn.getTime()));
+			pstmt.setDate(5, new java.sql.Date(expireDate.getTime()));
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
+			this.setId(pk);
+			updateCreatedInfo();
 
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
-			try {
-				conn.rollback();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				throw new ApplicationException(
-						"Exception : add rollback exception " + ex.getMessage());
-			}
-			throw new ApplicationException(
-					"Exception : Exception in add Notice");
+			JDBCDataSource.trnRollback(conn);
+			throw new ApplicationException(e);
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -131,14 +116,13 @@ public class NoticeModel extends BaseModel {
 	 * 
 	 * @throws ApplicationException
 	 */
-
 	public void delete() throws ApplicationException {
 		log.debug("Model delete Started");
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			String sql = "DELETE FROM  " + getTableName() + " WHERE ID=?";
+			String sql = "DELETE FROM  ST_NOTICE WHERE ID=?";
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -146,7 +130,6 @@ public class NoticeModel extends BaseModel {
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
-
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
 			try {
@@ -171,14 +154,11 @@ public class NoticeModel extends BaseModel {
 	 * @return
 	 * @throws ApplicationException
 	 */
-
 	public NoticeModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
-
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
-				+ " WHERE ID=?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_NOTICE  WHERE ID=?");
+			
 		log.info("SQL : " + sql);
-
 		NoticeModel model = null;
 		Connection conn = null;
 		try {
@@ -191,7 +171,7 @@ public class NoticeModel extends BaseModel {
 				model.setId(rs.getLong(1));
 				model.setSubject(rs.getString(2));
 				model.setDetails(rs.getString(3));
-				model.setCreatedOn(rs.getTimestamp(4));
+				model.setCreatedOn(rs.getDate(4));
 				model.setExpireDate(rs.getDate(5));
 			}
 			rs.close();
@@ -214,34 +194,28 @@ public class NoticeModel extends BaseModel {
 	public void update() throws ApplicationException {
 		log.debug("Model update Started");
 		Connection conn = null;
-
 		try {
-
 			conn = JDBCDataSource.getConnection();
-
 			conn.setAutoCommit(false); // Begin transaction
-			String sql = "UPDATE " + getTableName()
-					+ " SET SUBJECT=?,DETAILS=?,EXPIRE_DATE=? WHERE ID=?";
+			String sql = "UPDATE ST_NOTICE  SET SUBJECT=?,"
+					+ "DETAILS=?,CREATED_ON=?,EXPIRE_DATE=? WHERE ID=?";
+					
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, subject);
 			pstmt.setString(2, details);
-			pstmt.setDate(3, new java.sql.Date(getExpireDate().getTime()));
-			pstmt.setLong(4, id);
+			pstmt.setDate(3, new java.sql.Date(getCreatedOn().getTime()));
+			pstmt.setDate(4, new java.sql.Date(getExpireDate().getTime()));
+			pstmt.setLong(5, id);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
+			updateModifiedInfo();
 		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			try {
-				conn.rollback();
-			} catch (Exception ex) {
-				throw new ApplicationException(
-						"Exception : Delete rollback exception "
-								+ ex.getMessage());
-			}
-			throw new ApplicationException("Exception in updating Notice ");
+			log.error(e);
+			JDBCDataSource.trnRollback(conn);
+			throw new ApplicationException(e);
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -259,12 +233,9 @@ public class NoticeModel extends BaseModel {
 	 * @throws ApplicationException
 	 */
 	public List search(int pageNo, int pageSize) throws ApplicationException {
-
 		log.debug("Model search Started");
-
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
-				+ " WHERE 1=1 AND DATE(NOW()) <= DATE(EXPIRE_DATE)");
-
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_NOTICE WHERE 1=1");
+				 
 		if (id > 0) {
 			sql.append(" AND id = " + id);
 		}
@@ -299,7 +270,7 @@ public class NoticeModel extends BaseModel {
 				model.setId(rs.getLong(1));
 				model.setSubject(rs.getString(2));
 				model.setDetails(rs.getString(3));
-				model.setCreatedOn(rs.getTimestamp(4));
+				model.setCreatedOn(rs.getDate(4));
 				model.setExpireDate(rs.getDate(5));
 				list.add(model);
 			}

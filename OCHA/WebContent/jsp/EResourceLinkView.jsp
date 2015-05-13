@@ -2,13 +2,13 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="in.co.sunrays.ocha.model.CommentModel"%>
 <%@page import="in.co.sunrays.ocha.controller.ORSView"%>
-<%@page import="in.co.sunrays.ocha.controller.BaseCtl"%>
+<%@page import="in.co.sunrays.common.controller.BaseCtl"%>
 <%@page import="in.co.sunrays.ocha.model.EResourceModel"%>
 <%@page import="in.co.sunrays.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 
-<h1>E-Resource List</h1>
+<p class="st-title">E-Resource List</p>
 
 <form action="<%=ORSView.ERESOURCE_LINK_CTL%>">
 

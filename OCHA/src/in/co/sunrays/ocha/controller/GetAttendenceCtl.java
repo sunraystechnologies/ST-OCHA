@@ -1,5 +1,6 @@
 package in.co.sunrays.ocha.controller;
 
+import in.co.sunrays.common.controller.BaseCtl;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.model.AttendenceModel;
 import in.co.sunrays.util.DataUtility;
@@ -16,7 +17,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * Contains navigation logic for Comment Views.
  * 
@@ -26,8 +26,8 @@ import org.apache.log4j.Logger;
  * @Copyright (c) sunRays Technologies. All rights reserved.
  * @URL www.sunrays.co.in
  */
-public class GetAttendenceCtl extends BaseCtl{
-	
+public class GetAttendenceCtl extends BaseCtl {
+
 	/**
 	 * Logger to log the messages.
 	 */
@@ -52,12 +52,11 @@ public class GetAttendenceCtl extends BaseCtl{
 		pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader
 				.getValue("page.size")) : pageSize;
 
-
 		String op = DataUtility.getString(request.getParameter("operation"));
 
 		AttendenceModel model = new AttendenceModel();
-		long userId=(long)session.getAttribute("userId");
-model.setStudentId(userId);
+		long userId = (long) session.getAttribute("userId");
+		// model.setStudentId(userId);
 
 		try {
 
@@ -82,7 +81,8 @@ model.setStudentId(userId);
 
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
-			ServletUtility.forward(ORSView.GETATTENDENCE_VIEW, request, response);
+			ServletUtility.forward(ORSView.GETATTENDENCE_VIEW, request,
+					response);
 		} catch (ApplicationException e) {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);
@@ -95,6 +95,5 @@ model.setStudentId(userId);
 	protected String getView() {
 		return ORSView.GETATTENDENCE_VIEW;
 	}
-
 
 }

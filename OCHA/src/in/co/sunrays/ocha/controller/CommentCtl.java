@@ -1,6 +1,10 @@
 package in.co.sunrays.ocha.controller;
 
+import in.co.sunrays.common.controller.BaseCtl;
+import in.co.sunrays.common.model.BaseModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
+import in.co.sunrays.ocha.model.AttendenceModel;
+import in.co.sunrays.ocha.model.CollegeModel;
 import in.co.sunrays.ocha.model.CommentModel;
 import in.co.sunrays.ocha.model.EResourceModel;
 import in.co.sunrays.util.DataUtility;
@@ -12,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -69,31 +74,69 @@ public class CommentCtl extends BaseCtl {
 			pass = false;
 		}
 
-		log.debug("EResourceCtl Method validate Ended");
+		log.debug("CommentCtl Method validate Ended");
 
 		return pass;
 
 	}
+	@Override
+	protected BaseModel populateModel(HttpServletRequest request) {
 
-	/**
-	 * Handles GET request.
-	 * 
-	 */
+		log.debug("CommentCtl Method populatebean Started");
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession(true);
 		CommentModel model = new CommentModel();
 		model.setId(DataUtility.getLong(request.getParameter("id")));
 		model.setText(DataUtility.getString(request.getParameter("text")));
 		model.setName(DataUtility.getString(request.getParameter("name")));
 		model.setResourceId(DataUtility.getLong(request
 				.getParameter("resourceId")));
-		System.out.println("hkhkh" + request.getParameter("resourceId"));
-		long userId = (Long) session.getAttribute("userId");
-		model.setUserId(userId);
+		
+		populateModel(model, request);
+		
+		log.debug("CommentCtl Method populatemodel Ended");
+
+		return model;
+	}
+	/**
+	 * Contains Display Logic
+	 */
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		CommentModel model = new CommentModel();
 		long id = DataUtility.getLong(request.getParameter("id"));
+		if (id > 0) {
+			try {
+				CommentModel dbModel = model.findByPK(id);
+				ServletUtility.setModel(dbModel, request);
+			} catch (ApplicationException e) {
+				log.error(e);
+				ServletUtility.handleException(e, request, response);
+				return;
+			}
+		}
+
+		ServletUtility.forwardView(ORSView.COMMENT_VIEW, request, response);
+	}
+
+	/**
+	 * 
+	 * Contains Submit Logic
+	 * 
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		log.debug("CommentCtl Method doGet Started");
+
 		String op = DataUtility.getString(request.getParameter("operation"));
+
+		// get model
+		CommentModel model = (CommentModel) populateModel(request);
+
+		long id = model.getId();
+
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 			try {
 				if (id > 0) {
@@ -102,57 +145,42 @@ public class CommentCtl extends BaseCtl {
 					long pk = model.add();
 					model.setId(pk);
 				}
-
 				ServletUtility.setModel(model, request);
-
 				ServletUtility.setSuccessMessage("Data is successfully saved",
 						request);
-
 			} catch (ApplicationException e) {
 				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-		} else if (OP_DELETE.equalsIgnoreCase(op)) {
 
+		} else if (OP_DELETE.equalsIgnoreCase(op)) {
 			try {
 				model.delete();
 				ServletUtility.redirect(ORSView.COMMENT_LIST_CTL, request,
 						response);
 				return;
-
 			} catch (ApplicationException e) {
 				log.error(e);
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-
-		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
-
-			ServletUtility
-					.redirect(ORSView.COMMENT_LIST_CTL, request, response);
-			return;
-
-		} else { // View page
-			if (model.getResourceId() > 0) {
-
-				ServletUtility.setModel(model, request);
-			} else if (id > 0 || op != null) {
-
+		} else {
+			if (id > 0 || op != null) {
+				CommentModel model1;
 				try {
-					model = model.findByPK(id);
-					ServletUtility.setModel(model, request);
+					model1 = model.findByPK(id);
+					ServletUtility.setModel(model1, request);
 				} catch (ApplicationException e) {
-					log.error(e);
+
 					ServletUtility.handleException(e, request, response);
 					return;
 				}
 			}
 		}
-
-		ServletUtility.forward(ORSView.COMMENT_VIEW, request, response);
+		ServletUtility.forwardView(ORSView.COMMENT_VIEW, request, response);
+		log.debug("CommentCtl Method doGet Ended");
 	}
-
 	/**
 	 * Returns View page of Controller.
 	 */

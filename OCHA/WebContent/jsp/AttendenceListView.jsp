@@ -1,106 +1,113 @@
-
-<%@page import="in.co.sunrays.ocha.controller.AttendenceListCtl"%>
 <%@page import="in.co.sunrays.ocha.model.AttendenceModel"%>
-<%@page import="in.co.sunrays.ocha.controller.CommentListCtl"%>
-<%@page import="in.co.sunrays.ocha.model.CommentModel"%>
-<%@page import="in.co.sunrays.ocha.model.EResourceModel"%>
-<%@page import="in.co.sunrays.ocha.controller.EResourceListCtl"%>
-<%@page import="in.co.sunrays.ocha.model.NoticeModel"%>
-<%@page import="in.co.sunrays.ocha.controller.NoticeListCtl"%>
-<%@page import="in.co.sunrays.ocha.controller.UserListCtl"%>
-<%@page import="in.co.sunrays.util.ServletUtility"%>
-<%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="java.util.List"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
+<%@page import="in.co.sunrays.util.HTMLUtility"%>
+<%@page import="in.co.sunrays.common.controller.BaseCtl"%>
+<%@page import="in.co.sunrays.ocha.controller.ORSView"%>
+<%@page import="in.co.sunrays.util.AccessUtility"%>
 
-<html>
-<body>
-<div class="container">
-    <div class="row">
-        <div  class="col-md-2">
-	<%@include file="Header.jsp"%>
-        </div>
-        <div class="col-md-10">
-        	
-					<h2 align="Center"  style="margin-top: 140px">
-					<hr>
-					Attendance List
-					</h2>
-					<form action="<%=ORSView.ATTENDENCE_LIST_CTL%>" class="form-inline">
-					  	 <div class="form-group">
-					<label for="inputstudentName" class="control-label  col-md-5">Student Name</label>
-		<div class="col-md-2">
-						<input type="text" class="form-control" name="studentName" id="studentName"
-							placeholder="Student Name" value="<%=ServletUtility.getParameter("studentName", request)%>">
-					</div>
-					</div>
-					<div class="form-group">
-				<label for="inputLoginId" class="control-label col-md-4">Subject</label>
-					<div class="col-md-2">
-						<input type="text" class="form-control" name="Subject" id="Subject"
-						value="<%=ServletUtility.getParameter("Subject", request)%>"	placeholder="Subject">
-					</div>
-		</div>
-				<div class="form-group">
-						<button name="operation" value="<%=AttendenceListCtl.OP_SEARCH %>" type="submit" class="col-md-offset-1 btn btn-info">
-							<span class="btn-save-label">
-						<i class="glyphicon glyphicon-search"></i>
-						</span>
-						Search
-						</button>
-						</div>
-			<br>
-		<br>
-		<div class="table-responsive">
-						<table class="table table-bordered table-hover" >
-				<tr>
-					<th>Subject</th>
-					<th>Total Attendance</th>
-					<th>Attendance</th>
-					<th>Edit</th>
-				</tr>
+<p class="st-title">Attendance List</p>
 
-				<tr>
-					<td colspan="8"><font color="red"><%=ServletUtility.getErrorMessage(request)%></font></td>
-				</tr>
+<form action="<%=ORSView.ATTENDENCE_LIST_CTL%>">
 
-				<%
-					int pageNo = ServletUtility.getPageNo(request);
-					int pageSize = ServletUtility.getPageSize(request);
-					int index = ((pageNo - 1) * pageSize) + 1;
+	<table width="100%">
+		<tr>
+			<td align="center"><label> Student Name :</label> <input
+				type="text" name="subject"
+				value="<%=ServletUtility.getParameter("subject", request)%>">
+				&emsp; <input type="submit" name="operation"
+				value="<%=BaseCtl.OP_SEARCH%>"></td>
+		</tr>
+	</table>
+	<br>
 
-					List list = ServletUtility.getList(request);
-					Iterator<AttendenceModel> it = list.iterator();
-					while (it.hasNext()) {
-						AttendenceModel model = it.next();
-				%>
-				<tr>
-					<td><%=model.getSubject()%></td>
-						<td><%=model.getTotalAttendence()%></td>
-					<td><%=model.getAttendence()%></td>
-					<td><a href="AttendenceCtl?id=<%=model.getId()%>">Edit</a></td>
-				</tr>
-				<%
-					}
-				%>
-			</table>
-						
-			<table width="100%">
-				<tr>
-					<td ><input type="submit" name="operation"
-						value="<%=AttendenceListCtl.OP_PREVIOUS%>" class="btn btn-info"></td>
-					 <td ><input type="submit"
-						name="operation" value="<%=AttendenceListCtl.OP_DELETE%>" class="btn btn-info"></td>
-					 <td align="right"><input type="submit" name="operation"
-						value="<%=AttendenceListCtl.OP_NEXT%>" class="btn btn-info"></td>
-				</tr>
-			</table>
-			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
-				type="hidden" name="pageSize" value="<%=pageSize%>">
-						</div>
-		</form>
-					</div>
-					</div>
-					</div>
+	<table border="1" width="100%">
+		<tr>
+			<th>Select</th>
+			<th>Month</th>
+			<th>Year</th>
+			<th>Student Id</th>
+			<th>Student Name</th>
+			<th>Branch Name</th>
+			<th>Subject - Attendance (1)</th>
+			<th>Subject - Attendance (2)</th>
+			<th>Subject - Attendance (3)</th>
+			<th>Subject - Attendance (4)</th>
+			<th>Subject - Attendance (5)</th>
+			<th>Subject - Attendance (6)</th>
+			<th>Subject - Attendance (7)</th>
+			<th>Subject - Attendance (8)</th>
+			<th>Subject - Attendance (9)</th>
+			<th>Subject - Attendance (10)</th>
+			<th>Edit</th>
+		</tr>
+		<%
+			if (HTMLUtility.getErrorMessage(request).length() > 0) {
+		%>
+		<tr>
+			<td colspan="16"><%=HTMLUtility.getErrorMessage(request)%></td>
+		</tr>
+		<%
+			}
+		%>
+		<%
+			int i = 1;
+			List list = ServletUtility.getList(request);
+			Iterator<AttendenceModel> it = list.iterator();
+			while (it.hasNext()) {
+				AttendenceModel model = it.next();
+		%>
+		<tr>
+			<td><input type="checkbox" name="ids" value="<%=model.getId()%>"></td>
+			<td><%=model.getMonth()%></td>
+			<td><%=model.getYear()%></td>
+			<td><%=model.getStudentId()%></td>
+			<td><%=model.getStudentName()%></td>
+			<td><%=model.getBranchName()%></td>
+			<td><%=model.getSubject1() + " - " + model.getAttendence1()%></td>
+			<td><%=model.getSubject2() + " - " + model.getAttendence2()%></td>
+			<td><%=model.getSubject3() + " - " + model.getAttendence3()%></td>
+			<td><%=model.getSubject4() + " - " + model.getAttendence4()%></td>
+			<td><%=model.getSubject5() + " - " + model.getAttendence5()%></td>
+			<td><%=model.getSubject6() + " - " + model.getAttendence6()%></td>
+			<td><%=model.getSubject7() + " - " + model.getAttendence7()%></td>
+			<td><%=model.getSubject8() + " - " + model.getAttendence8()%></td>
+			<td><%=model.getSubject9() + " - " + model.getAttendence9()%></td>
+			<td><%=model.getSubject10() + " - "
+						+ model.getAttendence10()%></td>
+			<td>
+			<%
+					String label = (AccessUtility.canWrite(request)) ? "Edit"
+								: "View";
+				%> <a href="<%=ORSView.ATTENDENCE_CTL%>?id=<%=model.getId()%>"><%=label%></a>
 
-</body>
-</html>
+			
+			</td>
+		</tr>
+		<%
+			}
+		%>
+	</table>
+	<table width="100%">
+		<tr>
+			<td align="left"><input type="submit" name="operation"
+				value="<%=BaseCtl.OP_PREVIOUS%>"></td>
+				
+			<td><%=HTMLUtility.getSubmitButton(BaseCtl.OP_NEW,
+					AccessUtility.canAdd(request), request)%><%=HTMLUtility.getSubmitButton(BaseCtl.OP_DELETE,
+					AccessUtility.canDelete(request), request)%></td>
+			
+			<td align="right"><input type="submit" name="operation"
+				value="<%=BaseCtl.OP_NEXT%>"></td>
+		</tr>
+	</table>
+	<%
+		int pageNo = ServletUtility.getPageNo(request);
+		int pageSize = ServletUtility.getPageSize(request);
+		int index = ((pageNo - 1) * pageSize) + 1;
+	%>
+	<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
+		type="hidden" name="pageSize" value="<%=pageSize%>">
+
+</form>

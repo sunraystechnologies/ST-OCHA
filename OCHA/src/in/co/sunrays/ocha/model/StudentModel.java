@@ -1,9 +1,8 @@
 package in.co.sunrays.ocha.model;
 
-import in.co.sunrays.ocha.bean.StudentBean;
+import in.co.sunrays.common.model.BaseModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.exception.DatabaseException;
-import in.co.sunrays.ocha.exception.DuplicateRecordException;
 import in.co.sunrays.util.JDBCDataSource;
 
 import java.sql.Connection;
@@ -11,6 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,38 +28,19 @@ public class StudentModel extends BaseModel {
 
 	private static Logger log = Logger.getLogger(StudentModel.class);
 
-	/**
-	 * First Name of Student
-	 */
 	private String firstName;
-	/**
-	 * Last Name of Student
-	 */
 	private String lastName;
-	/**
-	 * Date of Birth of Student
-	 */
+	private String fatherName;
+	private String motherName;
+	private String collegeId;
+	private String departement;
+	private int semester;
+	private int year;
 	private Date dob;
-	/**
-	 * Mobile NO of Student
-	 */
+	private String gender;
 	private String mobileNo;
-	/**
-	 * Email of Student
-	 */
-	private String email;
-	/**
-	 * CollegeId of Student
-	 */
-	private long collegeId;
-	/**
-	 * College name of Student
-	 */
-	private String collegeName;
-
-	/**
-	 * accessor
-	 */
+	private String address;
+	
 
 	public String getFirstName() {
 		return firstName;
@@ -91,28 +74,68 @@ public class StudentModel extends BaseModel {
 		this.mobileNo = mobileNo;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getFatherName() {
+		return fatherName;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
 	}
 
-	public Long getCollegeId() {
+	public String getMotherName() {
+		return motherName;
+	}
+
+	public void setMotherName(String motherName) {
+		this.motherName = motherName;
+	}
+
+	public String getDepartement() {
+		return departement;
+	}
+
+	public void setDepartement(String departement) {
+		this.departement = departement;
+	}
+
+	public int getSemester() {
+		return semester;
+	}
+
+	public void setSemester(int semester) {
+		this.semester = semester;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCollegeId() {
 		return collegeId;
 	}
 
-	public void setCollegeId(Long collegeId) {
+	public void setCollegeId(String collegeId) {
 		this.collegeId = collegeId;
-	}
-
-	public String getCollegeName() {
-		return collegeName;
-	}
-
-	public void setCollegeName(String collegeName) {
-		this.collegeName = collegeName;
 	}
 
 	/**
@@ -122,22 +145,11 @@ public class StudentModel extends BaseModel {
 	 * @throws DatabaseException
 	 * 
 	 */
-	public long add() throws ApplicationException, DuplicateRecordException {
+	public long add() throws ApplicationException {
 		log.debug("Model add Started");
+
 		Connection conn = null;
-
-		// get College Name
-		// CollegeModel cModel = new CollegeModel();
-		// CollegeBean collegeBean = cModel.findByPK(bean.getCollegeId());
-		// bean.setCollegeName(collegeBean.getName());
-
-		StudentBean duplicateName = findByEmailId(email);
 		long pk = 0;
-
-		if (duplicateName != null) {
-			throw new DuplicateRecordException("Email already exists");
-		}
-
 		try {
 			conn = JDBCDataSource.getConnection();
 			pk = nextPK();
@@ -145,33 +157,37 @@ public class StudentModel extends BaseModel {
 			System.out.println(pk + " in ModelJDBC");
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn
-					.prepareStatement("INSERT INTO STUDENT VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+					.prepareStatement("INSERT INTO ST_STUDENT (ID,FIRST_NAME,LAST_NAME,"
+							+ "FATHER_NAME,MOTHER_NAME,COLLEGE_ID,DEPARTEMENT,"
+							+ "SEMESTER,YEAR,DATE_OF_BIRTH,GENDER,MOBILE_NO,ADDRESS) "
+							+ "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+							
 			pstmt.setLong(1, pk);
-			pstmt.setLong(2, collegeId);
-			pstmt.setString(3, collegeName);
-			pstmt.setString(4, firstName);
-			pstmt.setString(5, lastName);
-			pstmt.setDate(6, new java.sql.Date(dob.getTime()));
-			pstmt.setString(7, mobileNo);
-			pstmt.setString(8, email);
-			pstmt.setString(9, createdBy);
-			pstmt.setString(10, modifiedBy);
-			pstmt.setTimestamp(11, createdDatetime);
-			pstmt.setTimestamp(12, modifiedDatetime);
+			pstmt.setString(2, firstName);
+			pstmt.setString(3, lastName);
+			pstmt.setString(4, fatherName);
+			pstmt.setString(5, motherName);
+			pstmt.setString(6, collegeId);
+			pstmt.setString(7, departement);
+			pstmt.setInt(8, semester);
+			pstmt.setInt(9, year);
+			pstmt.setDate(10, new java.sql.Date(dob.getTime()));
+			pstmt.setString(11, gender);
+			pstmt.setString(12, mobileNo);
+			pstmt.setString(13, address);
+			//pstmt.setLong(14, userId);
+
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
+			this.setId(pk);
+			updateCreatedInfo();
 
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
-			try {
-				conn.rollback();
-			} catch (Exception ex) {
-				throw new ApplicationException(
-						"Exception : add rollback exception " + ex.getMessage());
-			}
-			throw new ApplicationException(
-					"Exception : Exception in add Student");
+			
+			JDBCDataSource.trnRollback(conn);
+			throw new ApplicationException(e);
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -191,8 +207,9 @@ public class StudentModel extends BaseModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
-			PreparedStatement pstmt = conn.prepareStatement("DELETE FROM "
-					+ getTableName() + " WHERE ID=?");
+			PreparedStatement pstmt = conn
+					.prepareStatement("DELETE FROM ST_STUDENT WHERE ID=?");
+
 			pstmt.setLong(1, id);
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -216,54 +233,6 @@ public class StudentModel extends BaseModel {
 	}
 
 	/**
-	 * Find User by Student
-	 * 
-	 * @param Email
-	 *            : get parameter
-	 * @return bean
-	 * @throws DatabaseException
-	 */
-
-	public StudentBean findByEmailId(String Email) throws ApplicationException {
-		log.debug("Model findBy Email Started");
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
-				+ " WHERE EMAIL=?");
-		StudentBean bean = null;
-		Connection conn = null;
-		try {
-			conn = JDBCDataSource.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			pstmt.setString(1, Email);
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				bean = new StudentBean();
-				bean.setId(rs.getLong(1));
-				bean.setCollegeId(rs.getLong(2));
-				bean.setCollegeName(rs.getString(3));
-				bean.setFirstName(rs.getString(4));
-				bean.setLastName(rs.getString(5));
-				bean.setDob(rs.getDate(6));
-				bean.setMobileNo(rs.getString(7));
-				bean.setEmail(rs.getString(8));
-				bean.setCreatedBy(rs.getString(9));
-				bean.setModifiedBy(rs.getString(10));
-				bean.setCreatedDatetime(rs.getTimestamp(11));
-				bean.setModifiedDatetime(rs.getTimestamp(12));
-
-			}
-			rs.close();
-		} catch (Exception e) {
-			log.error("Database Exception..", e);
-			throw new ApplicationException(
-					"Exception : Exception in getting User by Email");
-		} finally {
-			JDBCDataSource.closeConnection(conn);
-		}
-		log.debug("Model findBy Email End");
-		return bean;
-	}
-
-	/**
 	 * Find Student by PK
 	 * 
 	 * @param pk
@@ -272,11 +241,12 @@ public class StudentModel extends BaseModel {
 	 * @throws DatabaseException
 	 */
 
-	public StudentBean findByPK(long pk) throws ApplicationException {
+	public StudentModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByPK Started");
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
-				+ " WHERE ID=?");
-		StudentBean bean = null;
+		StringBuffer sql = new StringBuffer(
+				"SELECT * FROM ST_STUDENT  WHERE ID=?");
+
+		StudentModel model = null;
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -284,19 +254,22 @@ public class StudentModel extends BaseModel {
 			pstmt.setLong(1, pk);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				bean = new StudentBean();
-				bean.setId(rs.getLong(1));
-				bean.setCollegeId(rs.getLong(2));
-				bean.setCollegeName(rs.getString(3));
-				bean.setFirstName(rs.getString(4));
-				bean.setLastName(rs.getString(5));
-				bean.setDob(rs.getDate(6));
-				bean.setMobileNo(rs.getString(7));
-				bean.setEmail(rs.getString(8));
-				bean.setCreatedBy(rs.getString(9));
-				bean.setModifiedBy(rs.getString(10));
-				bean.setCreatedDatetime(rs.getTimestamp(11));
-				bean.setModifiedDatetime(rs.getTimestamp(12));
+				model = new StudentModel();
+				model.setId(rs.getLong(1));
+				model.setFirstName(rs.getString(2));
+				model.setLastName(rs.getString(3));
+				model.setFatherName(rs.getString(4));
+				model.setMotherName(rs.getString(5));
+				model.setCollegeId(rs.getString(6));
+				model.setDepartement(rs.getString(7));
+				model.setSemester(rs.getInt(8));
+				model.setYear(rs.getInt(9));
+				model.setDob(rs.getDate(10));
+				model.setGender(rs.getString(11));
+				model.setMobileNo(rs.getString(12));
+				model.setAddress(rs.getString(13));
+				//model.setUserId(rs.getLong(14));
+
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -307,7 +280,49 @@ public class StudentModel extends BaseModel {
 			JDBCDataSource.closeConnection(conn);
 		}
 		log.debug("Model findByPK End");
-		return bean;
+		return model;
+	}
+
+	public StudentModel findByUserId(long userId) throws ApplicationException {
+		log.debug("Model findByPK Started");
+		StringBuffer sql = new StringBuffer(
+				"SELECT * FROM ST_STAFF  WHERE USER_ID=?");
+
+		StudentModel model = null;
+		Connection conn = null;
+		try {
+			conn = JDBCDataSource.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setLong(1, userId);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				model = new StudentModel();
+				model.setId(rs.getLong(1));
+				model.setFirstName(rs.getString(2));
+				model.setLastName(rs.getString(3));
+				model.setFatherName(rs.getString(4));
+				model.setMotherName(rs.getString(5));
+				model.setCollegeId(rs.getString(6));
+				model.setDepartement(rs.getString(7));
+				model.setSemester(rs.getInt(8));
+				model.setYear(rs.getInt(9));
+				model.setDob(rs.getDate(10));
+				model.setGender(rs.getString(11));
+				model.setMobileNo(rs.getString(12));
+				model.setAddress(rs.getString(13));
+				//model.setUserId(rs.getLong(14));
+
+			}
+			rs.close();
+		} catch (Exception e) {
+			log.error("Database Exception..", e);
+			throw new ApplicationException(
+					"Exception : Exception in getting User by pk");
+		} finally {
+			JDBCDataSource.closeConnection(conn);
+		}
+		log.debug("Model findByPK End");
+		return model;
 	}
 
 	/**
@@ -317,56 +332,45 @@ public class StudentModel extends BaseModel {
 	 * @throws DatabaseException
 	 */
 
-	public void update() throws ApplicationException, DuplicateRecordException {
+	public void update() throws ApplicationException {
 		log.debug("Model update Started");
 		Connection conn = null;
-
-		StudentBean beanExist = findByEmailId(email);
-
-		// Check if updated Roll no already exist
-		if (beanExist != null && beanExist.getId() != id) {
-			throw new DuplicateRecordException("Email Id is already exist");
-		}
-
-		// get College Name
-		// CollegeModel cModel = new CollegeModel();
-		// CollegeBean collegeBean = cModel.findByPK(bean.getCollegeId());
-		// bean.setCollegeName(collegeBean.getName());
-
+		
 		try {
 
 			conn = JDBCDataSource.getConnection();
 
 			conn.setAutoCommit(false); // Begin transaction
 			PreparedStatement pstmt = conn
-					.prepareStatement("UPDATE "
-							+ getTableName()
-							+ " SET COLLEGE_ID=?,COLLEGE_NAME=?,FIRST_NAME=?,LAST_NAME=?,DATE_OF_BIRTH=?,MOBILE_NO=?,EMAIL=?,CREATED_BY=?,MODIFIED_BY=?,CREATED_DATETIME=?,MODIFIED_DATETIME=? WHERE ID=?");
-			pstmt.setLong(1, collegeId);
-			pstmt.setString(2, collegeName);
-			pstmt.setString(3, firstName);
-			pstmt.setString(4, lastName);
-			pstmt.setDate(5, new java.sql.Date(dob.getTime()));
-			pstmt.setString(6, mobileNo);
-			pstmt.setString(7, email);
-			pstmt.setString(8, createdBy);
-			pstmt.setString(9, modifiedBy);
-			pstmt.setTimestamp(10, createdDatetime);
-			pstmt.setTimestamp(11, modifiedDatetime);
-			pstmt.setLong(12, id);
+					.prepareStatement("UPDATE ST_STUDENT  SET FIRST_NAME=?,"
+							+ "LAST_NAME=?,FATHER_NAME=?,MOTHER_NAME=?,COLLEGE_ID=?,DEPARTEMENT=?,"
+							+ "SEMESTER=?,YEAR=?,DATE_OF_BIRTH=?,GENDER=?,MOBILE_NO=?,"
+							+ "ADDRESS=? WHERE ID=?");
+
+			pstmt.setString(1, firstName);
+			pstmt.setString(2, lastName);
+			pstmt.setString(3, fatherName);
+			pstmt.setString(4, motherName);
+			pstmt.setString(5, collegeId);
+			pstmt.setString(6, departement);
+			pstmt.setInt(7, semester);
+			pstmt.setInt(8, year);
+			pstmt.setDate(9, new java.sql.Date(dob.getTime()));
+			pstmt.setString(10, gender);
+			pstmt.setString(11, mobileNo);
+			pstmt.setString(12, address);
+			//pstmt.setLong(13, userId);
+			pstmt.setLong(14, id);
 			pstmt.executeUpdate();
+			
 			conn.commit(); // End transaction
 			pstmt.close();
+			
+			updateModifiedInfo();
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
-			try {
-				conn.rollback();
-			} catch (Exception ex) {
-				throw new ApplicationException(
-						"Exception : Delete rollback exception "
-								+ ex.getMessage());
-			}
-			throw new ApplicationException("Exception in updating Student ");
+			JDBCDataSource.trnRollback(conn);
+			throw new ApplicationException(e);
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -381,8 +385,8 @@ public class StudentModel extends BaseModel {
 	 * @throws DatabaseException
 	 */
 
-	public List search(StudentBean bean) throws ApplicationException {
-		return search(bean, 0, 0);
+	public List search() throws ApplicationException {
+		return search(0, 0);
 	}
 
 	/**
@@ -399,37 +403,45 @@ public class StudentModel extends BaseModel {
 	 * @throws DatabaseException
 	 */
 
-	public List search(StudentBean bean, int pageNo, int pageSize)
-			throws ApplicationException {
+	public List search(int pageNo, int pageSize) throws ApplicationException {
+
 		log.debug("Model search Started");
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
-				+ " WHERE 1=1");
+		StringBuffer sql = new StringBuffer(
+				"SELECT * FROM ST_STUDENT WHERE 1=1");
 
-		if (bean != null) {
-			if (bean.getId() > 0) {
-				sql.append(" AND id = " + bean.getId());
-			}
-			if (bean.getFirstName() != null && bean.getFirstName().length() > 0) {
-				sql.append(" AND FIRST_NAME like '" + bean.getFirstName()
-						+ "%'");
-			}
-			if (bean.getLastName() != null && bean.getLastName().length() > 0) {
-				sql.append(" AND LAST_NAME like '" + bean.getLastName() + "%'");
-			}
-			if (bean.getDob() != null && bean.getDob().getDate() > 0) {
-				sql.append(" AND DOB = " + bean.getDob());
-			}
-			if (bean.getMobileNo() != null && bean.getMobileNo().length() > 0) {
-				sql.append(" AND MOBILE_NO like '" + bean.getMobileNo() + "%'");
-			}
-			if (bean.getEmail() != null && bean.getEmail().length() > 0) {
-				sql.append(" AND EMAIL like '" + bean.getEmail() + "%'");
-			}
-			if (bean.getCollegeName() != null
-					&& bean.getCollegeName().length() > 0) {
-				sql.append(" AND COLLEGE_NAME = " + bean.getCollegeName());
-			}
+		if (id > 0) {
+			sql.append(" AND id = " + id);
+		}
+		if (firstName != null && firstName.length() > 0) {
+			sql.append(" AND FIRST_NAME like '" + firstName + "%'");
+		}
+		if (lastName != null && lastName.length() > 0) {
+			sql.append(" AND LAST_NAME like '" + lastName + "%'");
+		}
+		if (fatherName != null && fatherName.length() > 0) {
+			sql.append(" AND FATHER_NAME like '" + fatherName + "%'");
+		}
+		if (motherName != null && motherName.length() > 0) {
+			sql.append(" AND MOTHER_NAME like '" + motherName + "%'");
+		}
+		if (collegeId != null && collegeId.length() > 0) {
+			sql.append(" AND COLLEGE_ID like '" + collegeId + "%'");
+		}
+		if (departement != null && departement.length() > 0) {
+			sql.append(" AND DEPARTMENT like '" + departement + "%'");
+		}
+		if (semester != 0 && semester > 0) {
+			sql.append(" AND SEMESTER like '" + semester + "%'");
+		}
+		if (dob != null && dob.getDate() > 0) {
+			sql.append(" AND DOB = " + dob);
+		}
+		if (mobileNo != null && mobileNo.length() > 0) {
+			sql.append(" AND MOBILE_NO like '" + mobileNo + "%'");
+		}
 
+		if (address != null && address.length() > 0) {
+			sql.append(" AND ADDRESS like = " + address);
 		}
 
 		// if page size is greater than zero then apply pagination
@@ -448,20 +460,24 @@ public class StudentModel extends BaseModel {
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				bean = new StudentBean();
-				bean.setId(rs.getLong(1));
-				bean.setCollegeId(rs.getLong(2));
-				bean.setCollegeName(rs.getString(3));
-				bean.setFirstName(rs.getString(4));
-				bean.setLastName(rs.getString(5));
-				bean.setDob(rs.getDate(6));
-				bean.setMobileNo(rs.getString(7));
-				bean.setEmail(rs.getString(8));
-				bean.setCreatedBy(rs.getString(9));
-				bean.setModifiedBy(rs.getString(10));
-				bean.setCreatedDatetime(rs.getTimestamp(11));
-				bean.setModifiedDatetime(rs.getTimestamp(12));
-				list.add(bean);
+				StudentModel model = new StudentModel();
+				model.setId(rs.getLong(1));
+				model.setFirstName(rs.getString(2));
+				model.setLastName(rs.getString(3));
+				model.setFatherName(rs.getString(4));
+				model.setMotherName(rs.getString(5));
+				model.setCollegeId(rs.getString(6));
+				model.setDepartement(rs.getString(7));
+				model.setSemester(rs.getInt(8));
+				model.setYear(rs.getInt(9));
+				model.setDob(rs.getDate(10));
+				model.setGender(rs.getString(11));
+				model.setMobileNo(rs.getString(12));
+				model.setAddress(rs.getString(13));
+
+				//model.setUserId(rs.getLong(14));
+
+				list.add(model);
 			}
 			rs.close();
 		} catch (Exception e) {

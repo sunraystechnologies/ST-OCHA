@@ -1,14 +1,15 @@
 package in.co.sunrays.util;
 
-import in.co.sunrays.ocha.bean.BaseBean;
-import in.co.sunrays.ocha.controller.BaseCtl;
+import in.co.sunrays.common.controller.BaseCtl;
+
+import in.co.sunrays.common.model.BaseModel;
+import in.co.sunrays.common.model.UserModel;
 import in.co.sunrays.ocha.controller.ORSView;
-import in.co.sunrays.ocha.model.BaseModel;
+import in.co.sunrays.ocha.model.AppRole;
 
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -112,6 +113,7 @@ public class ServletUtility {
 	/**
 	 * returns all input error messages
 	 * 
+	 * @deprecated Use HTMLUtil method instead
 	 * @param request
 	 * @return
 	 */
@@ -166,12 +168,14 @@ public class ServletUtility {
 	 * @return
 	 */
 	public static String getErrorMessage(HttpServletRequest request) {
+
 		String val = (String) request.getAttribute(BaseCtl.MSG_ERROR);
+
 		if (val == null) {
-			return "";
-		} else {
-			return val;
+			val = request.getParameter(BaseCtl.MSG_ERROR);
 		}
+		val = (val == null) ? "" : val;
+		return val;
 	}
 
 	/**
@@ -199,31 +203,63 @@ public class ServletUtility {
 		}
 	}
 
-	/**
-	 * Sets default Bean to request
-	 * 
-	 * @param bean
-	 * @param request
-	 */
-	public static void setBean(BaseBean bean, HttpServletRequest request) {
-		request.setAttribute("bean", bean);
-	}
-
 	public static void setModel(BaseModel model, HttpServletRequest request) {
 		request.setAttribute("model", model);
 	}
 
 	/**
-	 * Gets default bean from request
+	 * Set User Model in the session after login
+	 * 
+	 * @param model
+	 * @param request
+	 */
+	public static void setUserModel(UserModel model, HttpServletRequest request) {
+		request.getSession().setAttribute("user", model);
+	}
+
+	/**
+	 * gets UserModel from the session
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static UserModel getUserModel(HttpServletRequest request) {
+		return (UserModel) request.getSession().getAttribute("user");
+	}
+
+	/**
+	 * Checkes if user is logged in
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static boolean isLoggedIn(HttpServletRequest request) {
+		UserModel model = (UserModel) request.getSession().getAttribute("user");
+		return model != null;
+	}
+
+	/**
+	 * Returns logged in user role
 	 * 
 	 * @param request
 	 * @return
 	 */
 
-	public static BaseBean getBean(HttpServletRequest request) {
-		return (BaseBean) request.getAttribute("bean");
+	public static long getRole(HttpServletRequest request) {
+		UserModel model = (UserModel) request.getSession().getAttribute("user");
+		if (model != null) {
+			return model.getRoleId();
+		} else {
+			return AppRole.GUEST;
+		}
 	}
 
+	/**
+	 * gets Model from request scope
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public static BaseModel getModel(HttpServletRequest request) {
 		return (BaseModel) request.getAttribute("model");
 	}

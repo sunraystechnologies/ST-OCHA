@@ -1,12 +1,13 @@
-
 <%@page import="in.co.sunrays.ocha.controller.ORSView"%>
-<%@page import="in.co.sunrays.ocha.controller.BaseCtl"%>
+<%@page import="in.co.sunrays.common.controller.BaseCtl"%>
 <%@page import="in.co.sunrays.ocha.model.EResourceModel"%>
 <%@page import="in.co.sunrays.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="in.co.sunrays.util.AccessUtility"%>
+<%@page import="in.co.sunrays.util.HTMLUtility"%>
 
-<h1>ERsource List</h1>
+<p class="st-title">ERsource List</p>
 
 <form action="<%=ORSView.ERESOURCE_LIST_CTL%>">
 
@@ -21,11 +22,10 @@
 		</tr>
 	</table>
 	<br>
-
-	<table border="1" width="100%">
-
+	<table border="0" width="100%">
 		<tr>
-			<th>Sq.No</th>
+			<th>Select</th>
+			<th>Table Contains</th>
 			<th>Link</th>
 			<th>Details</th>
 			<th>Edit</th>
@@ -39,10 +39,15 @@
 				EResourceModel model = it.next();
 		%>
 		<tr>
-			<td><%=i++%></td>
+			<td><input type="checkbox" name="ids" value="<%=model.getId()%>"></td>
+			<td><%=model.getTablesContains()%></td>
 			<td><%=model.getName()%></td>
 			<td><%=model.getDetail()%></td>
-			<td><a href="EResourceCtl?id=<%=model.getId()%>">Edit</a></td>
+			<td>
+			<%
+					String label = (AccessUtility.canWrite(request)) ? "Edit"
+								: "View";
+			%> <a href="<%=ORSView.ERESOURCE_CTL%>?id=<%=model.getId()%>"><%=label%></a>
 		</tr>
 		<%
 			}
@@ -53,9 +58,11 @@
 		<tr>
 			<td align="left"><input type="submit" name="operation"
 				value="<%=BaseCtl.OP_PREVIOUS%>"></td>
-			<td colspan="3" align="center"><input type="submit"
-				name="operation" value="<%=BaseCtl.OP_NEW%>"> <input
-				type="submit" name="operation" value="<%=BaseCtl.OP_DELETE%>"></td>
+				
+			<td><%=HTMLUtility.getSubmitButton(BaseCtl.OP_NEW,
+					AccessUtility.canAdd(request), request)%><%=HTMLUtility.getSubmitButton(BaseCtl.OP_DELETE,
+					AccessUtility.canDelete(request), request)%></td>
+			
 			<td align="right"><input type="submit" name="operation"
 				value="<%=BaseCtl.OP_NEXT%>"></td>
 		</tr>

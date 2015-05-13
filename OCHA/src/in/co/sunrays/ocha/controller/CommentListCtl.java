@@ -1,8 +1,8 @@
 package in.co.sunrays.ocha.controller;
 
+import in.co.sunrays.common.controller.BaseCtl;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.ocha.model.CommentModel;
-import in.co.sunrays.ocha.model.EResourceModel;
 import in.co.sunrays.util.DataUtility;
 import in.co.sunrays.util.PropertyReader;
 import in.co.sunrays.util.ServletUtility;
@@ -45,6 +45,8 @@ public class CommentListCtl extends BaseCtl {
 				.getValue("page.size")) : pageSize;
 
 		String op = DataUtility.getString(request.getParameter("operation"));
+		// get the selected checkbox ids array for delete list
+		String[] ids = request.getParameterValues("ids");
 
 		CommentModel model = new CommentModel();
 
@@ -60,7 +62,18 @@ public class CommentListCtl extends BaseCtl {
 				} else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
 					pageNo--;
 				}
-
+			} else if (OP_DELETE.equalsIgnoreCase(op)) {
+				pageNo = 1;
+				if (ids != null && ids.length > 0) {
+					CommentModel deletebean = new CommentModel();
+					for (String id : ids) {
+						deletebean.setId(DataUtility.getInt(id));
+						deletebean.delete();
+					}
+				} else {
+					ServletUtility.setErrorMessage(
+							"Select at least one record", request);
+				}
 			}
 			list = model.search(pageNo, pageSize);
 			ServletUtility.setList(list, request);
@@ -71,8 +84,8 @@ public class CommentListCtl extends BaseCtl {
 
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
-			ServletUtility
-					.forward(ORSView.COMMENT_LIST_VIEW, request, response);
+			ServletUtility.forwardView(ORSView.COMMENT_LIST_VIEW, request,
+					response);
 		} catch (ApplicationException e) {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);

@@ -1,5 +1,6 @@
 package in.co.sunrays.ocha.controller;
 
+import in.co.sunrays.common.controller.BaseCtl;
 import in.co.sunrays.util.ServletUtility;
 
 import java.io.IOException;
@@ -26,9 +27,8 @@ public class WelcomeCtl extends BaseCtl {
 	/**
 	 * Logger to log the messages.
 	 */
-
 	private static Logger log = Logger.getLogger(WelcomeCtl.class);
-	
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -37,7 +37,7 @@ public class WelcomeCtl extends BaseCtl {
 			HttpServletResponse response) throws ServletException, IOException {
 		log.debug("WelcomeCtl Method doGet Started");
 
-		ServletUtility.forward(ORSView.WELCOME_VIEW , request, response);
+		ServletUtility.forwardView(ORSView.WELCOME_VIEW, request, response);
 
 		log.debug("WelcomeCtl Method doGet Ended");
 	}
@@ -49,6 +49,5 @@ public class WelcomeCtl extends BaseCtl {
 	protected String getView() {
 		return ORSView.WELCOME_VIEW;
 	}
-	
-   
+
 }

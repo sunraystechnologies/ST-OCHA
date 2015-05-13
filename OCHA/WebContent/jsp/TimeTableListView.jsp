@@ -1,72 +1,89 @@
-<%@page import="java.util.ResourceBundle"%>
+<%@page import="in.co.sunrays.ocha.model.TimeTableModel"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.List"%>
+<%@page import="in.co.sunrays.util.ServletUtility"%>
+<%@page import="in.co.sunrays.util.HTMLUtility"%>
+<%@page import="in.co.sunrays.common.controller.BaseCtl"%>
 <%@page import="in.co.sunrays.ocha.controller.ORSView"%>
-<%@page import="java.io.File"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>File Upload </title>
-    </head>
- 
-    <body> 
-    <div class="container">
-    <div class="row">
-        <div  class="col-md-2">
-        <%@include file="Header.jsp"%>
-        </div>
-        <div class="col-md-10">
-        	
-					<h2 align="Center"  style="margin-top: 140px">
-					<hr>
-					Time Table  List
-					</h2>
-					<div class="table-responsive">
-						<table class="table table-bordered table-hover" >
-				<tr>
-				<th>ID</th>
-					<th>FileName</th>
-             <th>Download</th>
-         <%
-			if (userBean.getRoleId() == RoleModel.ADMIN  || userBean.getRoleId() == RoleModel.STAFF) {
-		%>      <th>Delete</th>
-		<%} %>
-				</tr>
-    <% 
-      final  ResourceBundle resourceBundle = ResourceBundle
-	.getBundle("in.co.sunrays.bundle.system");
-    String UPLOAD_DIRECTORY = resourceBundle.getString("log.path");
-    File jsp = new File(UPLOAD_DIRECTORY);
+<%@page import="in.co.sunrays.util.AccessUtility"%>
 
- String f = "";
- File[] list = jsp.listFiles();
-int index=1;
- for(int i=0;i<list.length;i++)
- {
+<p class="st-title">Time Table List</p>
 
-    f = list[i].getName();
+<form action="<%=ORSView.TIMETABLE_LIST_CTL%>">
 
+	<table width="100%">
+		<tr>
+			<td align="center"><label> Subject :</label> <input type="text"
+				name="subject"
+				value="<%=ServletUtility.getParameter("subject", request)%>">
+				&emsp; <input type="submit" name="operation"
+				value="<%=BaseCtl.OP_SEARCH%>"></td>
+		</tr>
+	</table>
+	<br>
 
-	%>
-	<tr>
-		<td><%=index+i%></td>
-		<td><%=f%></td>
-<td><a href="<%=ORSView.Download_CTL %>?fileName=<%=f%>&operation=Download">Download</a></td>
- <%
-			if (userBean.getRoleId() == RoleModel.ADMIN) {
+	<table border="1" width="100%">
+		<tr>
+			<th>Select</th>
+			<th>Date</th>
+			<th>Time</th>
+			<th>Subject</th>
+			<th>Branch</th>
+			<th>Year</th>
+			<th>Semester</th>
+			<th>Faculty</th>
+			<th>Edit</th>
+		</tr>
+		<%
+			if (HTMLUtility.getErrorMessage(request).length() > 0) {
 		%>
-<td><a href="<%=ORSView.Download_CTL %>?fileName=<%=f%>&operation=Delete">Delete</a></td>
-<%} %>
-	</tr>
+		<tr>
+			<td colspan="8"><%=HTMLUtility.getErrorMessage(request)%></td>
+		</tr>
+		<%
+			}
+		%>
+		<%
+			int i = 1;
+			List list = ServletUtility.getList(request);
+			Iterator<TimeTableModel> it = list.iterator();
+			while (it.hasNext()) {
+				TimeTableModel model = it.next();
+		%>
+		<tr>
+			<td><%=i++%></td>
+			<td><%=model.getDate()%></td>
+			<td><%=model.getTime()%></td>
+			<td><%=model.getSubject()%></td>
+			<td><%=model.getBranch()%></td>
+			<td><%=model.getYear()%></td>
+			<td><%=model.getSemester()%></td>
+			<td><%=model.getFaculty()%></td>
+			<td><a href="#">Edit</a></td>
+		</tr>
+		<%
+			}
+		%>
+	</table>
+	<table width="100%">
+		<tr>
+			<td align="left"><input type="submit" name="operation"
+				value="<%=BaseCtl.OP_PREVIOUS%>"></td>
+				
+			<td><%=HTMLUtility.getSubmitButton(BaseCtl.OP_NEW,
+					AccessUtility.canAdd(request), request)%><%=HTMLUtility.getSubmitButton(BaseCtl.OP_DELETE,
+					AccessUtility.canDelete(request), request)%></td>
+				
+			<td align="right"><input type="submit" name="operation"
+				value="<%=BaseCtl.OP_NEXT%>"></td>
+		</tr>
+	</table>
 	<%
-		}
+		int pageNo = ServletUtility.getPageNo(request);
+		int pageSize = ServletUtility.getPageSize(request);
+		int index = ((pageNo - 1) * pageSize) + 1;
 	%>
-						</table>
-						</div>
-					</div>
-					</div>
-					</div>
-	
-    </body>
-</html>
+	<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
+		type="hidden" name="pageSize" value="<%=pageSize%>">
+
+</form>

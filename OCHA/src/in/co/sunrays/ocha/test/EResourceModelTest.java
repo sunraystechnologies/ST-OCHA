@@ -1,13 +1,12 @@
 package in.co.sunrays.ocha.test;
 
+import in.co.sunrays.ocha.exception.ApplicationException;
+import in.co.sunrays.ocha.exception.DuplicateRecordException;
+import in.co.sunrays.ocha.model.EResourceModel;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import in.co.sunrays.ocha.exception.ApplicationException;
-import in.co.sunrays.ocha.exception.DuplicateRecordException;
-import in.co.sunrays.ocha.model.CommentModel;
-import in.co.sunrays.ocha.model.EResourceModel;
 
 public class EResourceModelTest {
 	public static EResourceModel model = new EResourceModel();

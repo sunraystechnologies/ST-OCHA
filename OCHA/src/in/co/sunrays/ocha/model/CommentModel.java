@@ -1,5 +1,6 @@
 package in.co.sunrays.ocha.model;
 
+import in.co.sunrays.common.model.BaseModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
 import in.co.sunrays.util.JDBCDataSource;
 
@@ -96,8 +97,9 @@ public class CommentModel extends BaseModel {
 
 			conn.setAutoCommit(false); // Begin transaction
 
-			String sql = "INSERT INTO " + getTableName()
-					+ " VALUES(?,?,?,?,?,?)";
+			String sql = "INSERT INTO ST_COMMENT (ID,RESOURCEID,TEXT,CREATED_ON,"
+					+ "USER_ID,RESOURCENAME)VALUES(?,?,?,?,?,?)";
+				 
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -111,6 +113,8 @@ public class CommentModel extends BaseModel {
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
 			pstmt.close();
+			this.setId(pk);
+			updateCreatedInfo();
 
 		} catch (Exception e) {
 			log.error("Database Exception..", e);
@@ -143,7 +147,7 @@ public class CommentModel extends BaseModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false); // Begin transaction
 
-			String sql = "DELETE FROM " + getTableName() + " WHERE ID=?";
+			String sql = "DELETE FROM ST_COMMENT WHERE ID=?";
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -180,8 +184,8 @@ public class CommentModel extends BaseModel {
 	public CommentModel findByPK(long pk) throws ApplicationException {
 		log.debug("Model findByName Started");
 
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
-				+ " WHERE ID=?");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_COMMENT WHERE ID=?");
+			 
 		log.info("SQL : " + sql);
 
 		CommentModel model = null;
@@ -229,7 +233,7 @@ public class CommentModel extends BaseModel {
 
 			conn.setAutoCommit(false); // Begin transaction
 
-			String sql = "UPDATE " + getTableName() + " SET text=? WHERE ID=?";
+			String sql = "UPDATE ST_COMMENT SET text=? WHERE ID=?";
 			log.info("SQL : " + sql);
 
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -268,8 +272,8 @@ public class CommentModel extends BaseModel {
 
 		log.debug("Model search Started");
 
-		StringBuffer sql = new StringBuffer("SELECT * FROM " + getTableName()
-				+ " WHERE 1=1");
+		StringBuffer sql = new StringBuffer("SELECT * FROM ST_COMMENT WHERE 1=1");
+				
 
 		if (id > 0) {
 			sql.append(" AND id = " + id);

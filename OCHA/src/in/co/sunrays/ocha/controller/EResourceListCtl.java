@@ -1,8 +1,11 @@
 package in.co.sunrays.ocha.controller;
 
+import in.co.sunrays.common.controller.BaseCtl;
+import in.co.sunrays.common.model.BaseModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
-import in.co.sunrays.ocha.model.BaseModel;
+import in.co.sunrays.ocha.model.AppRole;
 import in.co.sunrays.ocha.model.EResourceModel;
+import in.co.sunrays.util.AccessUtility;
 import in.co.sunrays.util.DataUtility;
 import in.co.sunrays.util.PropertyReader;
 import in.co.sunrays.util.ServletUtility;
@@ -50,6 +53,9 @@ public class EResourceListCtl extends BaseCtl {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 
+		// get the selected checkbox ids array for delete list
+		String[] ids = request.getParameterValues("ids");
+
 		EResourceModel model = (EResourceModel) populateModel(request);
 
 		try {
@@ -65,14 +71,25 @@ public class EResourceListCtl extends BaseCtl {
 					pageNo--;
 				}
 			} else if (OP_NEW.equalsIgnoreCase(op)) {
-
 				ServletUtility.redirect(ORSView.ERESOURCE_CTL, request,
 						response);
 				return;
+			} else if (OP_DELETE.equalsIgnoreCase(op)) {
+				pageNo = 1;
+				if (ids != null && ids.length > 0) {
+					EResourceModel deletebean = new EResourceModel();
+					for (String id : ids) {
+						deletebean.setId(DataUtility.getInt(id));
+						deletebean.delete();
+					}
+				} else {
+					ServletUtility.setErrorMessage(
+							"Select at least one record", request);
+				}
 			}
 
 			List list = model.search(pageNo, pageSize);
-			
+
 			if (list == null || list.size() == 0) {
 				ServletUtility.setErrorMessage("No record found ", request);
 			}
@@ -80,14 +97,15 @@ public class EResourceListCtl extends BaseCtl {
 			ServletUtility.setPageNo(pageNo, request);
 			ServletUtility.setPageSize(pageSize, request);
 
-			ServletUtility.forwardView(ORSView.ERESOURCE_List_VIEW, request,response);
-		
+			ServletUtility.forwardView(ORSView.ERESOURCE_List_VIEW, request,
+					response);
+
 		} catch (ApplicationException e) {
 			log.error(e);
 			ServletUtility.handleException(e, request, response);
 			return;
 		}
-		
+
 		log.debug("EResourceListCtl doGet End");
 	}
 
@@ -95,5 +113,12 @@ public class EResourceListCtl extends BaseCtl {
 	protected String getView() {
 		return ORSView.ERESOURCE_List_VIEW;
 	}
-
+	@Override
+	protected void setAccess(HttpServletRequest request) {
+		super.setAccess(request);
+		AccessUtility.setAddAccess(""+ AppRole.ADMIN,
+				request);
+		AccessUtility.setWriteAccess(""+ AppRole.ADMIN,
+				request);
+	}
 }

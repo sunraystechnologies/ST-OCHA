@@ -1,8 +1,9 @@
 package in.co.sunrays.ocha.controller;
 
-import in.co.sunrays.ocha.bean.UserBean;
+import in.co.sunrays.common.controller.BaseCtl;
+import in.co.sunrays.common.model.BaseModel;
+import in.co.sunrays.common.model.UserModel;
 import in.co.sunrays.ocha.exception.ApplicationException;
-import in.co.sunrays.ocha.model.BaseModel;
 import in.co.sunrays.ocha.model.CommentModel;
 import in.co.sunrays.ocha.model.EResourceModel;
 import in.co.sunrays.util.DataUtility;
@@ -73,12 +74,12 @@ public class EResourceLinkCtl extends BaseCtl {
 			commentModel.setResourceId(DataUtility.getLong(request
 					.getParameter("linkId")));
 
-			UserBean userBean = (UserBean) request.getSession().getAttribute(
-					"user");
-			commentModel.setUserId(userBean.getId());
-			commentModel.setName(userBean.getFirstName() + " "
-					+ userBean.getLastName());
-			
+			UserModel userModel = (UserModel) request.getSession()
+					.getAttribute("user");
+			commentModel.setUserId(userModel.getId());
+			commentModel.setName(userModel.getFirstName() + " "
+					+ userModel.getLastName());
+
 			try {
 				commentModel.add();
 			} catch (ApplicationException e) {
@@ -86,7 +87,7 @@ public class EResourceLinkCtl extends BaseCtl {
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
-			
+
 			op = OP_SEARCH;
 		}
 
