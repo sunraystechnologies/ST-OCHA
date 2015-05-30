@@ -37,7 +37,7 @@
 				<th>Father Name</th>
 				<th>Mother Name</th>
 				<th>College Id</th>
-				<th>Departement</th>
+				<th>Department</th>
 				<th>Semester</th>
 				<th>Year</th>
 				<th>Date Of Birth</th>

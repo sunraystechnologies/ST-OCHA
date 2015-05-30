@@ -1,20 +1,24 @@
 package in.co.sunrays.ocha.controller;
 
-import in.co.sunrays.common.controller.BaseCtl;
-import in.co.sunrays.ocha.exception.ApplicationException;
-import in.co.sunrays.ocha.model.TimeTableModel;
-import in.co.sunrays.util.DataUtility;
-import in.co.sunrays.util.PropertyReader;
-import in.co.sunrays.util.ServletUtility;
-
 import java.io.IOException;
 import java.util.List;
+
+import in.co.sunrays.common.controller.BaseCtl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+
+import in.co.sunrays.ocha.exception.ApplicationException;
+import in.co.sunrays.ocha.model.AppRole;
+import in.co.sunrays.ocha.model.AttendenceModel;
+import in.co.sunrays.ocha.model.TimeTableModel;
+import in.co.sunrays.util.AccessUtility;
+import in.co.sunrays.util.DataUtility;
+import in.co.sunrays.util.PropertyReader;
+import in.co.sunrays.util.ServletUtility;
 
 /**
  * Contains navigation logic for Comment Views.
@@ -39,7 +43,7 @@ public class TimeTableListCtl extends BaseCtl {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		log.debug("AttendenceListCtl doGet Start");
+		log.debug("TimeTableListCtl doGet Start");
 
 		List list = null;
 
@@ -53,6 +57,8 @@ public class TimeTableListCtl extends BaseCtl {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
 
+		String[] ids = request.getParameterValues("ids");
+
 		TimeTableModel model = new TimeTableModel();
 
 		model.setSubject(DataUtility.getString(request.getParameter("subject")));
@@ -65,8 +71,23 @@ public class TimeTableListCtl extends BaseCtl {
 				} else if (OP_NEXT.equalsIgnoreCase(op)) {
 					pageNo++;
 				} else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
-					ServletUtility.redirect(ORSView.TIMETABLE_LIST_CTL, request, response);
-					return;
+					pageNo--;
+				}
+			} else if (OP_NEW.equalsIgnoreCase(op)) {
+				ServletUtility.redirect(ORSView.TIMETABLE_CTL, request,
+						response);
+				return;
+			} else if (OP_DELETE.equalsIgnoreCase(op)) {
+				pageNo = 1;
+				if (ids != null && ids.length > 0) {
+					TimeTableModel deletebean = new TimeTableModel();
+					for (String id : ids) {
+						deletebean.setId(DataUtility.getInt(id));
+						deletebean.delete();
+					}
+				} else {
+					ServletUtility.setErrorMessage(
+							"Select at least one record", request);
 				}
 			}
 			list = model.search(pageNo, pageSize);
@@ -95,5 +116,12 @@ public class TimeTableListCtl extends BaseCtl {
 	protected String getView() {
 		return ORSView.TIMETABLE_LIST_VIEW;
 	}
-
+	@Override
+	protected void setAccess(HttpServletRequest request) {
+		super.setAccess(request);
+		AccessUtility.setAddAccess(""+ AppRole.ADMIN,
+				request);
+		AccessUtility.setWriteAccess(""+ AppRole.ADMIN,
+				request);
+	}
 }

@@ -1,11 +1,13 @@
+<%@page import="in.co.sunrays.common.model.UserModel"%>
 <%@page import="in.co.sunrays.ocha.model.TimeTableModel"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.List"%>
 <%@page import="in.co.sunrays.util.ServletUtility"%>
-<%@page import="in.co.sunrays.util.HTMLUtility"%>
 <%@page import="in.co.sunrays.common.controller.BaseCtl"%>
 <%@page import="in.co.sunrays.ocha.controller.ORSView"%>
 <%@page import="in.co.sunrays.util.AccessUtility"%>
+<%@page import="in.co.sunrays.util.HTMLUtility"%>
+<%@page import= "in.co.sunrays.ocha.model.AppRole"%>
 
 <p class="st-title">Time Table List</p>
 
@@ -32,13 +34,12 @@
 			<th>Year</th>
 			<th>Semester</th>
 			<th>Faculty</th>
-			<th>Edit</th>
 		</tr>
 		<%
-			if (HTMLUtility.getErrorMessage(request).length() > 0) {
+			if (ServletUtility.getErrorMessage(request).length() > 0) {
 		%>
 		<tr>
-			<td colspan="8"><%=HTMLUtility.getErrorMessage(request)%></td>
+			<td colspan="8"><font color="red"><%=ServletUtility.getErrorMessage(request)%></font></td>
 		</tr>
 		<%
 			}
@@ -51,7 +52,18 @@
 				TimeTableModel model = it.next();
 		%>
 		<tr>
-			<td><%=i++%></td>
+			<td>
+				<%
+					if (session.getAttribute("user") != null
+								&& ((UserModel) session.getAttribute("user"))
+										.getRoleId() == AppRole.ADMIN) {
+				%> <input type="checkbox" name="ids" value="<%=model.getId()%>">
+				<%
+					} else {
+				%><%=i%> <%
+ 	}
+ %>
+			</td>
 			<td><%=model.getDate()%></td>
 			<td><%=model.getTime()%></td>
 			<td><%=model.getSubject()%></td>
@@ -59,9 +71,9 @@
 			<td><%=model.getYear()%></td>
 			<td><%=model.getSemester()%></td>
 			<td><%=model.getFaculty()%></td>
-			<td><a href="#">Edit</a></td>
 		</tr>
 		<%
+			i++;
 			}
 		%>
 	</table>
@@ -69,11 +81,16 @@
 		<tr>
 			<td align="left"><input type="submit" name="operation"
 				value="<%=BaseCtl.OP_PREVIOUS%>"></td>
-				
-			<td><%=HTMLUtility.getSubmitButton(BaseCtl.OP_NEW,
+			<td colspan="3" align="center">
+				<%
+					if (session.getAttribute("user") != null
+							&& ((UserModel) session.getAttribute("user")).getRoleId() == AppRole.ADMIN) {
+				%> <td colspan="3" align="center"><%=HTMLUtility.getSubmitButton(BaseCtl.OP_NEW,
 					AccessUtility.canAdd(request), request)%><%=HTMLUtility.getSubmitButton(BaseCtl.OP_DELETE,
-					AccessUtility.canDelete(request), request)%></td>
-				
+					AccessUtility.canDelete(request), request)%></td> <%
+ 	}
+ %>
+			</td>
 			<td align="right"><input type="submit" name="operation"
 				value="<%=BaseCtl.OP_NEXT%>"></td>
 		</tr>

@@ -36,7 +36,6 @@ public class StudentCtl extends BaseCtl {
 	/**
 	 * Logger to log the messages.
 	 */
-	public static final String OP_SAVE_UP = "Save";
 	private static Logger log = Logger.getLogger(StudentCtl.class);
 
 	/**
@@ -163,6 +162,12 @@ public class StudentCtl extends BaseCtl {
 					PropertyReader.getValue("error.require", "Address"));
 			pass = false;
 		}
+		if (DataValidator.isNull(request.getParameter("userId"))) {
+			request.setAttribute("userId",
+					PropertyReader.getValue("error.require", "User Id"));
+			pass = false;
+		}
+
 		
 
 		log.debug("StudentCtl Method validate Ended    " +pass);
@@ -200,7 +205,7 @@ public class StudentCtl extends BaseCtl {
 		model.setMobileNo(DataUtility.getString(request
 				.getParameter("mobileNo")));
 		model.setAddress(DataUtility.getString(request.getParameter("address")));
-		//model.setUserId(DataUtility.getLong(request.getParameter("userId")));
+		model.setUserId(DataUtility.getLong(request.getParameter("userId")));
 		
 		populateModel(model, request);
 
@@ -225,7 +230,7 @@ public class StudentCtl extends BaseCtl {
 
 		long id = model.getId();
 
-		if (OP_SAVE_UP.equalsIgnoreCase(op)) {
+		if (OP_SAVE.equalsIgnoreCase(op)) {
 			try {
 				if (id > 0) {
 					model.update();

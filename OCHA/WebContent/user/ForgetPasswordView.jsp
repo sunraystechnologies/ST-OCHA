@@ -14,7 +14,7 @@
 <%=HTMLUtility.getSuccessMessage(request)%>
 <%=HTMLUtility.getErrorMessage(request)%>
 
-<form action="<%=ORSView.FORGET_PASSWORD_CTL%>" method="GET">
+<form action="<%=ORSView.FORGET_PASSWORD_CTL%>" method="Post">
 
 	<table>
 		<tr>

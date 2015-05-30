@@ -29,7 +29,6 @@ public class CollegeCtl extends BaseCtl {
 	/**
 	 * Logger to log the messages.
 	 */
-	public static final String OP_SAVE_UP = "Save";
 	private static Logger log = Logger.getLogger(StudentCtl.class);
 
 	/**
@@ -113,7 +112,7 @@ public class CollegeCtl extends BaseCtl {
 		System.out.println("userrrr "+model.getCreatedBy());
 		long id = model.getId();
 
-		if (OP_SAVE_UP.equalsIgnoreCase(op)) {
+		if (OP_SAVE.equalsIgnoreCase(op)) {
 			try {
 				if (id > 0) {
 					model.update();

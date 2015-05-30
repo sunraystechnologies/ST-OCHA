@@ -6,7 +6,6 @@
 <%@page import="in.co.sunrays.util.HTMLUtility"%>
 <%@page import="in.co.sunrays.util.DataUtility"%>
 <%@page import="in.co.sunrays.util.ServletUtility"%>
-<%@page import="in.co.sunrays.util.AccessUtility"%>
 <jsp:useBean id="model" class="in.co.sunrays.ocha.model.TimeTableModel"
 	scope="request"></jsp:useBean>
 <%
@@ -20,8 +19,7 @@
 	facMap.put("Mahendra Sharama", "Mahendra Sharama");
 	facMap.put("Rajesh Sharama", "Rajesh Sharama");
 	facMap.put("Mahesh Sharama", "Mahesh Sharama");
-	facMap.put("Saurabh", "Saurabh");
-	
+
 	LinkedHashMap<String, String> semesterMap = new LinkedHashMap<String, String>();
 	semesterMap.put("", "--Select--");
 	semesterMap.put("1", "1");
@@ -64,25 +62,15 @@
 
 <p class="st-title">Add Timetable</p>
 
-
 <%=HTMLUtility.getSuccessMessage(request)%>
 <%=HTMLUtility.getErrorMessage(request)%>
+
 
 <form action="<%=ORSView.TIMETABLE_CTL%>" method="POST">
 	<input type="hidden" name="id" value="<%=model.getId()%>">
 
 	<table>
 		<tr>
-			<th>Date(mm/dd/yyyy)*</th>
-			<td><input type="text" name="date" readonly="readonly"
-				value="<%=DataUtility.getDateString(model.getDate())%>"> <a
-				href="javascript:getCalendar(document.forms[0].date);"> <img
-					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15"
-					border="0" alt="Calender">
-			</a></td>
-			<td>&nbsp;&nbsp;</td>
-			<td></td>
-			<td>&nbsp;&nbsp;</td>
 			<th>Branch*</th>
 			<td><%=HTMLUtility.getList("branch", model.getBranch(),
 					branchMap)%></td>
@@ -94,15 +82,21 @@
 					semesterMap)%></td>
 			</td>
 			<td></td>
-			<td></td>
-			<td></td>
 			<th>Year*</th>
 			<td><%=HTMLUtility.getList("year", model.getYear() + "", yearMap)%></td>
 			</td>
 		</tr>
 		<tr>
+			<th>Date(mm/dd/yyyy)*</th>
+			<td><input type="text" name="date1" readonly="readonly"
+				value="<%=DataUtility.getDateString(model.getDate())%>"> <a
+				href="javascript:getCalendar(document.forms[0].date1);"> <img
+					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15"
+					border="0" alt="Calender">
+			</a></td>
+			<td></td>
 			<th>Time*</th>
-			<td><input type="text" name="time1"
+			<td><input type="text" name="time"
 				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
 			<th>Subject*</th>
 			<td><%=HTMLUtility.getList("subject", model.getSubject(),
@@ -112,8 +106,16 @@
 			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
 		</tr>
 		<tr>
+			<th>Date(mm/dd/yyyy)*</th>
+			<td><input type="text" name="date2" readonly="readonly"
+				value="<%=DataUtility.getDateString(model.getDate())%>"> <a
+				href="javascript:getCalendar(document.forms[0].date2);"> <img
+					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15"
+					border="0" alt="Calender">
+			</a></td>
+			<td></td>
 			<th>Time*</th>
-			<td><input type="text" name="time1"
+			<td><input type="text" name="time"
 				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
 			<th>Subject*</th>
 			<td><%=HTMLUtility.getList("subject", model.getSubject(),
@@ -123,8 +125,16 @@
 			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
 		</tr>
 		<tr>
+			<th>Date(mm/dd/yyyy)*</th>
+			<td><input type="text" name="date3" readonly="readonly"
+				value="<%=DataUtility.getDateString(model.getDate())%>"> <a
+				href="javascript:getCalendar(document.forms[0].date3);"> <img
+					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15"
+					border="0" alt="Calender">
+			</a></td>
+			<td></td>
 			<th>Time*</th>
-			<td><input type="text" name="time1"
+			<td><input type="text" name="time"
 				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
 			<th>Subject*</th>
 			<td><%=HTMLUtility.getList("subject", model.getSubject(),
@@ -134,8 +144,16 @@
 			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
 		</tr>
 		<tr>
+			<th>Date(mm/dd/yyyy)*</th>
+			<td><input type="text" name="date4" readonly="readonly"
+				value="<%=DataUtility.getDateString(model.getDate())%>"> <a
+				href="javascript:getCalendar(document.forms[0].date4);"> <img
+					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15"
+					border="0" alt="Calender">
+			</a></td>
+			<td></td>
 			<th>Time*</th>
-			<td><input type="text" name="time1"
+			<td><input type="text" name="time"
 				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
 			<th>Subject*</th>
 			<td><%=HTMLUtility.getList("subject", model.getSubject(),
@@ -145,8 +163,16 @@
 			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
 		</tr>
 		<tr>
+			<th>Date(mm/dd/yyyy)*</th>
+			<td><input type="text" name="date5" readonly="readonly"
+				value="<%=DataUtility.getDateString(model.getDate())%>"> <a
+				href="javascript:getCalendar(document.forms[0].date5);"> <img
+					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15"
+					border="0" alt="Calender">
+			</a></td>
+			<td></td>
 			<th>Time*</th>
-			<td><input type="text" name="time1"
+			<td><input type="text" name="time"
 				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
 			<th>Subject*</th>
 			<td><%=HTMLUtility.getList("subject", model.getSubject(),
@@ -156,8 +182,16 @@
 			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
 		</tr>
 		<tr>
+			<th>Date(mm/dd/yyyy)*</th>
+			<td><input type="text" name="date6" readonly="readonly"
+				value="<%=DataUtility.getDateString(model.getDate())%>"> <a
+				href="javascript:getCalendar(document.forms[0].date6);"> <img
+					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15"
+					border="0" alt="Calender">
+			</a></td>
+			<td></td>
 			<th>Time*</th>
-			<td><input type="text" name="time1"
+			<td><input type="text" name="time"
 				value="<%=DataUtility.getStringData(model.getTime())%>"></td>
 			<th>Subject*</th>
 			<td><%=HTMLUtility.getList("subject", model.getSubject(),
@@ -167,8 +201,8 @@
 			<td><%=HTMLUtility.getList("faculty", model.getFaculty(), facMap)%></td>
 		</tr>
 		<tr>
-			<td align="center" colspan="6"><%=HTMLUtility.getSubmitButton(BaseCtl.OP_SAVE,
-					AccessUtility.canAdd(request), request)%></td>
+			<td align="center" colspan="6"><input type="submit"
+				name="operation" value="<%=BaseCtl.OP_SAVE%>"></td>
 		</tr>
 	</table>
 </form>

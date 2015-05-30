@@ -39,8 +39,16 @@ public class StudentModel extends BaseModel {
 	private Date dob;
 	private String gender;
 	private String mobileNo;
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
 	private String address;
-	
+	private long userId;
 
 	public String getFirstName() {
 		return firstName;
@@ -159,8 +167,8 @@ public class StudentModel extends BaseModel {
 			PreparedStatement pstmt = conn
 					.prepareStatement("INSERT INTO ST_STUDENT (ID,FIRST_NAME,LAST_NAME,"
 							+ "FATHER_NAME,MOTHER_NAME,COLLEGE_ID,DEPARTEMENT,"
-							+ "SEMESTER,YEAR,DATE_OF_BIRTH,GENDER,MOBILE_NO,ADDRESS) "
-							+ "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+							+ "SEMESTER,YEAR,DATE_OF_BIRTH,GENDER,MOBILE_NO,ADDRESS,USER_ID) "
+							+ "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 							
 			pstmt.setLong(1, pk);
 			pstmt.setString(2, firstName);
@@ -175,7 +183,7 @@ public class StudentModel extends BaseModel {
 			pstmt.setString(11, gender);
 			pstmt.setString(12, mobileNo);
 			pstmt.setString(13, address);
-			//pstmt.setLong(14, userId);
+			pstmt.setLong(14, userId);
 
 			pstmt.executeUpdate();
 			conn.commit(); // End transaction
@@ -268,7 +276,7 @@ public class StudentModel extends BaseModel {
 				model.setGender(rs.getString(11));
 				model.setMobileNo(rs.getString(12));
 				model.setAddress(rs.getString(13));
-				//model.setUserId(rs.getLong(14));
+				model.setUserId(rs.getLong(14));
 
 			}
 			rs.close();
@@ -310,7 +318,7 @@ public class StudentModel extends BaseModel {
 				model.setGender(rs.getString(11));
 				model.setMobileNo(rs.getString(12));
 				model.setAddress(rs.getString(13));
-				//model.setUserId(rs.getLong(14));
+				model.setUserId(rs.getLong(14));
 
 			}
 			rs.close();
@@ -345,7 +353,7 @@ public class StudentModel extends BaseModel {
 					.prepareStatement("UPDATE ST_STUDENT  SET FIRST_NAME=?,"
 							+ "LAST_NAME=?,FATHER_NAME=?,MOTHER_NAME=?,COLLEGE_ID=?,DEPARTEMENT=?,"
 							+ "SEMESTER=?,YEAR=?,DATE_OF_BIRTH=?,GENDER=?,MOBILE_NO=?,"
-							+ "ADDRESS=? WHERE ID=?");
+							+ "ADDRESS=?,USER_ID=? WHERE ID=?");
 
 			pstmt.setString(1, firstName);
 			pstmt.setString(2, lastName);
@@ -359,7 +367,7 @@ public class StudentModel extends BaseModel {
 			pstmt.setString(10, gender);
 			pstmt.setString(11, mobileNo);
 			pstmt.setString(12, address);
-			//pstmt.setLong(13, userId);
+			pstmt.setLong(13, userId);
 			pstmt.setLong(14, id);
 			pstmt.executeUpdate();
 			
@@ -443,7 +451,7 @@ public class StudentModel extends BaseModel {
 		if (address != null && address.length() > 0) {
 			sql.append(" AND ADDRESS like = " + address);
 		}
-
+		
 		// if page size is greater than zero then apply pagination
 		if (pageSize > 0) {
 			// Calculate start record index
@@ -475,7 +483,7 @@ public class StudentModel extends BaseModel {
 				model.setMobileNo(rs.getString(12));
 				model.setAddress(rs.getString(13));
 
-				//model.setUserId(rs.getLong(14));
+				model.setUserId(rs.getLong(14));
 
 				list.add(model);
 			}

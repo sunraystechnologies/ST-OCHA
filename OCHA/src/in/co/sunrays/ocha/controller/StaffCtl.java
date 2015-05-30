@@ -36,7 +36,6 @@ public class StaffCtl extends BaseCtl {
 	/**
 	 * Logger to log the messages.
 	 */
-	public static final String OP_SAVE_UP = "Save";
 	private static Logger log = Logger.getLogger(StaffCtl.class);
 
 	/**
@@ -225,7 +224,7 @@ public class StaffCtl extends BaseCtl {
 
 		long id = model.getId();
 
-		if (OP_SAVE_UP.equalsIgnoreCase(op)) {
+		if (OP_SAVE.equalsIgnoreCase(op)) {
 			try {
 				if (id > 0) {
 					model.update();

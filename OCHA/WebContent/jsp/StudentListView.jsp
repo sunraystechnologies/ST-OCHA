@@ -43,6 +43,7 @@
 			<th>Gender</th>
 			<th>mobileNo</th>
 			<th>Address</th>
+			<th>User Id</th>
 			<th>Edit</th>
 		</tr>
 		<%
@@ -77,6 +78,7 @@
 			<td><%=bean.getGender()%></td>
 			<td><%=bean.getMobileNo()%></td>
 			<td><%=bean.getAddress()%></td>
+			<td><%=bean.getUserId()%></td>
 			<td>
 				<%
 					String label = (AccessUtility.canWrite(request)) ? "Edit"
@@ -97,6 +99,7 @@
 			<td colspan="3" align="center"><%=HTMLUtility.getSubmitButton(BaseCtl.OP_NEW,
 					AccessUtility.canAdd(request), request)%><%=HTMLUtility.getSubmitButton(BaseCtl.OP_DELETE,
 					AccessUtility.canDelete(request), request)%></td>
+					
 			<td align="right"><input type="submit" name="operation"
 				value="<%=StudentListCtl.OP_NEXT%>"></td>
 		</tr>

@@ -69,7 +69,7 @@
 			<td><input type="text" name="dob" readonly="readonly"
 				value="<%=DataUtility.getDateString(model.getDob())%>"> <a
 				href="javascript:getCalendar(document.forms[0].dob);"> <img
-					src="../img/cal.jpg" width="16" height="15" border="0"
+					src="<%=ORSView.IMG_FOLDER%>/cal.jpg" width="16" height="15" border="0"
 					alt="Calender">
 			</a><font color="red"> <%=ServletUtility.getErrorMessage("dob", request)%></font></td>
 		</tr>
